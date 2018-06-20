@@ -30,10 +30,4 @@ class BeatSaverController extends Controller
     {
         return view('search');
     }
-
-    public function dmca()
-    {
-        return view('dmca');
-    }
-
 }

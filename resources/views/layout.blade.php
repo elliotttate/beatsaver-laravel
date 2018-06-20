@@ -34,18 +34,19 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="@if(Route::currentRouteName() == 'home')active @endif"><a href="{{ route('home') }}">Home</a></li>
-                <li class="@if(Route::currentRouteName() == 'browse.top.donwloads')active @endif"><a href="{{ route('browse.top.donwloads') }}">Top Downloads</a></li>
+                <li class="@if(Route::currentRouteName() == 'browse.top.downloads')active @endif"><a href="{{ route('browse.top.downloads') }}">Top Downloads</a></li>
                 <li class="@if(Route::currentRouteName() == 'browse.top.played')active @endif"><a href="{{ route('browse.top.played') }}">Top Played</a></li>
                 <li class="@if(Route::currentRouteName() == 'browse.top.newest')active @endif"><a href="{{ route('browse.top.newest') }}">Newest</a></li>
                 <li><a href="https://discord.gg/ZY8T8ky">Mod Discord</a></li>
-                <li class="@if(Route::currentRouteName() == 'search')active @endif"><a href="{{ route('search') }}">Search</a></li>
+                <li class="@if(Route::currentRouteName() == 'search.form')active @endif"><a href="{{ route('search.form') }}">Search</a></li>
                 <li><a href="https://scoresaber.com/">ScoreSaber</a></li>
                 <li><a href="https://github.com/Umbranoxio/BeatSaberModInstaller/releases">Mod Installer</a></li>
                 @auth
-                    <li><a href="upload.php">Upload</a></li>
-                    <li><a href="profile.php">{{ auth()->user()->name }}</a></li>
-                @elseauth
-                    <li><a href="login.php">Login / Register</a></li>
+                    <li class="@if(Route::currentRouteName() == 'upload.form')active @endif"><a href="upload.php">Upload</a></li>
+                    <li class="@if(Route::currentRouteName() == 'profile')active @endif"><a href="profile.php">{{ auth()->user()->name }}</a></li>
+                @else
+                    <li class="@if(Route::currentRouteName() == 'login.form' || Route::currentRouteName() == 'register.form' || Route::currentRouteName() == 'forgotpw.form')active @endif"><a
+                                href="{{ route('login.form') }}">Login / Register</a></li>
                 @endauth
             </ul>
         </div>
@@ -67,7 +68,8 @@
     <hr>
 </div> <!-- /container -->
 <footer>
-    <center><p><b><a href="{{ route('dmca') }}">DMCA Copyright Form</a> || <a href="https://dev.beatsaver.com/index.html#/">New Alpha Interface</a> || <a href="https://github.com/beatsaver/beatsaver">Github</a></b>
+    <center><p><b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> ||<a href="https://dev.beatsaver.com/index.html#/">New Alpha Interface</a> || <a
+                        href="https://github.com/beatsaver/beatsaver">Github</a></b>
         </p></center>
 </footer>
 {{--<script type="text/javascript">--}}

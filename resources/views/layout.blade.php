@@ -43,7 +43,8 @@
                 <li><a href="https://github.com/Umbranoxio/BeatSaberModInstaller/releases">Mod Installer</a></li>
                 @auth
                     <li class="@if(Route::currentRouteName() == 'upload.form')active @endif"><a href="upload.php">Upload</a></li>
-                    <li class="@if(Route::currentRouteName() == 'profile')active @endif"><a href="profile.php">{{ auth()->user()->name }}</a></li>
+                    <li class="@if(Route::currentRouteName() == 'profile')active @endif"><a href="{{ route('profile') }}">{{ auth()->user()->name }}</a></li>
+                    <li><a href="{{ route('logout') }}">Logout</a></li>
                 @else
                     <li class="@if(Route::currentRouteName() == 'login.form' || Route::currentRouteName() == 'register.form' || Route::currentRouteName() == 'forgotpw.form')active @endif"><a
                                 href="{{ route('login.form') }}">Login / Register</a></li>

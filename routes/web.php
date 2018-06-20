@@ -20,6 +20,9 @@ Route::get('/browse/newest/{start?}', 'BeatSaverController@newest')->name('brows
 Route::get('/search', 'BeatSaverController@search')->name('search.form');
 Route::post('/search', 'BeatSaverController@searchSubmit')->name('search.submit');
 
+Route::get('/profile', 'UserController@profile')->name('profile');
+
+
 Route::get('/auth/login', 'UserController@login')->name('login.form');
 Route::post('/auth/login', 'UserController@loginSubmit')->name('login.submit');
 Route::get('/auth/register', 'UserController@register')->name('register.form');

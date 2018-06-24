@@ -16,12 +16,17 @@ Route::get('/', 'BeatSaverController@welcome')->name('home');
 Route::get('/browse/downloads/{start?}', 'BeatSaverController@topDownloads')->name('browse.top.downloads');
 Route::get('/browse/played/{start?}', 'BeatSaverController@topPlayed')->name('browse.top.played');
 Route::get('/browse/newest/{start?}', 'BeatSaverController@newest')->name('browse.top.newest');
+Route::get('/browse/detail/{id?}', 'BeatSaverController@detail')->name('browse.detail');
+
+Route::get('/vote/up/{id?}', 'BeatSaverController@voteUp')->name('votes.up');
+Route::get('/vote/down/{id?}', 'BeatSaverController@voteDown')->name('votes.down');
+
+Route::get('/download/{id?}', 'BeatSaverController@download')->name('download');
 
 Route::get('/search', 'BeatSaverController@search')->name('search.form');
 Route::post('/search', 'BeatSaverController@searchSubmit')->name('search.submit');
 
 Route::get('/profile', 'UserController@profile')->name('profile');
-
 
 Route::get('/auth/login', 'UserController@login')->name('login.form');
 Route::post('/auth/login', 'UserController@loginSubmit')->name('login.submit');

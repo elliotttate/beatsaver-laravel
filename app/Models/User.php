@@ -29,6 +29,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
+        'votekey',
         'password',
         'remember_token',
     ];
@@ -38,6 +39,6 @@ class User extends Authenticatable
      */
     public function songs()
     {
-        return $this->hasMany(\App\Song::class);
+        return $this->hasMany(Song::class);
     }
 }

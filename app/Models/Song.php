@@ -11,12 +11,14 @@ class Song extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $fillable = ['name', 'description', 'user_id'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function uploader()
     {
-        return $this->belongsTo(\App\User::class);
+        return $this->belongsTo(User::class,'user_id');
     }
 
     /**
@@ -24,6 +26,6 @@ class Song extends Model
      */
     public function details()
     {
-        return $this->hasMany(\App\SongDetail::class);
+        return $this->hasMany(SongDetail::class);
     }
 }

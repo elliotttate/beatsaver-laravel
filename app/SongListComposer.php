@@ -3,6 +3,9 @@
 namespace App;
 
 
+use App\Models\Song;
+use App\Models\SongDetail;
+
 class SongListComposer
 {
     /**
@@ -13,7 +16,7 @@ class SongListComposer
      */
     public function getTopPlayedSongs(int $offset, int $limit = 20): array
     {
-        return $this->dummySongs($offset, $limit);
+        return [];
     }
 
     /**
@@ -24,7 +27,13 @@ class SongListComposer
      */
     public function getTopDownloadedSongs(int $offset, int $limit = 20): array
     {
-        return $this->dummySongs($offset, $limit);
+        $topDownloaded = Song::with([
+            'details' => function ($query) {
+                    $query->orderByDesc('download_count')->first();
+            },
+        ]);
+
+        dd($topDownloaded->offset($offset)->limit($limit)->get()->toArray());
     }
 
     /**
@@ -50,9 +59,8 @@ class SongListComposer
     {
         $composer = new SongComposer();
         $dummySongs = [];
-
         for ($i = 0; $i < $limit; $i++) {
-            $dummySongs[] = $composer->get($i);
+            $dummySongs[] = $composer->get($i,2);
         }
 
         return $dummySongs;

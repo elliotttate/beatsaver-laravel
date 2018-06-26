@@ -68,7 +68,7 @@ class UserController extends Controller
         $rememberMe = $request->input('remember');
         auth()->attempt($credentials,$rememberMe);
 
-        return redirect()->route('profile');
+        return redirect()->intended('profile');
     }
 
     /**

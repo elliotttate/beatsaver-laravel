@@ -4,7 +4,6 @@ namespace App;
 
 
 use App\Models\Song;
-use App\Models\SongDetail;
 
 class SongListComposer
 {
@@ -16,7 +15,15 @@ class SongListComposer
      */
     public function getTopPlayedSongs(int $offset, int $limit = 20): array
     {
-        return [];
+        $topDownloaded = Song::with([
+            'details' => function ($query) {
+                $query->orderByDesc('play_count')->first();
+            },
+        ]);
+
+        $songIds = $topDownloaded->offset($offset)->limit($limit)->pluck('id');
+
+        return $this->convertSongIds($songIds->toArray());
     }
 
     /**
@@ -29,19 +36,13 @@ class SongListComposer
     {
         $topDownloaded = Song::with([
             'details' => function ($query) {
-                    $query->orderByDesc('download_count')->first();
+                $query->orderByDesc('download_count')->first();
             },
         ]);
 
         $songIds = $topDownloaded->offset($offset)->limit($limit)->pluck('id');
 
-        $composer = new SongComposer();
-        $songs = [];
-        foreach ($songIds as $songId) {
-            $songs[] = $composer->get($songId);
-        }
-
-        return $songs;
+        return $this->convertSongIds($songIds->toArray());
     }
 
     /**
@@ -52,25 +53,31 @@ class SongListComposer
      */
     public function getNewestSongs(int $offset, int $limit = 20): array
     {
-        return $this->dummySongs($offset, $limit);
+        $topDownloaded = Song::with([
+            'details' => function ($query) {
+                $query->orderByDesc('created_at')->first();
+            },
+        ]);
+
+        $songIds = $topDownloaded->offset($offset)->limit($limit)->pluck('id');
+
+        return $this->convertSongIds($songIds->toArray());
     }
 
     /**
-     * produces a dummy song array for testing
-     *
-     * @param int $offset
-     * @param int $limit
+     * @param array $ids
      *
      * @return array
      */
-    protected function dummySongs(int $offset, int $limit = 20): array
+    protected function convertSongIds(array $ids): array
     {
         $composer = new SongComposer();
-        $dummySongs = [];
-        for ($i = 0; $i < $limit; $i++) {
-            $dummySongs[] = $composer->get($i,2);
-        }
+        $songs = [];
+        foreach ($ids as $songId) {
+            $songs[] = $composer->get($songId);
 
-        return $dummySongs;
+        }
+        return $songs;
     }
+
 }

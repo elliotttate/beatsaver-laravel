@@ -40,8 +40,8 @@
     @slot('downvotes')
         {{ $song['downvotes'] }}
     @endslot
-    @slot('downloadId')
-        {{ $song['downloadId'] }}
+    @slot('downloadKey')
+        {{ $song['downloadKey'] }}
     @endslot
     @slot('version')
         {{ $song['version'] }}

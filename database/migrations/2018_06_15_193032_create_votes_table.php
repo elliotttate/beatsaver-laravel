@@ -18,7 +18,7 @@ class CreateVotesTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('song_id');
             $table->unsignedInteger('detail_id');
-            $table->tinyInteger('value');
+            $table->tinyInteger('direction');
 //            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

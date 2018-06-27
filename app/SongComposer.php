@@ -34,8 +34,11 @@ class SongComposer
             }
         ])->findOrFail($id);
 
+        /**
+         * @var $details SongDetail
+         */
         $details = $song->details->first();
-        $detailVotes = $details->votes()->select(DB::raw('direction,count(*) as vote_count'))->groupBy('direction')->orderBy('direction')->get()->keyBy('direction')->toArray();
+        $detailVotes = $details->voteCount();
         $difficulties = array_keys(json_decode($details->difficulty_levels, true));
 
         return [
@@ -50,9 +53,9 @@ class SongComposer
             'difficulties'   => $difficulties,
             'downloadCount'  => $details->download_count,
             'playedCount'    => $details->play_count,
-            'upvotes'        => isset($detailVotes[1]) ? $detailVotes[1]['vote_count'] : 0,
+            'upvotes'        => $detailVotes['up'],
             'upvotesTotal'   => 0, //@todo get votes for song id instead of detailId
-            'downvotes'      => isset($detailVotes[0]) ? $detailVotes[0]['vote_count'] : 0,
+            'downvotes'      => $detailVotes['down'],
             'downvotesTotal' => 0, //@todo get votes for song id instead of detailId
             'downloadKey'    => $song->id . '-' . $details->id,
             'version'        => $song->details->count(), //@todo fix version if $detailId is specified

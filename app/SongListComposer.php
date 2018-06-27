@@ -33,7 +33,15 @@ class SongListComposer
             },
         ]);
 
-        dd($topDownloaded->offset($offset)->limit($limit)->get()->toArray());
+        $songIds = $topDownloaded->offset($offset)->limit($limit)->pluck('id');
+
+        $composer = new SongComposer();
+        $songs = [];
+        foreach ($songIds as $songId) {
+            $songs[] = $composer->get($songId);
+        }
+
+        return $songs;
     }
 
     /**

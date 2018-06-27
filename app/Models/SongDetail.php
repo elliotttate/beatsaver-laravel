@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -39,10 +40,13 @@ class SongDetail extends Model
      */
     public function voteCount()
     {
-        $votes = $this->load('votes')->select(DB::raw('direction,count(*) as vote_count'))->groupBy('direction')
-            ->orderBy('direction')->get()->keyBy('direction')->toArray();
+        $votes = $this->has('votes')->withCount(['votes as upvotes' => function($query){
+            $query->where('direction',1);
+        }, 'votes as downvotes' => function($query){
+            $query->where('direction',0);
+        }])->first();
 
-        return ['up' => $votes[1]['votes_count'], 'down' => $votes[0]['votes_count']];
+        return ['up' => $votes->upvotes, 'down' => $votes->downvotes];
     }
 
     /**

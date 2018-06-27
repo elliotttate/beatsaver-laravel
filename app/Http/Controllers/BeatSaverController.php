@@ -16,17 +16,17 @@ class BeatSaverController extends Controller
         return view('welcome');
     }
 
-    public function topDownloads($start = 1, SongListComposer $composer)
+    public function topDownloads($start = 0, SongListComposer $composer)
     {
         return view('browse.downloads')->with('songs', $composer->getTopDownloadedSongs($start));
     }
 
-    public function topPlayed($start = 1, SongListComposer $composer)
+    public function topPlayed($start = 0, SongListComposer $composer)
     {
         return view('browse.played')->with('songs', $composer->getTopDownloadedSongs($start));
     }
 
-    public function newest($start = 1, SongListComposer $composer)
+    public function newest($start = 0, SongListComposer $composer)
     {
         return view('browse.newest')->with('songs', $composer->getNewestSongs($start));
     }

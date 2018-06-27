@@ -40,6 +40,7 @@
         <div class="col-md-1"><br><br><br><br></div>
     </div>
     @if($errors->isNotEmpty())
+        <br/><br/><br/>
         <div class="row">
             <ul>
                 @foreach ($errors->all() as $message)

@@ -94,7 +94,10 @@ class BeatSaverController extends Controller
 
         try {
             $parser = new UploadParser($process);
-            $composer->create($metadata, $parser->getSongData());
+            if(!$songData = $parser->getSongData()){
+                return redirect()->back()->withErrors('Invalid song format.');
+            }
+            $composer->create($metadata, $songData);
 
         } catch (UploadParserException $e) {
             //@todo real error message!

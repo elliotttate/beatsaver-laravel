@@ -44,10 +44,10 @@ class SongDetail extends Model
 
         $votes = $this->has('votes')->withCount([
             'votes as upvotes'   => function ($query) {
-                $query->where('direction', 1);
+                $query->where('direction', 1)->where('detail_id', $this->id);
             },
             'votes as downvotes' => function ($query) {
-                $query->where('direction', 0);
+                $query->where('direction', 0)->where('detail_id', $this->id);
             }
         ])->first();
 

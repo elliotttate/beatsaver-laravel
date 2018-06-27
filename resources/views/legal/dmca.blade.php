@@ -2,9 +2,9 @@
 @section('title', '- DMCA')
 
 @section('content')
+    <br /><br />
     <div class="container">
         <div class="row">
-            <div class="col-md-1"><br><br><br><br></div>
             <div class="col-md-12">
                 <p>BeatSaver Copyright Policy</p>
                 <p></p>
@@ -69,9 +69,9 @@
                     the removed content or cease disabling it in 10 business days. Unless the copyright owner files an action seeking a court order against the content provider, member or user, the
                     removed content may be replaced, or access to it restored, in 10 to 14 business days or more after receipt of the counter-notice, at BeatSaver's sole discretion.</p>
                 <p></p>
-                <br><br><b>To file a right claim, the fastest method is to file a Github issue using <a href="https://github.com/beatsaver/beatsaver/issues/new">THIS LINK</a>, Please use the subject
-                    format DMCA Request: XXX Song</a></b><br>
-                Make sure to include a link to file in question to prevent issues of locating the infringing content.<br><b>You may also use this email: 179add2f@fire.fundersclub.com to create a issue
+                <br><br><b>To file a right claim, the fastest method is to file a Github issue using <a href="{{ config('beatsaver.githubUrl') }}/issues/new">THIS LINK</a>, Please use the subject
+                    format DMCA Request: XXX Song</b><br>
+                Make sure to include a link to file in question to prevent issues of locating the infringing content.<br><b>You may also use this email: {{ config('beatsaver.legalEmail') }} to create a issue
                     over email as well</b>
                 <br><br><br>
             </div>

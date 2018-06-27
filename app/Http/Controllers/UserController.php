@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         $newUser = User::create([
            'name' => $request->input('username'),
-//           'email' => $request->input('email'),
+           'email' => $request->input('email'),
            'password' => $request->input('password'),
         ]);
 

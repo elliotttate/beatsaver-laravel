@@ -39,6 +39,15 @@
     <div class="row">
         <div class="col-md-1"><br><br><br><br></div>
     </div>
+    @if($errors->isNotEmpty())
+        <div class="row">
+            <ul>
+                @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="row">
         @yield('content')
     </div>

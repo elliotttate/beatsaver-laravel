@@ -40,13 +40,23 @@ class SongDetail extends Model
      */
     public function voteCount()
     {
-        $votes = $this->has('votes')->withCount(['votes as upvotes' => function($query){
-            $query->where('direction',1);
-        }, 'votes as downvotes' => function($query){
-            $query->where('direction',0);
-        }])->first();
+        $count = ['up' => 0, 'down' => 0];
 
-        return ['up' => $votes->upvotes, 'down' => $votes->downvotes];
+        $votes = $this->has('votes')->withCount([
+            'votes as upvotes'   => function ($query) {
+                $query->where('direction', 1);
+            },
+            'votes as downvotes' => function ($query) {
+                $query->where('direction', 0);
+            }
+        ])->first();
+
+        if($votes){
+            $count['up'] = $votes->upvotes;
+            $count['down'] = $votes->downvotes;
+        }
+
+        return $count;
     }
 
     /**

@@ -1,4 +1,4 @@
-@component('browse.component-songinfo')
+@component('browse.component-songinfo-frontpage')
     @slot('id')
         {{ $song['id'] }}
     @endslot
@@ -19,9 +19,6 @@
     @endslot
     @slot('coverMime')
         {{ $song['coverMime'] }}
-    @endslot
-    @slot('description')
-        {{ $song['description'] }}
     @endslot
     @slot('difficulties')
         @foreach($song['difficulties'] as $diff)
@@ -46,4 +43,5 @@
     @slot('version')
         {{ $song['version'] }}
     @endslot
+
 @endcomponent

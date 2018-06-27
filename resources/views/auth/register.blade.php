@@ -3,13 +3,6 @@
 
 @section('content')
     <div class="container">
-        @if($errors->isNotEmpty())
-            <ul>
-        @foreach ($errors->all() as $message)
-            <li>{{ $message }}</li>
-        @endforeach
-            </ul>
-        @endif
         <form class="form-signin" method="POST" action="{{ route('register.submit') }}">
             {{ csrf_field() }}
             <h2 class="form-signin-heading">Create New Account</h2>

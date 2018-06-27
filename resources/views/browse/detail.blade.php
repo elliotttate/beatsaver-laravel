@@ -2,5 +2,6 @@
 @section('title', '- Song Detail')
 
 @section('content')
-    @include('browse.song-partial')
+    <br /><br />
+    @include('browse.song-data-detailpage')
 @endsection

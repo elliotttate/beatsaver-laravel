@@ -2,5 +2,6 @@
 @section('title', '- Top Played')
 
 @section('content')
-    @each('browse.song-partial',$songs,'song')
+    <br /><br />
+    @each('browse.song-data-frontpage',$songs,'song')
 @endsection

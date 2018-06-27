@@ -3,14 +3,6 @@
 
 @section('content')
     <div class="container">
-        @if($errors->isNotEmpty())
-            <br /><br /><br />
-            <ul>
-                @foreach ($errors->all() as $message)
-                    <li>{{ $message }}</li>
-                @endforeach
-            </ul>
-        @endif
         <form class="form-signin" method="post" enctype="multipart/form-data" action="{{ route('upload.submit') }}">
             {{ csrf_field() }}
             <h2 class="form-signin-heading">Upload Beat Track</h2>

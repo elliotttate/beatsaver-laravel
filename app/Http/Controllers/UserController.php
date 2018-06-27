@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Hash;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -24,7 +25,7 @@ class UserController extends Controller
         $newUser = User::create([
            'name' => $request->input('username'),
            'email' => $request->input('email'),
-           'password' => $request->input('password'),
+           'password' => Hash::make($request->input('password')),
         ]);
 
         auth()->login($newUser);
@@ -66,7 +67,9 @@ class UserController extends Controller
         ];
 
         $rememberMe = $request->input('remember');
-        auth()->attempt($credentials,$rememberMe);
+        if(!auth()->attempt($credentials,$rememberMe)){
+            return redirect()->back()->withErrors('Invalid login or password');
+        };
 
         return redirect()->intended('profile');
     }

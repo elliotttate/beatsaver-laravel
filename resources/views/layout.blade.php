@@ -45,9 +45,11 @@
     <hr>
 </div> <!-- /container -->
 <footer>
-    <center><p><b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> ||<a href="https://dev.beatsaver.com/index.html#/">New Alpha Interface</a> || <a
-                        href="https://github.com/beatsaver/beatsaver">Github</a></b>
-        </p></center>
+    <center>
+        <p>
+            <b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> || <a href="{{ config('beatsaver.githubUrl') }}">Github</a></b>
+        </p>
+    </center>
 </footer>
 
 </body>

@@ -19,6 +19,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'votekey',
+        'verification_code'
     ];
 
     protected $dates = ['deleted_at'];
@@ -40,5 +42,16 @@ class User extends Authenticatable
     public function songs()
     {
         return $this->hasMany(Song::class);
+    }
+
+    /**
+     * Create email verification code.
+     *
+     * @return string
+     */
+    public function createVerificationCode(): string
+    {
+        $this->update(['verification_code' => str_random(40)]);
+        return  $this->verification_code;
     }
 }

@@ -32,4 +32,5 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/auth/forgotpw', 'UserController@forgotPw')->name('forgotpw.form');
     Route::post('/auth/forgotpw', 'UserController@forgotPwSubmit')->name('forgotpw.submit');
 });
+Route::get('/auth/register/verify/{token}','UserController@verifyEmail')->name('register.verify');
 Route::any('/auth/logout', 'UserController@logout')->name('logout');

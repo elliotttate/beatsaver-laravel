@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserRegistered;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
@@ -29,8 +30,7 @@ class UserController extends Controller
         ]);
 
         auth()->login($newUser);
-
-        // @todo send email validation here
+        event(new UserRegistered($newUser));
 
         return redirect()->route('profile');
 

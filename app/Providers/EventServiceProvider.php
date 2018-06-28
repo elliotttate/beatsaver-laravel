@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserRegistered' => [
             'App\Listeners\SendConfirmEmailNotification',
         ],
+        'App\Events\SongUploaded' => [
+            'App\Listeners\UpdateSongCache',
+        ],
     ];
 
     /**

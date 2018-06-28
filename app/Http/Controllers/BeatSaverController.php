@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SongUploaded;
 use App\Exceptions\UploadParserException;
 use App\Http\Requests\UploadRequest;
 use App\Http\Requests\VoteRequest;
@@ -101,7 +102,7 @@ class BeatSaverController extends Controller
                 return redirect()->back()->withErrors('Invalid song format.');
             }
             $composer->create($metadata, $songData);
-
+            event(new SongUploaded($songData));
         } catch (UploadParserException $e) {
             //@todo real error message!
             return redirect()->back()->withErrors('Invalid song format.');

@@ -41,7 +41,7 @@
     </div>
     @if($errors->isNotEmpty())
         <br/><br/><br/>
-        <div class="row">
+        <div class="alert alert-danger" role="alert">
             <ul>
                 @foreach ($errors->all() as $message)
                     <li>{{ $message }}</li>

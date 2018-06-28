@@ -27,7 +27,11 @@ class SendConfirmEmailNotification
      */
     public function handle(UserRegistered $event)
     {
-        $token = $event->getUser()->createVerificationCode();
+        if(!$event->getUser()->verification_code){
+            $event->getUser()->createVerificationCode();
+        }
+
+        $token = $event->getUser()->verification_code;
         Mail::to($event->getUser()->email)->send(new EmailVerification($event->getUser(),$token));
     }
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Events\UserRegistered;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ResendEmailVerificationRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Hash;
 use Illuminate\Http\Request;
 
@@ -24,9 +26,9 @@ class UserController extends Controller
     public function registerSubmit(RegisterRequest $request)
     {
         $newUser = User::create([
-           'name' => $request->input('username'),
-           'email' => $request->input('email'),
-           'password' => Hash::make($request->input('password')),
+            'name'     => $request->input('username'),
+            'email'    => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
         ]);
 
         auth()->login($newUser);
@@ -37,13 +39,32 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param $token
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function verifyEmail(Request $request)
+    public function verifyEmail($token)
     {
-        return redirect()->home();
+        $user = auth()->user();
+        if (!$user->isVerified() && $user->verification_code == trim($token)) {
+            $user->verification_code = null;
+            $user->save();
+            return redirect()->route('profile')->with('status-success', 'Email successful validated!');
+        }
+        return redirect()->route('profile')->with('status-error', 'Invalid verification code!');
+    }
+
+    /**
+     * @param ResendEmailVerificationRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function verifyEmailResend(ResendEmailVerificationRequest $request)
+    {
+        event(new UserRegistered(auth()->user()));
+
+        session(['last-verificatopn-sent' => Carbon::now()->addMinutes(2)]);
+        return redirect()->route('profile')->with('status-success', 'Validation email sent');
     }
 
     /**
@@ -59,15 +80,16 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function loginSubmit(LoginRequest $request){
+    public function loginSubmit(LoginRequest $request)
+    {
 
         $credentials = [
-            'name'    => $request->input('username'),
+            'name'     => $request->input('username'),
             'password' => $request->input('password')
         ];
 
         $rememberMe = $request->input('remember');
-        if(!auth()->attempt($credentials,$rememberMe)){
+        if (!auth()->attempt($credentials, $rememberMe)) {
             return redirect()->back()->withErrors('Invalid login or password');
         };
 
@@ -87,7 +109,8 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function forgotPwSubmit(Request $request){
+    public function forgotPwSubmit(Request $request)
+    {
         return redirect()->home();
     }
 

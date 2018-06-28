@@ -54,4 +54,12 @@ class User extends Authenticatable
         $this->update(['verification_code' => str_random(40)]);
         return  $this->verification_code;
     }
+
+    /**
+     * @return bool
+     */
+    public function isVerified(): bool
+    {
+        return is_null($this->verification_code);
+    }
 }

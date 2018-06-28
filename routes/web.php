@@ -22,7 +22,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/upload', 'BeatSaverController@uploadSubmit')->name('upload.submit');
 
     Route::get('/profile', 'UserController@profile')->name('profile');
+
+    Route::get('/auth/register/verify/{token}','UserController@verifyEmail')->name('register.verify');
+    Route::post('/auth/register/verify/resend','UserController@verifyEmailResend')->name('register.verify.resend');
 });
+
 
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/auth/login', 'UserController@login')->name('login.form');
@@ -32,5 +36,4 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/auth/forgotpw', 'UserController@forgotPw')->name('forgotpw.form');
     Route::post('/auth/forgotpw', 'UserController@forgotPwSubmit')->name('forgotpw.submit');
 });
-Route::get('/auth/register/verify/{token}','UserController@verifyEmail')->name('register.verify');
 Route::any('/auth/logout', 'UserController@logout')->name('logout');

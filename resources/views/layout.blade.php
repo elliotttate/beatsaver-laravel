@@ -50,10 +50,6 @@
             </ul>
         </div>
     @endif
-    @if(session('status-success'))
-        <br/>
-        <div class="alert alert-success" role="alert">{{ session('status-success') }}</div>
-    @endif
     @if(session('status-error'))
         <br/>
         <div class="alert alert-danger" role="alert">{{ session('status-error') }}</div>
@@ -61,6 +57,10 @@
     @if(session('status-warning'))
         <br/>
         <div class="alert alert-warning" role="alert">{{ session('status-warning') }}</div>
+    @endif
+    @if(session('status-success'))
+        <br/>
+        <div class="alert alert-success" role="alert">{{ session('status-success') }}</div>
     @endif
     <div class="row">
         @yield('content')

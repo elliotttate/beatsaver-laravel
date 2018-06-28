@@ -86,6 +86,9 @@ class BeatSaverController extends Controller
 
     public function uploadSubmit(UploadRequest $request, SongComposer $composer)
     {
+        if(!auth()->user()->isVerified()) {
+            return redirect()->back()->withErrors('Your email needs to be verified in order to upload songs.');
+        }
         $process = $request->file('fileupload')->store('process');
 
         $metadata = $request->only(['name', 'description']);

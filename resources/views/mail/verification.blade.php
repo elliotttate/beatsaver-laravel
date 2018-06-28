@@ -3,7 +3,7 @@
 <table width="100%">
 <tr>
 <td style="text-align: center;padding-top: 20px;padding-bottom: 20px">
-<img src="{{ asset('/img/beat_saver_black.png') }}" style="max-width: 250px;display: block;margin: 0 auto;">
+<img src="{{ asset('/img/beat_saver_logo.png') }}" style="max-width: 250px;display: block;margin: 0 auto;">
 </td>
 </tr>
 </table>

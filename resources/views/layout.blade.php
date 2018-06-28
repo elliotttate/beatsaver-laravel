@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=1024">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
           crossorigin="anonymous">
@@ -39,8 +40,8 @@
     <div class="row">
         <div class="col-md-1"><br><br><br><br></div>
     </div>
+    <br/>
     @if($errors->isNotEmpty())
-        <br/><br/><br/>
         <div class="alert alert-danger" role="alert">
             <ul>
                 @foreach ($errors->all() as $message)
@@ -49,17 +50,27 @@
             </ul>
         </div>
     @endif
+    @if(session('status-success'))
+        <br/>
+        <div class="alert alert-success" role="alert">{{ session('status-success') }}</div>
+    @endif
+    @if(session('status-error'))
+        <br/>
+        <div class="alert alert-danger" role="alert">{{ session('status-error') }}</div>
+    @endif
+    @if(session('status-warning'))
+        <br/>
+        <div class="alert alert-warning" role="alert">{{ session('status-warning') }}</div>
+    @endif
     <div class="row">
         @yield('content')
     </div>
     <hr>
 </div> <!-- /container -->
 <footer>
-    <center>
-        <p>
+        <p class="text-center">
             <b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> || <a href="{{ config('beatsaver.githubUrl') }}">Github</a></b>
         </p>
-    </center>
 </footer>
 
 </body>

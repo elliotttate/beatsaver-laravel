@@ -29,7 +29,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.php"><img src="{{ asset('/img/beat_saver_logo_white.png') }}" height="35em" style="margin-top: -7px;"></a>
+            <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('/img/beat_saver_logo_white.png') }}" height="35em" style="margin-top: -7px;"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             @include('nav')

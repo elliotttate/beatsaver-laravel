@@ -103,12 +103,7 @@ class BeatSaverController extends Controller
             }
 
             $song = $composer->create($metadata, $songData);
-
-            // add some special fields (also included in the get request) so they can be used in the event
-            $songData['uploader'] = $song->uploader->name;
-            $songData['downloadKey'] = $song->id . '-' . $song->details->id;
-
-            event(new SongUploaded($songData));
+            event(new SongUploaded($song));
         } catch (UploadParserException $e) {
             //@todo real error message!
             return redirect()->back()->withErrors('Invalid song format.');

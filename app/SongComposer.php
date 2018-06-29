@@ -67,7 +67,7 @@ class SongComposer
      * @param array $metadata
      * @param array $songData
      *
-     * @return Song|null
+     * @return array
      */
     public function create(array $metadata, array $songData)
     {
@@ -100,8 +100,27 @@ class SongComposer
         Storage::disk()->move($metadata['tempFile'], "public/songs/{$song->id}-{$songDetails->id}.zip");
         Storage::disk()->put("public/songs/{$song->id}-{$songDetails->id}.{$songData['coverType']}", base64_decode($songData['coverData']));
 
-        //@todo fire new song/version event
 
-        return $song;
+        return [
+            'id'             => $song->id,
+            'name'           => $song->name,
+            'uploader'       => $song->uploader->name,
+            'songName'       => $songDetails->song_name,
+            'songSubName'    => $songDetails->song_sub_name,
+            'authorName'     => $songDetails->author_name,
+            'cover'          => $song->id . '-' . $songDetails->id,
+            'coverMime'      => $songDetails->cover,
+            'description'    => $song->description,
+            'difficulties'   => array_keys($songData['difficultyLevels']), // @todo we may need the complete stats here in the future
+            'downloadCount'  => $songDetails->download_count,
+            'playedCount'    => $songDetails->play_count,
+            'upvotes'        => 0,
+            'upvotesTotal'   => 0,
+            'downvotes'      => 0,
+            'downvotesTotal' => 0,
+            'downloadKey'    => $song->id . '-' . $songDetails->id,
+            'version'        => $song->details->count(), //@todo fix version if $detailId is specified
+        ];
+
     }
 }

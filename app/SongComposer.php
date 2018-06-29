@@ -47,10 +47,11 @@ class SongComposer
             'uploader'       => $song->uploader->name,
             'songName'       => $details->song_name,
             'songSubName'    => $details->song_sub_name,
+            'authorName'    => $details->author_name,
             'cover'          => $song->id . '-' . $details->id,
             'coverMime'      => $details->cover,
             'description'    => $song->description,
-            'difficulties'   => $difficulties,
+            'difficulties'   => $difficulties, // @todo we may need the complete stats here in the future
             'downloadCount'  => $details->download_count,
             'playedCount'    => $details->play_count,
             'upvotes'        => $detailVotes['up'],

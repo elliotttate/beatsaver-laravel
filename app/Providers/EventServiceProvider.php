@@ -18,6 +18,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         'App\Events\SongUploaded' => [
             'App\Listeners\UpdateSongCache',
+            'App\Listeners\DiscordSendNewSongNotification',
         ],
     ];
 

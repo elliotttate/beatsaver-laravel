@@ -22,14 +22,14 @@ class SongComposer
 
         $song = Song::with([
             'uploader',
-            'details' => function ($query) use ($detailId) {
+            'details'       => function ($query) use ($detailId) {
                 if ($detailId) {
                     $query->where('id', $detailId);
                 } else {
                     $query->orderByDesc('id');
                 }
             },
-            'details.votes' => function($query) {
+            'details.votes' => function ($query) {
                 $query;//->select(DB::raw('direction,count(*) as vote_count'))->groupBy('direction')->orderBy('direction');
             }
         ])->findOrFail($id);
@@ -47,7 +47,7 @@ class SongComposer
             'uploader'       => $song->uploader->name,
             'songName'       => $details->song_name,
             'songSubName'    => $details->song_sub_name,
-            'authorName'    => $details->author_name,
+            'authorName'     => $details->author_name,
             'cover'          => $song->id . '-' . $details->id,
             'coverMime'      => $details->cover,
             'description'    => $song->description,

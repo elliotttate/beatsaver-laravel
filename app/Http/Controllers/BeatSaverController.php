@@ -72,8 +72,8 @@ class BeatSaverController extends Controller
         $detailId = $split[1];
 
         // @todo stop/prevent download count faking
-        if(SongDetail::where('id', $detailId)->where('song_id', $songId)->increment('download_count',1)) {
-            return \response()->download(storage_path("app/public/songs")."/$key.zip");
+        if (SongDetail::where('id', $detailId)->where('song_id', $songId)->increment('download_count', 1)) {
+            return \response()->download(storage_path("app/public/songs") . "/$key.zip");
         }
 
         return abort(404);
@@ -87,7 +87,7 @@ class BeatSaverController extends Controller
 
     public function uploadSubmit(UploadRequest $request, SongComposer $composer)
     {
-        if(!auth()->user()->isVerified()) {
+        if (!auth()->user()->isVerified()) {
             return redirect()->back()->withErrors('Your email needs to be verified in order to upload songs.');
         }
         $process = $request->file('fileupload')->store('process');
@@ -98,10 +98,16 @@ class BeatSaverController extends Controller
 
         try {
             $parser = new UploadParser($process);
-            if(!$songData = $parser->getSongData()){
+            if (!$songData = $parser->getSongData()) {
                 return redirect()->back()->withErrors('Invalid song format.');
             }
-            $composer->create($metadata, $songData);
+
+            $song = $composer->create($metadata, $songData);
+
+            // add some special fields (also included in the get request) so they can be used in the event
+            $songData['uploader'] = $song->uploader->name;
+            $songData['downloadKey'] = $song->id . '-' . $song->details->id;
+
             event(new SongUploaded($songData));
         } catch (UploadParserException $e) {
             //@todo real error message!

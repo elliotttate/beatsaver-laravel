@@ -23,17 +23,18 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/profile', 'UserController@profile')->name('profile');
 
-    Route::get('/auth/register/verify/{token}','UserController@verifyEmail')->name('register.verify');
-    Route::post('/auth/register/verify/resend','UserController@verifyEmailResend')->name('register.verify.resend');
+    Route::get('/auth/register/verify/{token}', 'UserController@verifyEmail')->name('register.verify');
+    Route::post('/auth/register/verify/resend', 'UserController@verifyEmailResend')->name('register.verify.resend');
 });
-
 
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/auth/login', 'UserController@login')->name('login.form');
     Route::post('/auth/login', 'UserController@loginSubmit')->name('login.submit');
     Route::get('/auth/register', 'UserController@register')->name('register.form');
     Route::post('/auth/register', 'UserController@registerSubmit')->name('register.submit');
-    Route::get('/auth/forgotpw', 'UserController@forgotPw')->name('forgotpw.form');
-    Route::post('/auth/forgotpw', 'UserController@forgotPwSubmit')->name('forgotpw.submit');
+    Route::get('/auth/forgotpw', 'UserController@resetPassword')->name('password.reset.request.form');
+    Route::post('/auth/forgotpw', 'UserController@resetPasswordSubmit')->name('password.reset.request.submit');
+    Route::get('/auth/forgotpw/confirm/{token}', 'UserController@confirmPasswordReset')->name('password.reset.complete.form');
+    Route::post('/auth/forgotpw/confirm', 'UserController@confirmPasswordResetSubmit')->name('password.reset.complete.submit');
 });
 Route::any('/auth/logout', 'UserController@logout')->name('logout');

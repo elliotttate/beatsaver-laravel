@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Mail\PasswordReset;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Mail;
 
 class User extends Authenticatable
 {
@@ -62,4 +64,27 @@ class User extends Authenticatable
     {
         return is_null($this->verification_code);
     }
+
+    /**
+     * Get the e-mail address where password reset links are sent.
+     *
+     * @return string
+     */
+    public function getEmailForPasswordReset()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        //@todo switch with laravel notification
+        Mail::to($this->getEmailForPasswordReset())->send(new PasswordReset($this,$token));
+    }
+
 }

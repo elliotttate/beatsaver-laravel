@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserRegistered;
+use App\Http\Requests\ConfirmPasswordResetRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResendEmailVerificationRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Hash;
+use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Http\Request;
+use Password;
 
 class UserController extends Controller
 {
@@ -97,21 +101,58 @@ class UserController extends Controller
     }
 
     /**
+     * Request a password reset mail form.
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function forgotPw()
+    public function resetPassword()
     {
-        return view('auth.forgotpw');
+        return view('auth.password-reset');
     }
 
     /**
-     * @param Request $request
+     * @param ResetPasswordRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function forgotPwSubmit(Request $request)
+    public function resetPasswordSubmit(ResetPasswordRequest $request)
     {
-        return redirect()->home();
+        Password::broker()->sendResetLink(['email' => $request->input('email')]);
+
+        // always sent a positive response in order to prevent email fishing
+        return redirect()->route('password.reset.request.form')->with('request-send',true);
+    }
+
+    /**
+     * Complete your password request form.
+     *
+     * @param $token
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function confirmPasswordReset($token)
+    {
+        return view('auth.password-reset-complete')->with(['token' => $token]);
+    }
+
+    /**
+     * @param ConfirmPasswordResetRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function confirmPasswordResetSubmit(ConfirmPasswordResetRequest $request)
+    {
+        $status = Password::broker()->reset($request->only(['password','password_confirmation','token','email']), function($user,$password) {
+            $user->password = Hash::make($password);
+            $user->setRememberToken(str_random(40));
+            $user->save();
+            auth()->login($user);
+        });
+
+        if($status == PasswordBroker::PASSWORD_RESET) {
+            return redirect()->route('profile');
+        }
+        return redirect()->route('password.reset.complete.form')->with('status-error','Reset failed. Please try again');
     }
 
     public function profile()

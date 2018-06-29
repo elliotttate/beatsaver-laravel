@@ -15,7 +15,7 @@
         <a href="{{ route('register.form') }}">
             <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
         </a>
-        <a href="{{ route('forgotpw.form') }}">
+        <a href="{{ route('password.reset.request.form') }}">
             <button class="btn btn-primary btn-block" type="submit">Forgot Password</button>
         </a>
     </div>

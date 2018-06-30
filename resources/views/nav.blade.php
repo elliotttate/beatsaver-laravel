@@ -3,8 +3,8 @@
     <li class="@if(Route::currentRouteName() == 'browse.top.downloads')active @endif"><a href="{{ route('browse.top.downloads') }}">Top Downloads</a></li>
     <li class="@if(Route::currentRouteName() == 'browse.top.played')active @endif"><a href="{{ route('browse.top.played') }}">Top Played</a></li>
     <li class="@if(Route::currentRouteName() == 'browse.top.newest')active @endif"><a href="{{ route('browse.top.newest') }}">Newest</a></li>
-    <li><a href="https://discord.gg/ZY8T8ky">Mod Discord</a></li>
     <li class="@if(Route::currentRouteName() == 'search.form' || Route::currentRouteName() == 'browse.user' || Route::currentRouteName() == 'browse.detail' )active @endif"><a href="{{ route('search.form') }}">Search</a></li>
+    <li><a href="https://discord.gg/ZY8T8ky">Mod Discord</a></li>
     <li><a href="https://scoresaber.com/">ScoreSaber</a></li>
     <li><a href="https://github.com/Umbranoxio/BeatSaberModInstaller/releases">Mod Installer</a></li>
     @auth

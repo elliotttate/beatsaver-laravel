@@ -45,6 +45,7 @@ class SongComposer
             'id'             => $song->id,
             'name'           => $song->name,
             'uploader'       => $song->uploader->name,
+            'uploaderId'     => $song->uploader->id,
             'songName'       => $details->song_name,
             'songSubName'    => $details->song_sub_name,
             'authorName'     => $details->author_name,
@@ -60,6 +61,7 @@ class SongComposer
             'downvotesTotal' => 0, //@todo get votes for song id instead of detailId
             'downloadKey'    => $song->id . '-' . $details->id,
             'version'        => $song->details->count(), //@todo fix version if $detailId is specified
+            'createdAt'      => $details->created_at,
         ];
     }
 
@@ -105,6 +107,7 @@ class SongComposer
             'id'             => $song->id,
             'name'           => $song->name,
             'uploader'       => $song->uploader->name,
+            'uploaderId'     => $song->uploader->id,
             'songName'       => $songDetails->song_name,
             'songSubName'    => $songDetails->song_sub_name,
             'authorName'     => $songDetails->author_name,
@@ -112,14 +115,15 @@ class SongComposer
             'coverMime'      => $songDetails->cover,
             'description'    => $song->description,
             'difficulties'   => array_keys($songData['difficultyLevels']), // @todo we may need the complete stats here in the future
-            'downloadCount'  => $songDetails->download_count,
-            'playedCount'    => $songDetails->play_count,
+            'downloadCount'  => 0,
+            'playedCount'    => 0,
             'upvotes'        => 0,
             'upvotesTotal'   => 0,
             'downvotes'      => 0,
             'downvotesTotal' => 0,
             'downloadKey'    => $song->id . '-' . $songDetails->id,
             'version'        => $song->details->count(), //@todo fix version if $detailId is specified
+            'createdAt'      => $songDetails->created_at,
         ];
 
     }

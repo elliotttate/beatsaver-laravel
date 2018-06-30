@@ -6,6 +6,7 @@ Route::get('/browse/downloads/{start?}', 'BeatSaverController@topDownloads')->na
 Route::get('/browse/played/{start?}', 'BeatSaverController@topPlayed')->name('browse.top.played');
 Route::get('/browse/newest/{start?}', 'BeatSaverController@newest')->name('browse.top.newest');
 Route::get('/browse/detail/{key}', 'BeatSaverController@detail')->name('browse.detail');
+Route::get('/browse/byuser/{id}/{start?}', 'BeatSaverController@byUser')->name('browse.user');
 
 Route::get('/download/{key}', 'BeatSaverController@download')->name('download');
 
@@ -30,10 +31,13 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/auth/login', 'UserController@login')->name('login.form');
     Route::post('/auth/login', 'UserController@loginSubmit')->name('login.submit');
+
     Route::get('/auth/register', 'UserController@register')->name('register.form');
     Route::post('/auth/register', 'UserController@registerSubmit')->name('register.submit');
+
     Route::get('/auth/forgotpw', 'UserController@resetPassword')->name('password.reset.request.form');
     Route::post('/auth/forgotpw', 'UserController@resetPasswordSubmit')->name('password.reset.request.submit');
+
     Route::get('/auth/forgotpw/confirm/{token}', 'UserController@confirmPasswordReset')->name('password.reset.complete.form');
     Route::post('/auth/forgotpw/confirm', 'UserController@confirmPasswordResetSubmit')->name('password.reset.complete.submit');
 });

@@ -10,24 +10,25 @@
                 <a class="btn btn-default" href="{{ route('browse.detail', ['key' => $downloadKey]) }}" role="button">Details</a>
             </div>
         </th>
-        <th>
-            <small>Uploaded by: {{ $uploader }}<br></small>
+        <th colspan="2">
+            <small>Uploaded by: <a href="{{ route('browse.user',['id' => $uploaderId]) }}">{{ $uploader }}</a> ({{ $createdAt }})</small>
         </th>
     </tr>
     <tr>
-        <td>Song: {{ $songName }} - {{ $songSubName }}</td>
+        <td colspan="2">Song: {{ $songName }} - {{ $songSubName }}</td>
     </tr>
     <tr>
+        <td>Author: {{ $authorName }}</td>
         <td>Difficulties: {{ $difficulties }}</td>
     </tr>
     <tr>
-        <td>
+        <td colspan="2">
             Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }} || <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> {{ $upvotes }} / <span
                     class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> {{ $downvotes }}
         </td>
     </tr>
     <tr>
-        <td>
+        <td colspan="2">
             <a class="btn btn-default" href="{{ route('download', ['key' => $downloadKey]) }}" role="button">Download File</a>
         </td>
     </tr>

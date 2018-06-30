@@ -16,17 +16,18 @@
             </div>
         </th>
         <th colspan="2">
-            <small>Uploaded by: {{ $uploader }}<br></small>
+            <small>Uploaded by: <a href="{{ route('browse.user',['id' => $uploaderId]) }}">{{ $uploader }}</a> ({{ $createdAt }})</small>
         </th>
     </tr>
     <tr>
         <td colspan="2">Song: {{ $songName }} - {{ $songSubName }}</td>
     </tr>
     <tr>
-        <td colspan="2">Difficulties: {{ $difficulties }}</td>
+        <td>Author: {{ $authorName }}</td>
+        <td>Difficulties: {{ $difficulties }}</td>
     </tr>
     <tr>
-        <td>
+        <td colspan="2">
             Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }}
         </td>
     </tr>

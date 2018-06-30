@@ -7,6 +7,7 @@ use App\Exceptions\UploadParserException;
 use App\Http\Requests\UploadRequest;
 use App\Http\Requests\VoteRequest;
 use App\Models\SongDetail;
+use App\Models\User;
 use App\Models\Vote;
 use App\SongComposer;
 use App\SongListComposer;
@@ -34,6 +35,17 @@ class BeatSaverController extends Controller
     public function newest($start = 0, SongListComposer $composer)
     {
         return view('browse.newest')->with(['songs' => $composer->getNewestSongs($start)]);
+    }
+
+    public function byUser($id, $start = 0, SongListComposer $composer)
+    {
+        $user = User::find($id);
+        if ($user) {
+            $name = $user->name;
+        } else {
+            $name = '';
+        }
+        return view('browse.user')->with(['songs' => $composer->getSongsByUser($id, $start), 'username' => $name]);
     }
 
     public function detail($key, SongComposer $composer)
@@ -102,7 +114,7 @@ class BeatSaverController extends Controller
                 return redirect()->back()->withErrors('Invalid song format.');
             }
 
-            if($song = $composer->create($metadata, $songData)){
+            if ($song = $composer->create($metadata, $songData)) {
                 event(new SongUploaded($song));
             }
         } catch (UploadParserException $e) {

@@ -7,21 +7,23 @@ use App\Models\Song;
 
 class SongListComposer
 {
+    const DEFAULT_LIMIT = 15;
+
     /**
      * @param int $offset
      * @param int $limit
      *
      * @return array
      */
-    public function getTopPlayedSongs(int $offset, int $limit = 20): array
+    public function getTopPlayedSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): array
     {
-        $topDownloaded = Song::with([
+        $songs = Song::with([
             'details' => function ($query) {
                 $query->orderByDesc('play_count')->first();
             },
         ]);
 
-        $songIds = $topDownloaded->offset($offset)->limit($limit)->pluck('id');
+        $songIds = $songs->offset($offset)->limit($limit)->pluck('id');
 
         return $this->convertSongIds($songIds->toArray());
     }
@@ -32,15 +34,15 @@ class SongListComposer
      *
      * @return array
      */
-    public function getTopDownloadedSongs(int $offset, int $limit = 20): array
+    public function getTopDownloadedSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): array
     {
-        $topDownloaded = Song::with([
+        $songs = Song::with([
             'details' => function ($query) {
                 $query->orderByDesc('download_count')->first();
             },
         ]);
 
-        $songIds = $topDownloaded->offset($offset)->limit($limit)->pluck('id');
+        $songIds = $songs->offset($offset)->limit($limit)->pluck('id');
 
         return $this->convertSongIds($songIds->toArray());
     }
@@ -51,15 +53,35 @@ class SongListComposer
      *
      * @return array
      */
-    public function getNewestSongs(int $offset, int $limit = 20): array
+    public function getNewestSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): array
     {
-        $topDownloaded = Song::with([
+        $songs = Song::with([
             'details' => function ($query) {
                 $query->orderByDesc('created_at')->first();
             },
         ]);
 
-        $songIds = $topDownloaded->offset($offset)->limit($limit)->pluck('id');
+        $songIds = $songs->offset($offset)->limit($limit)->pluck('id');
+
+        return $this->convertSongIds($songIds->toArray());
+    }
+
+    /**
+     * @param int $userId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function getSongsByUser(int $userId, int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): array
+    {
+        $songs = Song::with([
+            'details' => function ($query) {
+                $query->orderByDesc('created_at')->first();
+            },
+        ])->where('user_id',$userId);
+
+        $songIds = $songs->offset($offset)->limit($limit)->pluck('id');
 
         return $this->convertSongIds($songIds->toArray());
     }

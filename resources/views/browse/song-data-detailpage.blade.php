@@ -8,6 +8,12 @@
     @slot('uploader')
         {{ $song['uploader'] }}
     @endslot
+    @slot('uploaderId')
+        {{ $song['uploaderId'] }}
+    @endslot
+    @slot('authorName')
+        {{ $song['authorName'] }}
+    @endslot
     @slot('songName')
         {{ $song['songName'] }}
     @endslot
@@ -45,6 +51,9 @@
     @endslot
     @slot('version')
         {{ $song['version'] }}
+    @endslot
+    @slot('createdAt')
+        {{ $song['createdAt'] }}
     @endslot
     @slot('alreadyVoted')
         @if($alreadyVoted) disabled @endif

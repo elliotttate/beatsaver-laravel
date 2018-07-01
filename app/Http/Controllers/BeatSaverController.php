@@ -101,7 +101,7 @@ class BeatSaverController extends Controller
             return redirect()->back()->withErrors('Invalid song format.');
         }
 
-        return redirect()->route('browse.user', ['id' => auth()->id()]); //@todo redirect to "my songs"
+        return redirect()->route('browse.user', ['id' => auth()->id()]);
     }
 
     public function search()

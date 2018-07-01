@@ -34,32 +34,6 @@ class SongDetail extends Model
     }
 
     /**
-     * Return up and down votes count.
-     *
-     * @return array
-     */
-    public function voteCount()
-    {
-        $count = ['up' => 0, 'down' => 0];
-
-        $votes = $this->has('votes')->withCount([
-            'votes as upvotes'   => function ($query) {
-                $query->where('direction', 1)->where('detail_id', $this->id);
-            },
-            'votes as downvotes' => function ($query) {
-                $query->where('direction', 0)->where('detail_id', $this->id);
-            }
-        ])->first();
-
-        if($votes){
-            $count['up'] = $votes->upvotes;
-            $count['down'] = $votes->downvotes;
-        }
-
-        return $count;
-    }
-
-    /**
      * @param User $user
      */
     public function voteUp(User $user)

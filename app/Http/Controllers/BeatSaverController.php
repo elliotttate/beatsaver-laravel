@@ -24,7 +24,10 @@ class BeatSaverController extends Controller
 
     public function topDownloads($start = 0, SongListComposer $composer)
     {
-        return view('browse.downloads')->with(['songs' => $composer->getTopDownloadedSongs($start)]);
+        $songs = $composer->getTopDownloadedSongs($start);
+
+        \Log::debug(count(\DB::getQueryLog()));
+        return view('browse.downloads')->with(['songs' => $songs]);
     }
 
     public function topPlayed($start = 0, SongListComposer $composer)
@@ -50,46 +53,22 @@ class BeatSaverController extends Controller
 
     public function detail($key, SongComposer $composer)
     {
-        $alreadyVoted = false;
-        $split = explode('-', $key, 2);
-
-        $songId = $split[0];
-        $detailId = $split[1];
-
-        return view('browse.detail')->with(['song' => $composer->get($songId, $detailId), 'alreadyVoted' => $alreadyVoted]);
+        return view('browse.detail')->with(['song' => $composer->get($key)]);
     }
 
-    public function vote($key, VoteRequest $request)
+    public function vote($key, VoteRequest $request, SongComposer $composer)
     {
-        $split = explode('-', $key, 2);
-
-        $songId = $split[0];
-        $detailId = $split[1];
-
-
-        Vote::updateOrCreate([
-            'song_id'   => $songId,
-            'detail_id' => $detailId,
-            'user_id'   => auth()->id(),
-        ], ['direction' => $request->input('type') == 'up' ? 1 : 0]);
-
-        return redirect()->back();
-    }
-
-    public function download($key)
-    {
-        $split = explode('-', $key, 2);
-
-        $songId = $split[0];
-        $detailId = $split[1];
-
-        // @todo stop/prevent download count faking
-        if (SongDetail::where('id', $detailId)->where('song_id', $songId)->increment('download_count', 1)) {
-            return \response()->download(storage_path("app/public/songs") . "/$key.zip");
+        if ($composer->vote($key, auth()->user(), ($request->input('type') == 'up' ? SongComposer::VOTE_UP : SongComposer::VOTE_DOWN))) {
+            return redirect()->back()->with('status-success', 'Vote successful!');
         }
 
-        return abort(404);
+        return redirect()->back()->with('status-error', 'Invalid vote parameter!');
 
+    }
+
+    public function download($key, SongComposer $composer)
+    {
+        return $composer->serveFileDownload($key);
     }
 
     public function upload()
@@ -122,7 +101,7 @@ class BeatSaverController extends Controller
             return redirect()->back()->withErrors('Invalid song format.');
         }
 
-        return redirect()->route('browse.top.newest'); //@todo redirect to "my songs"
+        return redirect()->route('browse.user', ['id' => auth()->id()]); //@todo redirect to "my songs"
     }
 
     public function search()

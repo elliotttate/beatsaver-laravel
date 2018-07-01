@@ -2,104 +2,123 @@
 
 namespace App;
 
-
-use App\Models\Song;
+use DB;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 
 class SongListComposer
 {
     const DEFAULT_LIMIT = 15;
 
     /**
+     * Get songs ordered by play count descending.
+     * If a song has multiple versions only get the latest one.
+     *
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return Collection
      */
-    public function getTopPlayedSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): array
+    public function getTopPlayedSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
     {
-        $songs = Song::with([
-            'details' => function ($query) {
-                $query->orderByDesc('play_count')->first();
-            },
-        ]);
+        $orderBy = 'play_count';
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
-        $songIds = $songs->offset($offset)->limit($limit)->pluck('id');
-
-        return $this->convertSongIds($songIds->toArray());
+        return $this->prepareSongInfo($songs->get());
     }
 
     /**
+     * Get songs ordered by download count descending.
+     * If a song has multiple versions only get the latest one.
+     *
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return Collection
      */
-    public function getTopDownloadedSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): array
+    public function getTopDownloadedSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
     {
-        $songs = Song::with([
-            'details' => function ($query) {
-                $query->orderByDesc('download_count')->first();
-            },
-        ]);
+        $orderBy = 'download_count';
 
-        $songIds = $songs->offset($offset)->limit($limit)->pluck('id');
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
-        return $this->convertSongIds($songIds->toArray());
+
+        return $this->prepareSongInfo($songs->get());
     }
 
     /**
+     * Get songs ordered by creation date descending.
+     * If a song has multiple versions only get the latest one.
+     *
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return Collection
      */
-    public function getNewestSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): array
+    public function getNewestSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
     {
-        $songs = Song::with([
-            'details' => function ($query) {
-                $query->orderByDesc('created_at')->first();
-            },
-        ]);
+        $orderBy = 'created_at';
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
-        $songIds = $songs->offset($offset)->limit($limit)->pluck('id');
-
-        return $this->convertSongIds($songIds->toArray());
+        return $this->prepareSongInfo($songs->get());
     }
 
     /**
+     * Get songs uploaded by user {$id] ordered by creation date.
+     * If a song has multiple versions only get the latest one.
+     *
      * @param int $userId
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return Collection
      */
-    public function getSongsByUser(int $userId, int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): array
+    public function getSongsByUser(int $userId, int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
     {
-        $songs = Song::with([
-            'details' => function ($query) {
-                $query->orderByDesc('created_at')->first();
-            },
-        ])->where('user_id',$userId);
+        $orderBy = 'created_at';
+        $songs = $this->prepareQuery($orderBy, $offset, $limit)
+            ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
+            ->where('s.user_id', $userId);
 
-        $songIds = $songs->offset($offset)->limit($limit)->pluck('id');
-
-        return $this->convertSongIds($songIds->toArray());
+        return $this->prepareSongInfo($songs->get());
     }
 
     /**
-     * @param array $ids
+     * Converts a list of song keys into song info data.
      *
-     * @return array
+     * @param Collection $songs
+     *
+     * @return Collection
      */
-    protected function convertSongIds(array $ids): array
+    protected function prepareSongInfo(Collection $songs): Collection
     {
         $composer = new SongComposer();
-        $songs = [];
-        foreach ($ids as $songId) {
-            $songs[] = $composer->get($songId);
 
-        }
+        $songs->transform(function ($item, $key) use ($composer) {
+            return $composer->get($item->songKey);
+        });
+
         return $songs;
+    }
+
+    /**
+     * Prepare a base query every song list uses.
+     *
+     * WARNING: never pass unchecked, user defined data into {$orderBy} since it opens
+     * the query for injection attacks!
+     *
+     * @param string $orderBy
+     * @param int    $offset
+     * @param int    $limit
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    protected function prepareQuery(string $orderBy, int $offset, int $limit): Builder
+    {
+        return DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id))as songKey"))
+            ->groupBy(['sd.song_id'])->orderByRaw("(select {$orderBy} from song_details where id = max(sd.id)) desc")
+            ->offset($offset)->limit($limit);
+
     }
 
 }

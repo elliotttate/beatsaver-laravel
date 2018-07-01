@@ -23,8 +23,8 @@
     </tr>
     <tr>
         <td colspan="2">
-            Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }} || <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> {{ $upvotes }} / <span
-                    class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> {{ $downvotes }}
+            Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }} || <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> {{ $upVotes }} / <span
+                    class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> {{ $downVotes }}
         </td>
     </tr>
     <tr>

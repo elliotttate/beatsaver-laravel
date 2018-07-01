@@ -37,11 +37,11 @@
     @slot('playedCount')
         {{ $song['playedCount'] }}
     @endslot
-    @slot('upvotes')
-        {{ $song['upvotes'] }}
+    @slot('upVotes')
+        {{ $song['upVotes'] }}
     @endslot
-    @slot('downvotes')
-        {{ $song['downvotes'] }}
+    @slot('downVotes')
+        {{ $song['downVotes'] }}
     @endslot
     @slot('downloadKey')
         {{ $song['downloadKey'] }}

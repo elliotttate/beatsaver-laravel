@@ -40,11 +40,11 @@
                 <div>
                     <form action="{{ route('votes.submit',['key' => $downloadKey]) }}" method="post">
                         {{ csrf_field() }}
-                        <button type="submit" class="btn btn-default" name="type" value="up" {{ $alreadyVoted }}>
-                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Up {{ $upvotes }}
+                        <button type="submit" class="btn btn-default" name="type" value="up">
+                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Up {{ $upVotes }}
                         </button>
-                        <button type="submit" class="btn btn-default" name="type" value="down" {{ $alreadyVoted }}>
-                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Down {{ $downvotes }}
+                        <button type="submit" class="btn btn-default" name="type" value="down">
+                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Down {{ $downVotes }}
                         </button>
                     </form>
                 </div>

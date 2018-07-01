@@ -5,9 +5,18 @@ return [
     'legalEmail'        => env('BS_LEAGAL_EMAIL'),
     'songCacheDuration' => env('BS_SONG_CACHE_DURATION', \App\SongComposer::CACHE_DURATION),
     'discord'           => [
-        'botEnabled' => env('DISCORD_BOT_ENABLED', false),
-        'botUrl'     => env('DISCORD_BOT_URL', 'http:/localhost'),
-        'botToken'   => env('DISCORD_BOT_TOKEN', 'secret'),
+        'bot'      => [
+            'enabled'     => env('BS_DISCORD_BOT_ENABLED', false),
+            'url'         => env('BS_DISCORD_BOT_URL', 'http:/localhost/'),
+            'bearerToken' => env('BS_DISCORD_BOT_TOKEN', 'secret'),
+        ],
+        'webhooks' => [
+            'enabled' => env('BS_DISCORD_WEBHOOKS_ENABLED',false),
+            'username' => env('BS_DISCORD_WEBHOOKS_USERNAME',null),
+            'avatarUrl' => env('BS_DISCORD_WEBHOOKS_AVATAR',null),
+            'channel' => env('BS_DISCORD_WEBHOOKS_CHANNEL'),
+        ]
+
     ],
 
 ];

@@ -2,8 +2,9 @@
 
 namespace App\Listeners;
 
-use App\DiscordBot;
 use App\Events\SongUploaded;
+use App\Integrations\Discord\DiscordBot;
+use App\Integrations\Discord\DiscordWebhook;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,6 +13,7 @@ use Log;
 class DiscordSendNewSongNotification
 {
     protected $bot;
+    protected $webhook;
 
     /**
      * Create the event listener.
@@ -20,7 +22,10 @@ class DiscordSendNewSongNotification
      */
     public function __construct()
     {
-        $this->bot = new DiscordBot(config('beatsaver.discord.botUrl'),config('beatsaver.discord.botToken'));
+        //@todo unify interface so that we don't have to worry about different discord bot types
+
+        $this->bot = new DiscordBot(config('beatsaver.discord.bot.url'), config('beatsaver.discord.bot.bearerToken'));
+        $this->webhook = new DiscordWebhook(config('beatsaver.discord.webhooks.channel'));
     }
 
     /**
@@ -33,8 +38,17 @@ class DiscordSendNewSongNotification
     public function handle(SongUploaded $event)
     {
         try {
-            if(config('beatsaver.discord.botEnabled')) {
-                $this->bot->eventNewSong($event->getSongData());
+
+            $songData = $event->getSongData();
+
+            if (config('beatsaver.discord.bot.enabled')) {
+                $this->bot->eventNewSong($songData);
+            }
+
+            if (config('beatsaver.discord.webhooks.enabled')) {
+                $message = $this->webhook->prepareMessage();
+                $message->setContent("New song uploaded by **{$songData['uploader']}** : ".route('browse.detail', ['key' => $songData['downloadKey']]));
+                $this->webhook->postMessage($message);
             }
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());

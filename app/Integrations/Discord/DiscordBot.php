@@ -1,9 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Integrations\Discord;
 
 
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Log;
 
@@ -15,20 +14,20 @@ class DiscordBot
     protected $url;
 
     /**
-     * @var string
-     */
-    protected $authToken;
-
-    /**
      * @var \GuzzleHttp\Client
      */
     protected $client;
 
-    public function __construct(string $url, string $authToken)
+    public function __construct(string $url, string $bearerToken)
     {
-        $this->client = new \GuzzleHttp\Client();
+        $this->client = new \GuzzleHttp\Client([
+            'base_url' => $url,
+            'timeout'  => 5,
+            'headers'  => [
+                'Authorization' => "Bearer " . $bearerToken
+            ]
+        ]);
         $this->url = $url;
-        $this->authToken = $authToken;
     }
 
 
@@ -43,16 +42,17 @@ class DiscordBot
         $songKey = $songData['downloadKey'];
         try {
             Log::debug($this->url . 'SongUploaded');
-            $response = $this->client->request('POST', $this->url . 'SongUploaded', [
-                'timeout' => 5,
+            $response = $this->client->request('POST', 'SongUploaded', [
                 'json' => [
                     'creatorName' => $uploaderName,
                     'songUrl'     => route('browse.detail', ['key' => $songKey])
                 ]
             ]);
-            Log::debug($response->getBody());
+            Log::debug('Body: ' . $response->getBody());
         } catch (RequestException $e) {
             Log::error($e->getMessage());
+            Log::error($e->getRequest()->getHeaders());
+            Log::error($e->getRequest()->getBody());
         }
     }
 }

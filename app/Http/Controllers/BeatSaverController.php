@@ -108,4 +108,10 @@ class BeatSaverController extends Controller
     {
         return view('search');
     }
+
+    public function searchResult($type,$key, SongListComposer $composer)
+    {
+        $parameter = [strtolower($type) => $key];
+        return view('browse.search')->with(['songs' => $composer->search($parameter)]);
+    }
 }

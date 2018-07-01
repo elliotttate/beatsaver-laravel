@@ -11,6 +11,65 @@ class SongListComposer
     const DEFAULT_LIMIT = 15;
 
     /**
+     * @param array $parameter
+     * @param int   $offset
+     * @param int   $limit
+     *
+     * @return Collection
+     */
+    public function search(array $parameter, int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    {
+        if (!$parameter) {
+            return collect();
+        }
+
+        $doSearch = false;
+        $orderBy = 'created_at';
+
+        $songs = $this->prepareQuery($orderBy, $offset, $limit)
+            ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
+            ->whereNull('s.deleted_at');
+
+        foreach ($parameter as $key => $search) {
+            $searchableKeys = $this->searchableKeys();
+            if (array_key_exists($key, $searchableKeys)) {
+                $doSearch = true;
+
+                // add multiple columns via or if the searchable key is a combined search criteria
+                if (is_array($searchableKeys[$key])) {
+                    $songs->where(function ($query) use ($searchableKeys, $search, $key) {
+                        foreach ($searchableKeys[$key] as $searchColumn) {
+                            $query->orWhere($searchColumn, 'LIKE', "%$search%");
+                        }
+                    });
+                } else {
+                    $songs->where($searchableKeys[$key], 'LIKE', "%$search%");
+                }
+            }
+        }
+
+        // only execute search if we have at least one valid input
+        if (!$doSearch) {
+            return collect();
+        }
+        return $this->prepareSongInfo($songs->get());
+    }
+
+    /**
+     * searchable key to column mapper
+     *
+     * @return array
+     */
+    protected function searchableKeys()
+    {
+        return [
+            'author' => 'sd.author_name',
+            'song'   => ['sd.song_name', 'sd.song_sub_name'],
+            'name'   => 's.name'
+        ];
+    }
+
+    /**
      * Get songs ordered by play count descending.
      * If a song has multiple versions only get the latest one.
      *
@@ -19,7 +78,7 @@ class SongListComposer
      *
      * @return Collection
      */
-    public function getTopPlayedSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    public function getTopPlayedSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
     {
         $orderBy = 'play_count';
         $songs = $this->prepareQuery($orderBy, $offset, $limit);
@@ -36,7 +95,7 @@ class SongListComposer
      *
      * @return Collection
      */
-    public function getTopDownloadedSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    public function getTopDownloadedSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
     {
         $orderBy = 'download_count';
 
@@ -55,7 +114,7 @@ class SongListComposer
      *
      * @return Collection
      */
-    public function getNewestSongs(int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    public function getNewestSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
     {
         $orderBy = 'created_at';
         $songs = $this->prepareQuery($orderBy, $offset, $limit);
@@ -73,12 +132,12 @@ class SongListComposer
      *
      * @return Collection
      */
-    public function getSongsByUser(int $userId, int $offset, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    public function getSongsByUser(int $userId, int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
     {
         $orderBy = 'created_at';
         $songs = $this->prepareQuery($orderBy, $offset, $limit)
             ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
-            ->where('s.user_id', $userId);
+            ->where('s.user_id', $userId)->whereNull('s.deleted_at');
 
         return $this->prepareSongInfo($songs->get());
     }
@@ -117,7 +176,7 @@ class SongListComposer
     {
         return DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id))as songKey"))
             ->groupBy(['sd.song_id'])->orderByRaw("(select {$orderBy} from song_details where id = max(sd.id)) desc")
-            ->offset($offset)->limit($limit);
+            ->whereNull('sd.deleted_at')->offset($offset)->limit($limit);
 
     }
 

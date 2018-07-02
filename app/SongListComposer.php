@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Song;
 use DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
@@ -9,6 +10,28 @@ use Illuminate\Support\Collection;
 class SongListComposer
 {
     const DEFAULT_LIMIT = 15;
+
+    /**
+     * Get song count of all songs.
+     *
+     * @return int
+     */
+    public function getSongCount(): int
+    {
+        return Song::count();
+    }
+
+    /**
+     * Get song count for user.
+     *
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function getUserSongCount(int $userId): int
+    {
+        return Song::where('user_id', $userId)->count();
+    }
 
     /**
      * @param array $parameter
@@ -53,21 +76,6 @@ class SongListComposer
             return collect();
         }
         return $this->prepareSongInfo($songs->get());
-    }
-
-    /**
-     * searchable key to column mapper
-     *
-     * @return array
-     */
-    protected function searchableKeys()
-    {
-        return [
-            'author' => 'sd.author_name',
-            'name'   => 's.name',
-            'song'   => ['sd.song_name', 'sd.song_sub_name'],
-            'all'   => ['sd.song_name', 'sd.song_sub_name', 'sd.author_name', 's.name'],
-        ];
     }
 
     /**
@@ -141,6 +149,21 @@ class SongListComposer
             ->where('s.user_id', $userId)->whereNull('s.deleted_at');
 
         return $this->prepareSongInfo($songs->get());
+    }
+
+    /**
+     * searchable key to column mapper
+     *
+     * @return array
+     */
+    protected function searchableKeys()
+    {
+        return [
+            'author' => 'sd.author_name',
+            'name'   => 's.name',
+            'song'   => ['sd.song_name', 'sd.song_sub_name'],
+            'all'    => ['sd.song_name', 'sd.song_sub_name', 'sd.author_name', 's.name'],
+        ];
     }
 
     /**

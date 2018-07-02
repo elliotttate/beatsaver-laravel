@@ -75,11 +75,11 @@ class DiscordMessage implements Jsonable
     /**
      * Convert the object to its JSON representation.
      *
-     * @param  int $options
+     * @param  int $options JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
      *
      * @return string
      */
-    public function toJson($options = 0): string
+    public function toJson($options = 15): string
     {
         if (!$this->isEmpty()) {
             return json_encode([

@@ -32,7 +32,7 @@ class BeatSaverController extends Controller
 
     public function topPlayed($start = 0, SongListComposer $composer)
     {
-        return view('browse.played')->with(['songs' => $composer->getTopDownloadedSongs($start)]);
+        return view('browse.played')->with(['songs' => $composer->getTopPlayedSongs($start)]);
     }
 
     public function newest($start = 0, SongListComposer $composer)

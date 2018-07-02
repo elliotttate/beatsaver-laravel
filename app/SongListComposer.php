@@ -64,8 +64,9 @@ class SongListComposer
     {
         return [
             'author' => 'sd.author_name',
+            'name'   => 's.name',
             'song'   => ['sd.song_name', 'sd.song_sub_name'],
-            'name'   => 's.name'
+            'all'   => ['sd.song_name', 'sd.song_sub_name', 'sd.author_name', 's.name'],
         ];
     }
 

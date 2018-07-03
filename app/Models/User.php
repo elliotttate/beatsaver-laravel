@@ -87,4 +87,14 @@ class User extends Authenticatable
         Mail::to($this->getEmailForPasswordReset())->send(new PasswordReset($this,$token));
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function($user) {
+            foreach ($user->songs()->get() as $song) {
+                $song->delete();
+            }
+        });
+    }
+
 }

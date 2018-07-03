@@ -28,4 +28,16 @@ class Song extends Model
     {
         return $this->hasMany(SongDetail::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function($song) {
+            foreach ($song->details()->get() as $details) {
+                $details->delete();
+            }
+        });
+    }
+
+
 }

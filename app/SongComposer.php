@@ -53,67 +53,6 @@ class SongComposer
     }
 
     /**
-     * Compose a song info for an existing song.
-     *
-     * @param string $key
-     *
-     * @return array
-     */
-    protected function compose(string $key): array
-    {
-        $split = $this->parseKey($key);
-
-        $song = Song::with([
-            'uploader',
-            'details' => function ($query) use ($split) {
-                $query->withCount([
-                    'votes as upVotes'   => function ($query) {
-                        $query->where('direction', 1);
-                    },
-                    'votes as downVotes' => function ($query) {
-                        $query->where('direction', 0);
-                    }
-                ]);
-                if ($split['detailId']) {
-                    $query->where('id', $split['detailId']);
-                } else {
-                    $query->orderByDesc('id');
-                }
-            },
-        ])->findOrFail($split['songId']);
-
-        /**
-         * @var $details SongDetail
-         */
-        $details = $song->details->first();
-        $difficulties = array_keys(json_decode($details->difficulty_levels, true));
-
-        return [
-            'id'             => $song->id,
-            'name'           => $song->name,
-            'uploader'       => $song->uploader->name,
-            'uploaderId'     => $song->uploader->id,
-            'songName'       => $details->song_name,
-            'songSubName'    => $details->song_sub_name,
-            'authorName'     => $details->author_name,
-            'cover'          => $song->id . '-' . $details->id,
-            'coverMime'      => $details->cover,
-            'description'    => $song->description,
-            'difficulties'   => $difficulties, // @todo we may need the complete stats here in the future
-            'downloadCount'  => $details->download_count,
-            'playedCount'    => $details->play_count,
-            'upVotes'        => $details->upVotes,
-            'upVotesTotal'   => 0, //@todo get votes for song id instead of detailId
-            'downVotes'      => $details->downVotes,
-            'downVotesTotal' => 0, //@todo get votes for song id instead of detailId
-            'downloadKey'    => $song->id . '-' . $details->id,
-            'version'        => $song->details->count(), //@todo fix version if $detailId is specified
-            'createdAt'      => $details->created_at,
-        ];
-
-    }
-
-    /**
      * Store a new song in the database.
      *
      * @param array $metadata
@@ -185,7 +124,25 @@ class SongComposer
     {
         $split = $this->parseKey($key);
 
-        return false;
+        if (is_null($split['detailId'])) {
+            if ($destroyed = Song::destroy($split['songId'])) {
+                $filesToDelete = collect(Storage::allFiles())->filter(function ($value, $key) use ($split) {
+                    $pi = pathinfo($value);
+                    return preg_match("/^{$split['songId']}-(.*)\.(.*)/", strtolower($pi['basename']));
+                });
+                return Storage::delete($filesToDelete->toArray());
+            }
+            return false;
+        } else {
+            if ($destroyed = SongDetail::destroy($split['detailId'])) {
+                $filesToDelete = collect(Storage::allFiles())->filter(function ($value, $key) use ($split) {
+                    $pi = pathinfo($value);
+                    return preg_match("/^{$split['songId']}-{$split['detailId']}\.(.*)/", strtolower($pi['basename']));
+                });
+                return Storage::delete($filesToDelete->toArray());
+            }
+            return false;
+        }
     }
 
     /**
@@ -242,6 +199,67 @@ class SongComposer
         }
 
         return abort(404);
+    }
+
+    /**
+     * Compose a song info for an existing song.
+     *
+     * @param string $key
+     *
+     * @return array
+     */
+    protected function compose(string $key): array
+    {
+        $split = $this->parseKey($key);
+
+        $song = Song::with([
+            'uploader',
+            'details' => function ($query) use ($split) {
+                $query->withCount([
+                    'votes as upVotes'   => function ($query) {
+                        $query->where('direction', 1);
+                    },
+                    'votes as downVotes' => function ($query) {
+                        $query->where('direction', 0);
+                    }
+                ]);
+                if ($split['detailId']) {
+                    $query->where('id', $split['detailId']);
+                } else {
+                    $query->orderByDesc('id');
+                }
+            },
+        ])->findOrFail($split['songId']);
+
+        /**
+         * @var $details SongDetail
+         */
+        $details = $song->details->first();
+        $difficulties = array_keys(json_decode($details->difficulty_levels, true));
+
+        return [
+            'id'             => $song->id,
+            'name'           => $song->name,
+            'uploader'       => $song->uploader->name,
+            'uploaderId'     => $song->uploader->id,
+            'songName'       => $details->song_name,
+            'songSubName'    => $details->song_sub_name,
+            'authorName'     => $details->author_name,
+            'cover'          => $song->id . '-' . $details->id,
+            'coverMime'      => $details->cover,
+            'description'    => $song->description,
+            'difficulties'   => $difficulties, // @todo we may need the complete stats here in the future
+            'downloadCount'  => $details->download_count,
+            'playedCount'    => $details->play_count,
+            'upVotes'        => $details->upVotes,
+            'upVotesTotal'   => 0, //@todo get votes for song id instead of detailId
+            'downVotes'      => $details->downVotes,
+            'downVotesTotal' => 0, //@todo get votes for song id instead of detailId
+            'downloadKey'    => $song->id . '-' . $details->id,
+            'version'        => $song->details->count(), //@todo fix version if $detailId is specified
+            'createdAt'      => $details->created_at,
+        ];
+
     }
 
     /**

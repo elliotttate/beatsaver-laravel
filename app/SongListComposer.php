@@ -30,7 +30,7 @@ class SongListComposer
      */
     public function getUserSongCount(int $userId): int
     {
-        return Song::where('user_id', $userId)->count();
+        return Song::where('user_id', $userId)->whereNull('deleted_at')->count();
     }
 
     /**
@@ -49,9 +49,7 @@ class SongListComposer
         $doSearch = false;
         $orderBy = 'created_at';
 
-        $songs = $this->prepareQuery($orderBy, $offset, $limit)
-            ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
-            ->whereNull('s.deleted_at');
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
         foreach ($parameter as $key => $search) {
             $searchableKeys = $this->searchableKeys();
@@ -145,8 +143,8 @@ class SongListComposer
     {
         $orderBy = 'created_at';
         $songs = $this->prepareQuery($orderBy, $offset, $limit)
-            ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
-            ->where('s.user_id', $userId);
+            ->leftJoin('users as u', 's.user_id', '=', 'u.id')
+            ->whereNull('u.deleted_at')->where('s.user_id', $userId);
 
         return $this->prepareSongInfo($songs->get());
     }
@@ -186,6 +184,7 @@ class SongListComposer
 
     /**
      * Prepare a base query every song list uses.
+     * Song not delete, latest version
      *
      * WARNING: never pass unchecked, user defined data into {$orderBy} since it opens
      * the query for injection attacks!
@@ -198,8 +197,10 @@ class SongListComposer
      */
     protected function prepareQuery(string $orderBy, int $offset, int $limit): Builder
     {
-        return DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id))as songKey"))->whereNull('s.deleted_at')
-            ->groupBy(['sd.song_id'])->orderByRaw("(select {$orderBy} from song_details where id = max(sd.id)) desc")
+        return DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id))as songKey"))
+            ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
+            ->whereNull('s.deleted_at')->whereNull('sd.deleted_at')
+            ->groupBy(['sd.song_id'])->orderByRaw("(select {$orderBy} from song_details where id = max(sd.id) and deleted_at is null) desc")
             ->offset($offset)->limit($limit);
 
     }

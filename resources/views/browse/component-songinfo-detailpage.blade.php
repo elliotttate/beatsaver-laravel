@@ -3,11 +3,11 @@
     <tr>
         <th rowspan="6" style="width: 15%;" class="text-center">
             <div>
-                <img src="{{ asset("storage/songs/$cover.$coverMime") }}" alt="{{ $name }}" style="min-width: 10em; max-width: 10em;">
+                <img src="{{ $coverUrl }}" alt="{{ $name }}" style="min-width: 10em; max-width: 10em;">
             </div>
             <br/>
             <div>
-                <a class="btn btn-default" href="{{ route('download', ['key' => $downloadKey]) }}" role="button">Download File</a>
+                <a class="btn btn-default" href="{{ $downloadUrl }}" role="button">Download File</a>
             </div>
             <br/>
 
@@ -38,7 +38,7 @@
         <td colspan="2">
             @auth
                 <div>
-                    <form action="{{ route('votes.submit',['key' => $downloadKey]) }}" method="post">
+                    <form action="{{ route('votes.submit',['key' => $key]) }}" method="post">
                         {{ csrf_field() }}
                         <button type="submit" class="btn btn-default" name="type" value="up">
                             <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Up {{ $upVotes }}

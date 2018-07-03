@@ -2,6 +2,9 @@
     @slot('id')
         {{ $song['id'] }}
     @endslot
+    @slot('key')
+        {{ $song['key'] }}
+    @endslot
     @slot('name')
         {{ $song['name'] }}
     @endslot
@@ -19,12 +22,6 @@
     @endslot
     @slot('songSubName')
         {{ $song['songSubName'] }}
-    @endslot
-    @slot('cover')
-        {{ $song['cover'] }}
-    @endslot
-    @slot('coverMime')
-        {{ $song['coverMime'] }}
     @endslot
     @slot('description')
         {{ $song['description'] }}
@@ -46,13 +43,19 @@
     @slot('downVotes')
         {{ $song['downVotes'] }}
     @endslot
-    @slot('downloadKey')
-        {{ $song['downloadKey'] }}
-    @endslot
     @slot('version')
         {{ $song['version'] }}
     @endslot
     @slot('createdAt')
         {{ $song['createdAt'] }}
+    @endslot
+    @slot('linkUrl')
+        {{ $song['linkUrl'] }}
+    @endslot
+    @slot('downloadUrl')
+        {{ $song['downloadUrl'] }}
+    @endslot
+    @slot('coverUrl')
+        {{ $song['coverUrl'] }}
     @endslot
 @endcomponent

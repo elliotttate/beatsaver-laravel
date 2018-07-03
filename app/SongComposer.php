@@ -38,9 +38,9 @@ class SongComposer
             \Log::debug('cache empty ' . $key . ' try compose');
             if ($song = $this->compose($key)) {
                 // update cache after compose
-                cache()->put("song.{$song['downloadKey']}.info", $song, config('beatsaver.songCacheDuration'));
-                cache()->put("song.{$song['downloadKey']}.votes-1", $song['upVotes'], config('beatsaver.songCacheDuration'));
-                cache()->put("song.{$song['downloadKey']}.votes-0", $song['downVotes'], config('beatsaver.songCacheDuration'));
+                cache()->put("song.{$song['key']}.info", $song, config('beatsaver.songCacheDuration'));
+                cache()->put("song.{$song['key']}.votes-1", $song['upVotes'], config('beatsaver.songCacheDuration'));
+                cache()->put("song.{$song['key']}.votes-0", $song['downVotes'], config('beatsaver.songCacheDuration'));
                 return $song;
             }
             \Log::debug('compose failed');
@@ -93,15 +93,14 @@ class SongComposer
 
         return [
             'id'             => $song->id,
+            'key'            => $song->id . '-' . $songDetails->id,
             'name'           => $song->name,
+            'description'    => $song->description,
             'uploader'       => $song->uploader->name,
             'uploaderId'     => $song->uploader->id,
             'songName'       => $songDetails->song_name,
             'songSubName'    => $songDetails->song_sub_name,
             'authorName'     => $songDetails->author_name,
-            'cover'          => $song->id . '-' . $songDetails->id,
-            'coverMime'      => $songDetails->cover,
-            'description'    => $song->description,
             'difficulties'   => array_keys($songData['difficultyLevels']), // @todo we may need the complete stats here in the future
             'downloadCount'  => 0,
             'playedCount'    => 0,
@@ -109,9 +108,12 @@ class SongComposer
             'upVotesTotal'   => 0,
             'downVotes'      => 0,
             'downVotesTotal' => 0,
-            'downloadKey'    => $song->id . '-' . $songDetails->id,
             'version'        => $song->details->count(), //@todo fix version if $detailId is specified
             'createdAt'      => $songDetails->created_at,
+            'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $songDetails->id]),
+            'downloadUrl'    => route('download', ['key' => $song->id . '-' . $songDetails->id]),
+            'coverUrl'       => asset("storage/songs/{$song->id}-{$songDetails->id}.$songDetails->cover"),
+
         ];
     }
 
@@ -239,15 +241,14 @@ class SongComposer
 
         return [
             'id'             => $song->id,
+            'key'            => $song->id . '-' . $details->id,
             'name'           => $song->name,
+            'description'    => $song->description,
             'uploader'       => $song->uploader->name,
             'uploaderId'     => $song->uploader->id,
             'songName'       => $details->song_name,
             'songSubName'    => $details->song_sub_name,
             'authorName'     => $details->author_name,
-            'cover'          => $song->id . '-' . $details->id,
-            'coverMime'      => $details->cover,
-            'description'    => $song->description,
             'difficulties'   => $difficulties, // @todo we may need the complete stats here in the future
             'downloadCount'  => $details->download_count,
             'playedCount'    => $details->play_count,
@@ -255,9 +256,11 @@ class SongComposer
             'upVotesTotal'   => 0, //@todo get votes for song id instead of detailId
             'downVotes'      => $details->downVotes,
             'downVotesTotal' => 0, //@todo get votes for song id instead of detailId
-            'downloadKey'    => $song->id . '-' . $details->id,
             'version'        => $song->details->count(), //@todo fix version if $detailId is specified
             'createdAt'      => $details->created_at,
+            'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $details->id]),
+            'downloadUrl'    => route('download', ['key' => $song->id . '-' . $details->id]),
+            'coverUrl'       => asset("storage/songs/{$song->id}-{$details->id}.$details->cover"),
         ];
 
     }

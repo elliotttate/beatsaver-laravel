@@ -3,11 +3,11 @@
     <tr>
         <th rowspan="5" style="width: 15%;" class="text-center">
             <div>
-                <img src="{{ asset("storage/songs/$cover.$coverMime") }}" alt="{{ $name }}" style="min-width: 10em; max-width: 10em;">
+                <img src="{{ $coverUrl }}" alt="{{ $name }}" style="min-width: 10em; max-width: 10em;">
             </div>
             <br/>
             <div>
-                <a class="btn btn-default" href="{{ route('browse.detail', ['key' => $downloadKey]) }}" role="button">Details</a>
+                <a class="btn btn-default" href="{{ $linkUrl }}" role="button">Details</a>
             </div>
         </th>
         <th colspan="2">
@@ -29,7 +29,7 @@
     </tr>
     <tr>
         <td colspan="2">
-            <a class="btn btn-default" href="{{ route('download', ['key' => $downloadKey]) }}" role="button">Download File</a>
+            <a class="btn btn-default" href="{{ $downloadUrl }}" role="button">Download File</a>
         </td>
     </tr>
 </table>

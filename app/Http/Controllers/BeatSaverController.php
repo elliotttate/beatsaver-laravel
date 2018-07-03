@@ -33,7 +33,6 @@ class BeatSaverController extends Controller
     {
         $songs = $composer->getTopDownloadedSongs($start);
 
-        \Log::debug(count(\DB::getQueryLog()));
         return view('browse.downloads')->with(['songs' => $songs]);
     }
 

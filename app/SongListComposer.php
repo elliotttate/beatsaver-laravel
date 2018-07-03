@@ -146,7 +146,7 @@ class SongListComposer
         $orderBy = 'created_at';
         $songs = $this->prepareQuery($orderBy, $offset, $limit)
             ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
-            ->where('s.user_id', $userId)->whereNull('s.deleted_at');
+            ->where('s.user_id', $userId);
 
         return $this->prepareSongInfo($songs->get());
     }
@@ -198,9 +198,9 @@ class SongListComposer
      */
     protected function prepareQuery(string $orderBy, int $offset, int $limit): Builder
     {
-        return DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id))as songKey"))
+        return DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id))as songKey"))->whereNull('s.deleted_at')
             ->groupBy(['sd.song_id'])->orderByRaw("(select {$orderBy} from song_details where id = max(sd.id)) desc")
-            ->whereNull('sd.deleted_at')->offset($offset)->limit($limit);
+            ->offset($offset)->limit($limit);
 
     }
 

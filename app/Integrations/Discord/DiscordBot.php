@@ -39,7 +39,7 @@ class DiscordBot
     public function eventNewSong(array $songData)
     {
         $uploaderName = $songData['uploader'];
-        $songKey = $songData['downloadKey'];
+        $songKey = $songData['key'];
         try {
             Log::debug($this->url . 'SongUploaded');
             $response = $this->client->request('POST', 'SongUploaded', [

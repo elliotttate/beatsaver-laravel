@@ -47,7 +47,7 @@ class DiscordSendNewSongNotification
 
             if (config('beatsaver.discord.webhooks.enabled')) {
                 $message = $this->webhook->prepareMessage();
-                $message->setContent("New song uploaded by **{$songData['uploader']}** : ".route('browse.detail', ['key' => $songData['downloadKey']]));
+                $message->setContent("New song uploaded by **{$songData['uploader']}** : " . route('browse.detail', ['key' => $songData['key']]));
                 $this->webhook->postMessage($message);
             }
         } catch (GuzzleException $e) {

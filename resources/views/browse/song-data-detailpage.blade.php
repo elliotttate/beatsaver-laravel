@@ -27,7 +27,7 @@
         {{ $song['description'] }}
     @endslot
     @slot('difficulties')
-        @foreach($song['difficulties'] as $diff)
+        @foreach($song['difficulties'] as $diff => $data)
             {{ $diff }}@if(!$loop->last), @endif
         @endforeach
     @endslot

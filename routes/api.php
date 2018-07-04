@@ -18,5 +18,5 @@ Route::get('/songs/played/{start?}','ApiController@topPlayed');
 Route::get('/songs/newest/{start?}','ApiController@newest');
 Route::get('/songs/byuser/{id}/{start?}','ApiController@byUser');
 Route::get('/songs/detail/{key}','ApiController@detail');
-Route::get('/songs/vote/{key}/{$type}/{$votekey}','ApiController@search');
-Route::get('/songs/search/{type}/{key}','ApiController@vote');
+Route::get('/songs/vote/{key}/{$type}/{$votekey}','ApiController@vote');
+Route::get('/songs/search/{type}/{key}','ApiController@search');

@@ -92,10 +92,11 @@ class UploadParser
 
                 if ($this->zipHasFile($difficultyLevel['audioPath']) && $this->zipHasFile($difficultyLevel['jsonPath'])) {
                     $songData['difficultyLevels'][$difficultyLevel['difficulty']] = [
-                        'rank'      => $difficultyLevel['difficultyRank'],
-                        'audioPath' => $difficultyLevel['audioPath'],
-                        'jsonPath'  => $difficultyLevel['jsonPath'],
-                        'stats'     => [],
+                        'difficulty' => $difficultyLevel['difficulty'],
+                        'rank'       => $difficultyLevel['difficultyRank'],
+                        'audioPath'  => $difficultyLevel['audioPath'],
+                        'jsonPath'   => $difficultyLevel['jsonPath'],
+                        'stats'      => [],
                     ];
 
                     $difficultyDataRaw = $this->readFromZip($difficultyLevel['jsonPath']);

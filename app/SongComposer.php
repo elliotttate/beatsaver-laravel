@@ -101,7 +101,8 @@ class SongComposer
             'songName'       => $songDetails->song_name,
             'songSubName'    => $songDetails->song_sub_name,
             'authorName'     => $songDetails->author_name,
-            'difficulties'   => array_keys($songData['difficultyLevels']), // @todo we may need the complete stats here in the future
+            'bpm'            => $songDetails->bpm,
+            'difficulties'   => $songData['difficultyLevels'],
             'downloadCount'  => 0,
             'playedCount'    => 0,
             'upVotes'        => 0,
@@ -237,7 +238,7 @@ class SongComposer
          * @var $details SongDetail
          */
         $details = $song->details->first();
-        $difficulties = array_keys(json_decode($details->difficulty_levels, true));
+        $difficulties = json_decode($details->difficulty_levels, true);
 
         return [
             'id'             => $song->id,
@@ -249,7 +250,8 @@ class SongComposer
             'songName'       => $details->song_name,
             'songSubName'    => $details->song_sub_name,
             'authorName'     => $details->author_name,
-            'difficulties'   => $difficulties, // @todo we may need the complete stats here in the future
+            'bpm'            => $details->bpm,
+            'difficulties'   => $difficulties,
             'downloadCount'  => $details->download_count,
             'playedCount'    => $details->play_count,
             'upVotes'        => $details->upVotes,

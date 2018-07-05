@@ -70,7 +70,12 @@ class UploadParser
     {
         $songData = [];
 
-        $info = json_decode($this->readFromZip('info.json'), true);
+        $info = $this->readFromZip('info.json');
+        // workaround for info.json files with non UTF8 encoded characters
+        // remove BOM
+        $info = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $info);
+        $info = json_decode($info, true);
+
         if ($info) {
             $songData['songName'] = $info['songName'];
             $songData['songSubName'] = $info['songSubName'];

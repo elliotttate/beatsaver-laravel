@@ -11,12 +11,11 @@ return [
             'bearerToken' => env('BS_DISCORD_BOT_TOKEN', 'secret'),
         ],
         'webhooks' => [
-            'enabled' => env('BS_DISCORD_WEBHOOKS_ENABLED',false),
-            'username' => env('BS_DISCORD_WEBHOOKS_USERNAME',null),
-            'avatarUrl' => env('BS_DISCORD_WEBHOOKS_AVATAR',null),
-            'channel' => env('BS_DISCORD_WEBHOOKS_CHANNEL'),
+            'enabled'   => env('BS_DISCORD_WEBHOOKS_ENABLED', false),
+            'username'  => env('BS_DISCORD_WEBHOOKS_USERNAME', null),
+            'avatarUrl' => env('BS_DISCORD_WEBHOOKS_AVATAR', null),
+            'channel'   => env('BS_DISCORD_WEBHOOKS_CHANNEL'),
         ]
-
     ],
 
 ];

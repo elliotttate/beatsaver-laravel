@@ -10,9 +10,9 @@ Route::get('/browse/byuser/{id}/{start?}', 'BeatSaverController@byUser')->name('
 
 Route::get('/download/{key}', 'BeatSaverController@download')->name('download');
 
-Route::get('/search', 'BeatSaverController@search')->name('search.form');
+//Route::get('/search', 'BeatSaverController@search')->name('search.form');
 Route::post('/search', 'BeatSaverController@searchSubmit')->name('search.submit');
-Route::get('/search/{type}/{key}', 'BeatSaverController@searchResult')->name('search');
+Route::get('/search/{type?}/{key?}', 'BeatSaverController@searchResult')->name('search');
 
 Route::get('/legal/dmca', 'LegalController@dmca')->name('legal.dmca');
 Route::get('/legal/privacy', 'LegalController@privacy')->name('legal.privacy');

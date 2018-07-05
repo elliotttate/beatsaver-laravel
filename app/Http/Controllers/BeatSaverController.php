@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\SongUploaded;
 use App\Exceptions\UploadParserException;
+use App\Http\Requests\SearchRequest;
 use App\Http\Requests\UploadRequest;
 use App\Http\Requests\VoteRequest;
 use App\Models\User;
@@ -166,15 +167,34 @@ class BeatSaverController extends Controller
     }
 
     /**
-     * @param                  $type
-     * @param                  $key
+     * @param SearchRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function searchSubmit(SearchRequest $request)
+    {
+        $params = $request->only(['key']);
+        $params['type'] = 'all';
+
+        return redirect()->route('search', $params);
+    }
+
+    /**
+     * @param string           $type
+     * @param string           $key
      * @param SongListComposer $composer
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function searchResult($type,$key, SongListComposer $composer)
+    public function searchResult($type = 'all', $key = null, SongListComposer $composer)
     {
-        $parameter = [strtolower($type) => $key];
-        return view('browse.search')->with(['songs' => $composer->search($parameter)]);
+        $songs = [];
+
+        if (!is_null($key) && strlen($key) >= 3) {
+            $parameter = [strtolower($type) => $key];
+            $songs = $composer->search($parameter);
+        }
+
+        return view('browse.search')->with(['songs' => $songs, 'key' => $key]);
     }
 }

@@ -119,9 +119,13 @@ class ApiController extends Controller
      */
     public function search(string $type, string $key, SongListComposer $composer)
     {
+        if (strlen($key) < 3) {
+            return Response::json(['songs' => [], 'total' => 0]);
+        }
+
         $parameter = [strtolower($type) => $key];
         $songs = $composer->search($parameter);
-        $total = 0;
+        $total = count($songs);
         return Response::json(['songs' => $songs, 'total' => $total]);
     }
 }

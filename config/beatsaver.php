@@ -4,7 +4,7 @@ return [
     'githubUrl'         => env('BS_GITHUB_URL', 'https://github.com/Byorun/beatsaver-laravel'),
     'legalEmail'        => env('BS_LEAGAL_EMAIL'),
     'songCacheDuration' => env('BS_SONG_CACHE_DURATION', \App\SongComposer::CACHE_DURATION),
-    'discord'           => [
+    'discord'    => [
         'bot'      => [
             'enabled'     => env('BS_DISCORD_BOT_ENABLED', false),
             'url'         => env('BS_DISCORD_BOT_URL', 'http:/localhost/'),
@@ -15,7 +15,12 @@ return [
             'username'  => env('BS_DISCORD_WEBHOOKS_USERNAME', null),
             'avatarUrl' => env('BS_DISCORD_WEBHOOKS_AVATAR', null),
             'channel'   => env('BS_DISCORD_WEBHOOKS_CHANNEL'),
-        ]
+        ],
     ],
+    'scoreSaber' => [
+        'authKey'              => env('BS_SCORESABER_AUTH_KEY', null),
+        'enabled'              => env('BS_SCORESABER_ENABLED', false),
+        'syncMinDownloadCount' => env('BS_SCORESABER_SYNC_MIN_DOWNLOAD', 100),
+    ]
 
 ];

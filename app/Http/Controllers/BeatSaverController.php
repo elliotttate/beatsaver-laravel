@@ -32,9 +32,7 @@ class BeatSaverController extends Controller
      */
     public function topDownloads($start = 0, SongListComposer $composer)
     {
-        $songs = $composer->getTopDownloadedSongs($start);
-
-        return view('browse.downloads')->with(['songs' => $songs]);
+        return view('browse.downloads')->with(['songs' => $composer->getTopDownloadedSongs($start), 'start' => $start, 'steps' => $composer::DEFAULT_LIMIT]);
     }
 
     /**
@@ -45,7 +43,7 @@ class BeatSaverController extends Controller
      */
     public function topPlayed($start = 0, SongListComposer $composer)
     {
-        return view('browse.played')->with(['songs' => $composer->getTopPlayedSongs($start)]);
+        return view('browse.played')->with(['songs' => $composer->getTopPlayedSongs($start), 'start' => $start, 'steps' => $composer::DEFAULT_LIMIT]);
     }
 
     /**
@@ -56,7 +54,7 @@ class BeatSaverController extends Controller
      */
     public function newest($start = 0, SongListComposer $composer)
     {
-        return view('browse.newest')->with(['songs' => $composer->getNewestSongs($start)]);
+        return view('browse.newest')->with(['songs' => $composer->getNewestSongs($start), 'start' => $start, 'steps' => $composer::DEFAULT_LIMIT]);
     }
 
     /**
@@ -71,10 +69,12 @@ class BeatSaverController extends Controller
         $user = User::find($id);
         if ($user) {
             $name = $user->name;
+            $userId = $user->id;
         } else {
             $name = '';
+            $userId = 0;
         }
-        return view('browse.user')->with(['songs' => $composer->getSongsByUser($id, $start), 'username' => $name]);
+        return view('browse.user')->with(['songs' => $composer->getSongsByUser($id, $start), 'username' => $name, 'userId' => $userId, 'start' => $start, 'steps' => $composer::DEFAULT_LIMIT]);
     }
 
     /**

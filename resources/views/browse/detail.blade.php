@@ -7,13 +7,13 @@
             {{ $song['songName'] }} | {{ $song['songSubName'] }}
         @endslot
         @slot('ogImageUrl')
-            {{ asset("storage/songs/".$song['cover'].".".$song['coverMime']) }}
+            {{ $song['coverUrl'] }}
         @endslot
         @slot('ogDescription')
             {{ $song['name'] }} {{ $song['description'] }}
         @endslot
         @slot('ogUrl')
-            {{ URL::current() }}
+            {{ $song['linkUrl'] }}
         @endslot
     @endcomponent
 @endsection

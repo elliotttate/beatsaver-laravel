@@ -22,10 +22,11 @@
         <td>Difficulties: {{ $difficulties }}</td>
     </tr>
     <tr>
-        <td colspan="2">
+        <td>
             Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }} || <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> {{ $upVotes }} / <span
                     class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> {{ $downVotes }}
         </td>
+        <td>Lighting Events: {{ $events }}</td>
     </tr>
     <tr>
         <td colspan="2">

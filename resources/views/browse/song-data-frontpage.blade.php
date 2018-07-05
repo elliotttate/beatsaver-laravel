@@ -26,7 +26,13 @@
     @slot('difficulties')
         @foreach($song['difficulties'] as $diff => $data)
             {{ $diff }}@if(!$loop->last), @endif
+            @php
+                $events = $data['stats']['events'] ? 'Yes':'No'
+            @endphp
         @endforeach
+    @endslot
+    @slot('events')
+        {{ $events }}
     @endslot
     @slot('downloadCount')
         {{ $song['downloadCount'] }}

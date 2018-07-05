@@ -27,8 +27,11 @@
         <td>Difficulties: {{ $difficulties }}</td>
     </tr>
     <tr>
-        <td colspan="2">
+        <td>
             Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }}
+        </td>
+        <td>
+            Lighting Events: {{ $events }}
         </td>
     </tr>
     <tr>

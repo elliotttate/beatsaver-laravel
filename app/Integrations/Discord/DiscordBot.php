@@ -9,11 +9,6 @@ use Log;
 class DiscordBot
 {
     /**
-     * @var string
-     */
-    protected $url;
-
-    /**
      * @var \GuzzleHttp\Client
      */
     protected $client;
@@ -21,13 +16,12 @@ class DiscordBot
     public function __construct(string $url, string $bearerToken)
     {
         $this->client = new \GuzzleHttp\Client([
-            'base_url' => $url,
+            'base_uri' => $url,
             'timeout'  => 5,
             'headers'  => [
                 'Authorization' => "Bearer " . $bearerToken
             ]
         ]);
-        $this->url = $url;
     }
 
 
@@ -41,7 +35,6 @@ class DiscordBot
         $uploaderName = $songData['uploader'];
         $songKey = $songData['key'];
         try {
-            Log::debug($this->url . 'SongUploaded');
             $response = $this->client->request('POST', 'SongUploaded', [
                 'json' => [
                     'creatorName' => $uploaderName,

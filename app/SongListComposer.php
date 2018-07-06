@@ -49,7 +49,8 @@ class SongListComposer
         $doSearch = false;
         $orderBy = 'created_at';
 
-        $songs = $this->prepareQuery($orderBy, $offset, $limit);
+        $songs = $this->prepareQuery($orderBy, $offset, $limit)
+            ->leftJoin('users as u', 's.user_id', '=', 'u.id');
 
         foreach ($parameter as $key => $search) {
             $searchableKeys = $this->searchableKeys();
@@ -159,8 +160,9 @@ class SongListComposer
         return [
             'author' => 'sd.author_name',
             'name'   => 's.name',
+            'user'   => 'u.name',
             'song'   => ['sd.song_name', 'sd.song_sub_name'],
-            'all'    => ['sd.song_name', 'sd.song_sub_name', 'sd.author_name', 's.name'],
+            'all'    => ['sd.song_name', 'sd.song_sub_name', 'sd.author_name', 's.name', 'u.name'],
         ];
     }
 

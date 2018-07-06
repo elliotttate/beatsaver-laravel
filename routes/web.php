@@ -10,7 +10,6 @@ Route::get('/browse/byuser/{id}/{start?}', 'BeatSaverController@byUser')->name('
 
 Route::get('/download/{key}', 'BeatSaverController@download')->name('download');
 
-//Route::get('/search', 'BeatSaverController@search')->name('search.form');
 Route::post('/search', 'BeatSaverController@searchSubmit')->name('search.submit');
 Route::get('/search/{type?}/{key?}', 'BeatSaverController@searchResult')->name('search');
 
@@ -29,6 +28,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/auth/register/verify/{token}', 'UserController@verifyEmail')->name('register.verify');
     Route::post('/auth/register/verify/resend', 'UserController@verifyEmailResend')->name('register.verify.resend');
+
+    Route::get('/browse/detail/{id}/edit', 'BeatSaverController@songEdit')->name('browse.detail.edit');
+    Route::post('/browse/detail/{id}/edit', 'BeatSaverController@songEditSubmit')->name('browse.detail.edit.submit');
+    Route::get('/browse/detail/{id}/delete', 'BeatSaverController@songDelete')->name('browse.detail.delete');
+    Route::post('/browse/detail/{id}/delete', 'BeatSaverController@songDeleteSubmit')->name('browse.detail.delete.submit');
 });
 
 Route::group(['middleware' => ['guest']], function () {

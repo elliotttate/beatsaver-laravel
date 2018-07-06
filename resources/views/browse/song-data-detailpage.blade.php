@@ -1,4 +1,4 @@
-@component('browse.component-songinfo-detailpage')
+@component('browse.component-songinfo-detailpage',['uploaderId' => $song['uploaderId']])
     @slot('id')
         {{ $song['id'] }}
     @endslot
@@ -10,9 +10,6 @@
     @endslot
     @slot('uploader')
         {{ $song['uploader'] }}
-    @endslot
-    @slot('uploaderId')
-        {{ $song['uploaderId'] }}
     @endslot
     @slot('authorName')
         {{ $song['authorName'] }}

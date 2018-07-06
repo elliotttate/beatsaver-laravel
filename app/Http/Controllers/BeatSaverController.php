@@ -197,4 +197,39 @@ class BeatSaverController extends Controller
 
         return view('browse.search')->with(['songs' => $songs, 'key' => $key]);
     }
+
+
+    public function songEdit($id, SongComposer $composer)
+    {
+        $song = $composer->get($id);
+
+        if ($song && auth()->id() == $song['uploaderId']) {
+            return view('edit.edit')->with(['song' => $song]);
+        }
+
+        return redirect()->route('browse.user', ['id' => auth()->id()]);
+    }
+
+    public function songEditSubmit($id)
+    {
+        dd(request()->all());
+    }
+
+    public function songDelete($id, SongComposer $composer)
+    {
+        $song = $composer->get($id);
+
+        if ($song && auth()->id() == $song['uploaderId']) {
+            return view('edit.delete')->with(['song' => $song]);
+        }
+
+        return redirect()->route('browse.user', ['id' => auth()->id()]);
+    }
+
+    public function songDeleteSubmit($id, SongComposer $composer)
+    {
+        dd(request()->all());
+
+        $composer->delete($id);
+    }
 }

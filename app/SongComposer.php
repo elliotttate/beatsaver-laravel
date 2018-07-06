@@ -133,7 +133,10 @@ class SongComposer
                     $pi = pathinfo($value);
                     return preg_match("/^{$split['songId']}-(.*)\.(.*)/", strtolower($pi['basename']));
                 });
-                return Storage::delete($filesToDelete->toArray());
+                if (Storage::delete($filesToDelete->toArray())) {
+                    // @todo delete cache
+                    return true;
+                }
             }
             return false;
         } else {
@@ -142,7 +145,10 @@ class SongComposer
                     $pi = pathinfo($value);
                     return preg_match("/^{$split['songId']}-{$split['detailId']}\.(.*)/", strtolower($pi['basename']));
                 });
-                return Storage::delete($filesToDelete->toArray());
+                if (Storage::delete($filesToDelete->toArray())) {
+                    // @todo delete cache
+                    return true;
+                }
             }
             return false;
         }

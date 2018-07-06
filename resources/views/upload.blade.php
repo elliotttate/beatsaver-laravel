@@ -7,9 +7,7 @@
             <form class="form-signin" method="post" enctype="multipart/form-data" action="{{ route('upload.submit') }}">
                 {{ csrf_field() }}
                 <h2 class="form-signin-heading">Upload Beat Track</h2>
-                <label for="inputEmail" class="sr-only">Beat Track Name</label>
                 <div class="form-group">
-                    <label for="InputFile">Beat Track Name</label>
                     <input type="text" name="name" id="inputTitle" class="form-control" placeholder="160 Letters Max" maxlength="160" required autofocus/>
                 </div>
                 <div class="form-group">

@@ -12,7 +12,7 @@
             <br/>
 
             <div>
-                <a class="btn btn-default" href="{{ URL::previous('home') }}">Back</a>
+                <a class="btn btn-default" href="{{ route('browse.top.newest') }}">Back</a>
             </div>
         </th>
         <th colspan="2">
@@ -35,10 +35,10 @@
         </td>
     </tr>
     <tr>
-        <td colspan="2">{{ $description }}</td>
+        <td colspan="2">{!! nl2br(e($description)) !!}</td>
     </tr>
     <tr>
-        <td colspan="2">
+        <td>
             @auth
                 <div>
                     <form action="{{ route('votes.submit',['key' => $key]) }}" method="post">
@@ -52,6 +52,14 @@
                     </form>
                 </div>
                 <br/>
+            @endauth
+        </td>
+        <td class="text-right">
+            @auth
+                @if(auth()->id() == $uploaderId)
+                    <a class="btn btn-default btn-primary" href="{{ route('browse.detail.edit',['id' => $id]) }}" role="button">Edit</a>
+                    <a class="btn btn-default btn-danger" href="{{ route('browse.detail.delete',['id' => $id]) }}" role="button">Delete</a>
+                @endif
             @endauth
         </td>
     </tr>

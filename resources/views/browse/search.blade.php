@@ -3,13 +3,17 @@
 
 @section('content')
 
-    <div class="container">
-
+    <div class="row">
         <form class="form-signin" method="post" action="{{ route('search.submit',['type' => 'all']) }}">
             {{ csrf_field() }}
-            <input type="text" id="inputSearchKey" class="form-control" placeholder="Name / Song Name / Author" name="key" minlength="3" value="{{ $key }}" required autofocus>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
-            <br>
+            <div class="col-md-6 col-md-offset-3">
+                <div class="input-group">
+                    <input type="text" id="inputSearchKey" class="form-control" placeholder="Search for... Name / Song Name / Author" name="key" minlength="3" value="{{ $key }}" required autofocus>
+                    <span class="input-group-btn">
+                    <button class="btn btn-primary btn-block" type="submit">Search</button>
+                </span>
+                </div>
+            </div>
         </form>
     </div>
 

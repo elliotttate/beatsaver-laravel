@@ -8,6 +8,8 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResendEmailVerificationRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UpdateEmailRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Hash;
@@ -29,6 +31,10 @@ class UserController extends Controller
      */
     public function registerSubmit(RegisterRequest $request)
     {
+        if (User::where('email', sha1($request->input('email')))->first()) {
+            return redirect()->back()->withErrors('Email is not available!');
+        }
+
         $newUser = User::create([
             'name'     => $request->input('username'),
             'email'    => $request->input('email'),
@@ -120,7 +126,7 @@ class UserController extends Controller
         Password::broker()->sendResetLink(['email' => $request->input('email')]);
 
         // always sent a positive response in order to prevent email fishing
-        return redirect()->route('password.reset.request.form')->with('request-send',true);
+        return redirect()->route('password.reset.request.form')->with('request-send', true);
     }
 
     /**
@@ -142,22 +148,49 @@ class UserController extends Controller
      */
     public function confirmPasswordResetSubmit(ConfirmPasswordResetRequest $request)
     {
-        $status = Password::broker()->reset($request->only(['password','password_confirmation','token','email']), function($user,$password) {
+        $status = Password::broker()->reset($request->only(['password', 'password_confirmation', 'token', 'email']), function ($user, $password) {
             $user->password = Hash::make($password);
             $user->setRememberToken(str_random(40));
             $user->save();
             auth()->login($user);
         });
 
-        if($status == PasswordBroker::PASSWORD_RESET) {
+        if ($status == PasswordBroker::PASSWORD_RESET) {
             return redirect()->route('profile');
         }
-        return redirect()->route('password.reset.complete.form')->with('status-error','Reset failed. Please try again');
+        return redirect()->route('password.reset.complete.form')->with('status-error', 'Reset failed. Please try again');
     }
 
     public function profile()
     {
         return view('profile');
+    }
+
+    public function updateEmail(UpdateEmailRequest $request)
+    {
+        $user = auth()->user();
+        if (User::where('email', sha1($request->input('email')))->where('id','<>', $user->id)->first()) {
+            return redirect()->back()->withErrors('Email is not available!');
+        }
+
+        if($request->input('email_old') == $user->email || $request->input('email_old') == sha1($user-email)){
+            $user->email = $request->input('email');
+            $user->save();
+            event(new UserRegistered(auth()->user()));
+        }
+        return redirect()->route('profile')->with('status-success','Email successfully change.');
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request)
+    {
+        $user = auth()->user();
+        if(!Hash::check($request->input('password_old'),$user->password)){
+            return redirect()->back()->withErrors('Passwords do not match');
+        }
+        $user->password = Hash::make($request->input('password'));
+        $user->save();
+
+        return redirect()->route('profile')->with('status-success','Password successfully changed');
     }
 
     /**

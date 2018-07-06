@@ -27,21 +27,18 @@
 <body>
 
 <!-- Fixed navbar -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-expand navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('/img/beat_saver_logo_white.png') }}" height="35em" style="margin-top: -7px;"></a>
+        <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('/img/beat_saver_logo_white.png') }}" height="35em" style="margin-top: -7px;"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             @include('nav')
         </div>
     </div>
 </nav>
-<div class="container">
-    <div class="row">
-        <div class="col-md-1"><br><br><br><br></div>
-    </div>
-    <br/>
+<div class="container" style="padding-top: 60px">
+    <hr>
     @if($errors->isNotEmpty())
         <div class="alert alert-danger" role="alert">
             <ul>

@@ -6,6 +6,7 @@ use App\Mail\PasswordReset;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 use Mail;
 
 class User extends Authenticatable
@@ -63,6 +64,14 @@ class User extends Authenticatable
     public function isVerified(): bool
     {
         return is_null($this->verification_code);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasLegacyEmail(): bool
+    {
+        return ($this->email && !Str::contains('@',$this->email));
     }
 
     /**

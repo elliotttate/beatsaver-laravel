@@ -24,6 +24,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/upload', 'BeatSaverController@uploadSubmit')->name('upload.submit');
 
     Route::get('/profile', 'UserController@profile')->name('profile');
+    Route::post('/profile/update/email', 'UserController@updateEmail')->name('profile.update.email');
+    Route::post('/profile/update/password', 'UserController@updatePassword')->name('profile.update.password');
 
     Route::get('/auth/register/verify/{token}', 'UserController@verifyEmail')->name('register.verify');
     Route::post('/auth/register/verify/resend', 'UserController@verifyEmailResend')->name('register.verify.resend');

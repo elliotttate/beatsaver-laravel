@@ -173,12 +173,13 @@ class UserController extends Controller
             return redirect()->back()->withErrors('Email is not available!');
         }
 
-        if($request->input('email_old') == $user->email || $request->input('email_old') == sha1($user-email)){
+        if ($request->input('email_old') == $user->email || sha1($request->input('email_old')) == $user->email) {
             $user->email = $request->input('email');
             $user->save();
-            event(new UserRegistered(auth()->user()));
+            event(new UserRegistered(auth()->user())); //@todo send email updated event
+            return redirect()->route('profile')->with('status-success', 'Email successfully changed.');
         }
-        return redirect()->route('profile')->with('status-success','Email successfully change.');
+        return redirect()->route('profile')->with('status-error', 'Email could not be changed! Please try again.');
     }
 
     public function updatePassword(UpdatePasswordRequest $request)

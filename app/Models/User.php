@@ -71,7 +71,7 @@ class User extends Authenticatable
      */
     public function hasLegacyEmail(): bool
     {
-        return ($this->email && !Str::contains('@',$this->email));
+        return ($this->email && !Str::contains($this->email, '@'));
     }
 
     /**

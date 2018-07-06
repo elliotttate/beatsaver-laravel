@@ -67,13 +67,13 @@ class BeatSaverController extends Controller
     public function byUser($id, $start = 0, SongListComposer $composer)
     {
         $user = User::find($id);
-        if ($user) {
-            $name = $user->name;
-            $userId = $user->id;
-        } else {
-            $name = '';
-            $userId = 0;
+        if (!$user) {
+            return view('browse.user')->with(['songs' => [], 'username' => 'Unknown User', 'userId' => 0, 'start' => 0, 'steps' => 1]);
         }
+
+        $name = $user->name;
+        $userId = $user->id;
+
         return view('browse.user')->with(['songs' => $composer->getSongsByUser($id, $start), 'username' => $name, 'userId' => $userId, 'start' => $start, 'steps' => $composer::DEFAULT_LIMIT]);
     }
 

@@ -19,6 +19,5 @@
 @endsection
 
 @section('content')
-    <br/><br/>
     @include('browse.song-data-detailpage')
 @endsection

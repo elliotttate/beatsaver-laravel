@@ -2,7 +2,6 @@
 @section('title', '- Top Played')
 
 @section('content')
-    <br /><br />
     @each('browse.song-data-frontpage',$songs,'song')
 
     @if($start >= 0 && count($songs) > 0)

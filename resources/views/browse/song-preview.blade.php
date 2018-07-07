@@ -4,11 +4,11 @@
     @slot('name', $song['name'])
     @slot('uploader', $song['uploader'])
     @slot('uploaderId', $song['uploaderId'])
-    @slot('authorName', $song['authorName'])
-    @slot('songName', $song['songName'])
-    @slot('songSubName', $song['songSubName'])
+    @slot('authorName', $song['version'][$song['key']]['authorName'])
+    @slot('songName', $song['version'][$song['key']]['songName'])
+    @slot('songSubName', $song['version'][$song['key']]['songSubName'])
     @slot('difficulties')
-        @foreach($song['difficulties'] as $diff => $data)
+        @foreach($song['version'][$song['key']]['difficulties'] as $diff => $data)
             {{ $diff }}@if(!$loop->last), @endif
             @php
                 $events = $data['stats']['events'] ? 'Yes':'No'
@@ -16,14 +16,14 @@
         @endforeach
     @endslot
     @slot('events', $events)
-    @slot('downloadCount', $song['downloadCount'])
-    @slot('playedCount', $song['playedCount'])
-    @slot('upVotes', $song['upVotes'])
-    @slot('downVotes', $song['downVotes'])
-    @slot('version', $song['version'])
-    @slot('createdAt', $song['createdAt'])
-    @slot('linkUrl', $song['linkUrl'])
-    @slot('downloadUrl', $song['downloadUrl'])
-    @slot('coverUrl', $song['coverUrl'])
+    @slot('downloadCount', $song['version'][$song['key']]['downloadCount'])
+    @slot('playedCount', $song['version'][$song['key']]['playedCount'])
+    @slot('upVotes', $song['version'][$song['key']]['upVotes'])
+    @slot('downVotes', $song['version'][$song['key']]['downVotes'])
+    @slot('version', $song['key'])
+    @slot('createdAt', $song['version'][$song['key']]['createdAt'])
+    @slot('linkUrl', $song['version'][$song['key']]['linkUrl'])
+    @slot('downloadUrl', $song['version'][$song['key']]['downloadUrl'])
+    @slot('coverUrl', $song['version'][$song['key']]['coverUrl'])
 
 @endcomponent

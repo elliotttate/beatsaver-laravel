@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Events\SongUploaded;
-use App\Exceptions\UploadParserException;
 use App\Http\Requests\DeleteSongRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\UpdateSongRequest;
 use App\Http\Requests\UploadRequest;
 use App\Http\Requests\VoteRequest;
+use App\Models\Song;
 use App\Models\User;
 use App\SongComposer;
 use App\SongListComposer;
-use App\UploadParser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\UnauthorizedException;
+use Log;
 
 class BeatSaverController extends Controller
 {
@@ -159,25 +160,20 @@ class BeatSaverController extends Controller
         if (!auth()->user()->isVerified()) {
             return redirect()->back()->withErrors('Your email needs to be verified in order to upload songs.');
         }
-        $process = $request->file('fileupload')->store('process');
+        $process = $request->file('fileupload');
 
         $metadata = $request->only(['name', 'description']);
-        $metadata['tempFile'] = $process;
         $metadata['userId'] = auth()->id();
+        $metadata['songId'] = null;
 
-        try {
-            $parser = new UploadParser($process);
-            if (!$songData = $parser->getSongData()) {
-                return redirect()->back()->withErrors('Invalid song format.');
-            }
+        $song = $composer->createOrUpdate($metadata, $process);
 
-            if ($song = $composer->create($metadata, $songData)) {
-                event(new SongUploaded($song));
-            }
-        } catch (UploadParserException $e) {
-            //@todo real error message!
-            return redirect()->back()->withErrors('Invalid song format.');
+        if ($song['status'] != $composer::SONG_CREATED) {
+            Log::debug($song['status']);
+            return redirect()->back()->withErrors($composer->getErrorText($song['status']));
         }
+
+        event(new SongUploaded($song['song']));
 
         return redirect()->route('browse.user', ['id' => auth()->id()]);
     }
@@ -242,9 +238,37 @@ class BeatSaverController extends Controller
 
     public function songEditSubmit($id, UpdateSongRequest $request, SongComposer $composer)
     {
-        $composer->delete();
+        $song = Song::find($id);
 
-        dd(request()->all());
+        if (!$song) {
+            return redirect()->back()->withErrors('Invalid Song.');
+        }
+
+        if ($song && auth()->id() != $song->user_id) {
+            throw new UnauthorizedException('Access Denied!');
+        }
+
+        if ($request->hasFile('fileupload')) {
+            if (!auth()->user()->isVerified()) {
+                return redirect()->back()->withErrors('Your email needs to be verified in order to upload songs.');
+            }
+            $process = $request->file('fileupload');
+        } else {
+            $process = false;
+        }
+
+        $metadata = $request->only(['name', 'description']);
+        $metadata['userId'] = auth()->id();
+        $metadata['updateFile'] = $process;
+        $metadata['songId'] = $song->id;
+
+        $info = $composer->createOrUpdate($metadata, $process);
+
+        if ($info['status'] == $composer::SONG_CREATED || $info['status'] == $composer::SONG_UPDATED) {
+            return redirect()->route('browse.detail', ['key' => $info['song']['key']]);
+        }
+
+        return redirect()->back()->withErrors($composer->getErrorText($info['status']));
     }
 
     public function songDelete($id, SongComposer $composer)
@@ -260,8 +284,14 @@ class BeatSaverController extends Controller
 
     public function songDeleteSubmit($id, DeleteSongRequest $request, SongComposer $composer)
     {
-        dd(request()->all());
 
-        $composer->delete($id);
+        if ($request->input('confirm', 0)) {
+            if ($composer->delete($id)) {
+                return redirect()->route('browse.user', ['id' => auth()->id()])->with('status-success', 'Delete successful.');
+            }
+        }
+        return redirect()->route('browse.detail', ['key' => $id]);
+
+
     }
 }

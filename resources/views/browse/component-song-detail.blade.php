@@ -20,7 +20,8 @@
         </th>
     </tr>
     <tr>
-        <td colspan="2">Song: {{ $songName }} - {{ $songSubName }}</td>
+        <td>Song: {{ $songName }} - {{ $songSubName }}</td>
+        <td class="text-right">Version: {{$version}}</td>
     </tr>
     <tr>
         <td>Author: {{ $authorName }}</td>

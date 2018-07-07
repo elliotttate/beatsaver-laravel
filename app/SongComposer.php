@@ -6,6 +6,9 @@ use App\Models\Song;
 use App\Models\SongDetail;
 use App\Models\User;
 use App\Models\Vote;
+use Cache;
+use File;
+use Log;
 use Storage;
 
 class SongComposer
@@ -18,60 +21,118 @@ class SongComposer
     const VOTE_UP = 1;
     const VOTE_DOWN = 0;
 
+    const SONG_CREATED = 0;
+    const ERROR_INVALID_FORMAT = 1;
+    const ERROR_ALREADY_EXISTS = 2;
+    const ERROR_INVALID_USER = 3;
+    const SONG_UPDATED = 4;
+
     /**
      * Get the song info from $key, return cached data (if exists).
+     * If updateCache is true the cache will be updated from the database
+     * and a fresh result is returned.
      *
      * @param string $key
+     * @param bool   $updateCache
      *
      * @return array
      */
-    public function get(string $key): array
+    public function get(string $key, $updateCache = false): array
     {
-        try {
-            $song = cache("song.{$key}.info");
-            if ($song) {
-                \Log::debug('load from cache ' . $key);
-                $song['upVotes'] = cache("song.{$key}.votes-1", $song['upVotes']);
-                $song['downVotes'] = cache("song.{$key}.votes-0", $song['downVotes']);
-                return $song;
-            }
-            \Log::debug('cache empty ' . $key . ' try compose');
-            if ($song = $this->compose($key)) {
-                // update cache after compose
-                cache()->put("song.{$song['key']}.info", $song, config('beatsaver.songCacheDuration'));
-                cache()->put("song.{$song['key']}.votes-1", $song['upVotes'], config('beatsaver.songCacheDuration'));
-                cache()->put("song.{$song['key']}.votes-0", $song['downVotes'], config('beatsaver.songCacheDuration'));
-                return $song;
-            }
-            \Log::debug('compose failed');
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            return [];
+        if ($updateCache) {
+            $song = $this->compose($key);
+            $this->updateCache($song);
+            return $song;
         }
+
+        $split = $this->parseKey($key);
+
+        // no version selected try to find default one
+//        if (is_null($split['detailId'])) {
+//            $split = $this->parseKey(Cache::tags(['song-' . $split['songId']])->get('default', $split));
+//        }
+
+        $song = Cache::tags(['song-' . $split['songId']])->get('info');
+        if ($song) {
+            Log::debug('load from cache ' . $key);
+            foreach ($song['version'] as &$version) {
+                $version['upVotes'] = Cache::tags(['song-' . $split['songId']])->get("votes-{$split['detailId']}-1", 0);
+                $version['downVotes'] = Cache::tags(['song-' . $split['songId']])->get("votes-{$split['detailId']}-0", 0);
+                $version['downloadCount'] = Cache::tags(['song-' . $split['songId']])->get("downloads-{$split['detailId']}", 0);
+            }
+            return $song;
+        }
+
+        Log::debug('cache empty ' . $key . ' try compose');
+        if ($song = $this->compose($key)) {
+            $this->updateCache($song);
+            return $song;
+        }
+        Log::debug('compose failed');
 
         return [];
     }
 
     /**
-     * Store a new song in the database.
+     * Store a new or update an existing song in the database.
      *
-     * @param array $metadata
-     * @param array $songData
+     * @param array  $metadata
+     * @param string $file
      *
      * @return array
      */
-    public function create(array $metadata, array $songData): array
+    public function createOrUpdate(array $metadata, string $file): array
     {
-        //check if song hash already exists
-        if (SongDetail::where('hash_md5', $songData['hashMD5'])->where('hash_sha1', $songData['hashSHA1'])->first()) {
-            return [];
+        //check if song fingerprint already exists
+        if (!empty($file)) {
+            try {
+                $parser = new UploadParser($file);
+                $songData = $parser->getSongData();
+            } catch (Exceptions\UploadParserException $e) {
+                Log::error($e->getMessage());
+                return ['status' => static::ERROR_INVALID_FORMAT];
+            }
+
+            //check if song hash already exists
+            // if a songId is present assume that we want to create an update and check the SHA1 hash too
+            if ($metadata['songId'] && SongDetail::where('hash_md5', $songData['hashMD5'])->where('hash_sha1', $songData['hashSHA1'])->first()) {
+                return ['status' => static::ERROR_ALREADY_EXISTS];
+            }
+
+            // if a songId is not present assume that we want to create a new song and only check the MD5 hash
+            if (!$metadata['songId'] && SongDetail::where('hash_md5', $songData['hashMD5'])->first()) {
+                return ['status' => static::ERROR_ALREADY_EXISTS];
+            }
+
+            if (empty($songData)) {
+                return ['status' => static::ERROR_INVALID_FORMAT];
+            }
         }
 
-        $user = User::findOrFail($metadata['userId']);
-        $song = new Song([
+        /**
+         * @var $user User
+         */
+        if (!$user = User::find($metadata['userId'])) {
+            return ['status' => static::ERROR_INVALID_USER];
+        }
+
+        // do song master data update
+        $song = $user->songs()->updateOrCreate([
+            'id' => $metadata['songId'],
+        ], [
             'name'        => $metadata['name'],
             'description' => $metadata['description'],
         ]);
+
+        // return song early if we only update meta data
+        if (empty($file)) {
+            return [
+                'status' => static::SONG_UPDATED,
+                'song'   => $this->get($song->id, true)
+            ];
+        }
+
+        // create song data entry
         $songDetails = new SongDetail([
             'song_name'         => $songData['songName'],
             'song_sub_name'     => $songData['songSubName'],
@@ -83,39 +144,70 @@ class SongComposer
             'hash_sha1'         => $songData['hashSHA1'],
         ]);
 
-        $user->songs()->save($song);
         $song->details()->save($songDetails);
+
         if (!Storage::disk()->exists('public/songs/' . $song->id)) {
             Storage::disk()->makeDirectory('public/songs/' . $song->id);
         }
-        Storage::disk()->move($metadata['tempFile'], "public/songs/{$song->id}/{$song->id}-{$songDetails->id}.zip");
+
+        File::move($file, storage_path('app/public/songs') . "/{$song->id}/{$song->id}-{$songDetails->id}.zip");
         Storage::disk()->put("public/songs/{$song->id}/{$song->id}-{$songDetails->id}.{$songData['coverType']}", base64_decode($songData['coverData']));
 
         return [
-            'id'             => $song->id,
-            'key'            => $song->id . '-' . $songDetails->id,
-            'name'           => $song->name,
-            'description'    => $song->description,
-            'uploader'       => $song->uploader->name,
-            'uploaderId'     => $song->uploader->id,
-            'songName'       => $songDetails->song_name,
-            'songSubName'    => $songDetails->song_sub_name,
-            'authorName'     => $songDetails->author_name,
-            'bpm'            => $songDetails->bpm,
-            'difficulties'   => $songData['difficultyLevels'],
-            'downloadCount'  => 0,
-            'playedCount'    => 0,
-            'upVotes'        => 0,
-            'upVotesTotal'   => 0,
-            'downVotes'      => 0,
-            'downVotesTotal' => 0,
-            'version'        => $song->details->count(), //@todo fix version if $detailId is specified
-            'createdAt'      => $songDetails->created_at,
-            'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $songDetails->id]),
-            'downloadUrl'    => route('download', ['key' => $song->id . '-' . $songDetails->id]),
-            'coverUrl'       => asset("storage/songs/{$song->id}/{$song->id}-{$songDetails->id}.$songDetails->cover"),
-
+            'status' => static::SONG_CREATED,
+            'song'   => [
+                'id'             => $song->id,
+                'key'            => $song->id . '-' . $songDetails->id,
+                'name'           => $song->name,
+                'description'    => $song->description,
+                'uploader'       => $song->uploader->name,
+                'uploaderId'     => $song->uploader->id,
+                'songName'       => $songDetails->song_name,
+                'songSubName'    => $songDetails->song_sub_name,
+                'authorName'     => $songDetails->author_name,
+                'bpm'            => $songDetails->bpm,
+                'difficulties'   => $songData['difficultyLevels'],
+                'downloadCount'  => 0,
+                'playedCount'    => 0,
+                'upVotes'        => 0,
+                'upVotesTotal'   => 0,
+                'downVotes'      => 0,
+                'downVotesTotal' => 0,
+                'version'        => $song->details->count(), //@todo fix version if $detailId is specified
+                'createdAt'      => $songDetails->created_at,
+                'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $songDetails->id]),
+                'downloadUrl'    => route('download', ['key' => $song->id . '-' . $songDetails->id]),
+                'coverUrl'       => asset("storage/songs/{$song->id}/{$song->id}-{$songDetails->id}.$songDetails->cover"),
+            ]
         ];
+    }
+
+    /**
+     * @param Song  $song
+     * @param array $metadata
+     *
+     * @return array
+     */
+    public function update(Song $song, array $metadata)
+    {
+        if ($song) {
+            if (!empty($metadata['updateFile'])) {
+                Log::debug('found update file');
+                return $this->createOrUpdate($metadata, $metadata['updateFile']);
+            }
+
+            Log::debug('only update meta data');
+            // only update meta data
+            $song->name = $metadata['name'];
+            $song->description = $metadata['description'];
+            $song->save();
+
+            return $this->get($song->id);
+        }
+
+        Log::debug('no song');
+
+        return [];
     }
 
     /**
@@ -134,7 +226,7 @@ class SongComposer
                     return preg_match("/^{$split['songId']}-(.*)\.(.*)/", strtolower($pi['basename']));
                 });
                 if (Storage::delete($filesToDelete->toArray())) {
-                    // @todo delete cache
+                    Cache::tags(['song-' . $split['songId']])->flush();
                     return true;
                 }
             }
@@ -169,24 +261,32 @@ class SongComposer
             return false;
         }
 
+        // prevent cache vote count abuse
+        $vote = Vote::where('song_id', $split['songId'])
+            ->where('detail_id', $split['detailId'])
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($vote && $vote->direction == $direction) {
+            return true;
+        }
+
         $vote = Vote::updateOrCreate([
             'song_id'   => $split['songId'],
             'detail_id' => $split['detailId'],
             'user_id'   => $user->id,
         ], ['direction' => $direction]);
 
-        try {
-            if ($vote->wasRecentlyCreated && $direction == static::VOTE_UP) {
-                cache()->increment("song.{$key}.votes-1", 1);
-            } elseif ($vote->wasRecentlyCreated && $direction == static::VOTE_DOWN) {
-                cache()->increment("song.{$key}.votes-0", 1);
-            } else {
-                cache()->increment("song.{$key}.votes-{$direction}", 1);
-                $decrement = $direction == static::VOTE_UP ? static::VOTE_DOWN : static::VOTE_UP;
-                cache()->decrement("song.{$key}.votes-{$decrement}", 1);
-            }
-        } catch (\Exception $e) {
-            // ignore cache errors, the next song update will fix them automatically
+        if ($vote->wasRecentlyCreated && $direction == static::VOTE_UP) {
+            Cache::tags(['song-' . $split['songId']])->increment("votes-{$split['detailId']}-1", 1);
+        } elseif ($vote->wasRecentlyCreated && $direction == static::VOTE_DOWN) {
+            Cache::tags(['song-' . $split['songId']])->increment("votes-{$split['detailId']}-0", 1);
+        } else {
+            Log::debug($direction);
+            Cache::tags(['song-' . $split['songId']])->increment("votes-{$split['detailId']}-{$direction}", 1);
+            $decrement = $direction == static::VOTE_UP ? static::VOTE_DOWN : static::VOTE_UP;
+            Cache::tags(['song-' . $split['songId']])->decrement("votes-{$split['detailId']}-{$decrement}", 1);
+            Log::debug($decrement);
         }
 
         return true;
@@ -203,7 +303,7 @@ class SongComposer
 
         // @todo stop/prevent download count faking
         if ($downloadCount = SongDetail::where('id', $split['detailId'])->where('song_id', $split['songId'])->increment('download_count', 1)) {
-            //@todo update cache with new download count
+            Cache::tags(['song-' . $split['songId']])->increment("downloads-{$split['detailId']}", 1);
             return \response()->download(storage_path("app/public/songs") . "/{$split['songId']}/{$split['songId']}-{$split['detailId']}.zip");
         }
 
@@ -240,37 +340,41 @@ class SongComposer
             },
         ])->findOrFail($split['songId']);
 
-        /**
-         * @var $details SongDetail
-         */
-        $details = $song->details->first();
-        $difficulties = json_decode($details->difficulty_levels, true);
+        $songData = [
+            'id'          => $song->id,
+            'key'         => $song->id . '-' . $song->details->first()->id,
+            'name'        => $song->name,
+            'description' => $song->description,
+            'uploader'    => $song->uploader->name,
+            'uploaderId'  => $song->uploader->id,
+            'version'     => [
 
-        return [
-            'id'             => $song->id,
-            'key'            => $song->id . '-' . $details->id,
-            'name'           => $song->name,
-            'description'    => $song->description,
-            'uploader'       => $song->uploader->name,
-            'uploaderId'     => $song->uploader->id,
-            'songName'       => $details->song_name,
-            'songSubName'    => $details->song_sub_name,
-            'authorName'     => $details->author_name,
-            'bpm'            => $details->bpm,
-            'difficulties'   => $difficulties,
-            'downloadCount'  => $details->download_count,
-            'playedCount'    => $details->play_count,
-            'upVotes'        => $details->upVotes,
-            'upVotesTotal'   => 0, //@todo get votes for song id instead of detailId
-            'downVotes'      => $details->downVotes,
-            'downVotesTotal' => 0, //@todo get votes for song id instead of detailId
-            'version'        => $song->details->count(), //@todo fix version if $detailId is specified
-            'createdAt'      => $details->created_at,
-            'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $details->id]),
-            'downloadUrl'    => route('download', ['key' => $song->id . '-' . $details->id]),
-            'coverUrl'       => asset("storage/songs/{$song->id}/{$song->id}-{$details->id}.$details->cover"),
+            ],
+            'createdAt'   => $song->created_at,
         ];
 
+        foreach ($song->details as $detail) {
+            $songData['version'][$song->id . '-' . $detail->id] = [
+                'songName'       => $detail->song_name,
+                'songSubName'    => $detail->song_sub_name,
+                'authorName'     => $detail->author_name,
+                'bpm'            => $detail->bpm,
+                'difficulties'   => json_decode($detail->difficulty_levels, true) ?? [],
+                'downloadCount'  => $detail->download_count,
+                'playedCount'    => $detail->play_count,
+                'upVotes'        => $detail->upVotes,
+                'upVotesTotal'   => 0, //@todo get votes for song id instead of detailId
+                'downVotes'      => $detail->downVotes,
+                'downVotesTotal' => 0, //@todo get votes for song id instead of detailId
+                'createdAt'      => $detail->created_at,
+                'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $detail->id]),
+                'downloadUrl'    => route('download', ['key' => $song->id . '-' . $detail->id]),
+                'coverUrl'       => asset("storage/songs/{$song->id}/{$song->id}-{$detail->id}.$detail->cover"),
+            ];
+        }
+
+
+        return $songData;
     }
 
     /**
@@ -278,7 +382,7 @@ class SongComposer
      *
      * @return array
      */
-    protected function parseKey(string $key)
+    protected function parseKey(string $key): array
     {
         $split = explode('-', $key, 2);
 
@@ -286,5 +390,38 @@ class SongComposer
         $detailId = $split[1] ?? null;
 
         return compact('songId', 'detailId');
+    }
+
+    /**
+     * @param int $code
+     *
+     * @return string
+     */
+    public function getErrorText(int $code): string
+    {
+        $translation = [
+            static::SONG_CREATED         => 'Song created successfully.',
+            static::ERROR_ALREADY_EXISTS => 'The same song already exists.',
+            static::ERROR_INVALID_FORMAT => 'The song format is invalid.',
+            static::ERROR_INVALID_USER   => 'The user is invalid',
+            static::SONG_UPDATED         => 'Song updated successfully',
+        ];
+        return $translation[$code] ?? 'Code ' . $code . ' Unknown';
+    }
+
+    /**
+     * @param array $song
+     */
+    protected function updateCache(array $song)
+    {
+        $split = $this->parseKey($song['key']);
+
+        Cache::tags(['song-' . $split['songId']])->put('default', $song['key'], config('beatsaver.songCacheDuration'));
+        Cache::tags(['song-' . $split['songId']])->put('info', $song, config('beatsaver.songCacheDuration'));
+        foreach ($song['version'] as $version) {
+            Cache::tags(['song-' . $split['songId']])->put("votes-{$split['detailId']}-1", $version['upVotes'], config('beatsaver.songCacheDuration'));
+            Cache::tags(['song-' . $split['songId']])->put("votes-{$split['detailId']}-0", $version['downVotes'], config('beatsaver.songCacheDuration'));
+            Cache::tags(['song-' . $split['songId']])->put("downloads-{$split['detailId']}", $version['downloadCount'], config('beatsaver.songCacheDuration'));
+        }
     }
 }

@@ -26,7 +26,7 @@ class UpdateSongRequest extends FormRequest
         return [
             'fileupload'  => 'file|mimetypes:application/zip|max:15000',
             'name'        => 'required|max:160',
-            'description' => 'required'
+            'description' => 'present'
         ];
     }
 }

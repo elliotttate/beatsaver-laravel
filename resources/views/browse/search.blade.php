@@ -1,5 +1,4 @@
-@extends('layout')
-@section('title', '- Search results')
+@extends('browse.songlist')
 
 @section('content')
     <div class="row">
@@ -16,5 +15,5 @@
             </div>
         </form>
     </div>
-    @each('browse.song-data-frontpage',$songs,'song')
+    @parent
 @endsection

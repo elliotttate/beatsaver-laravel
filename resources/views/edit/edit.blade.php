@@ -1,33 +1,16 @@
 @extends('layout')
 @section('title', '- Song Edit')
 
-
 @section('content')
     @component('edit.component-edit',['uploaderId' => $song['uploaderId']])
-        @slot('id')
-            {{ $song['id'] }}
-        @endslot
-        @slot('key')
-            {{ $song['key'] }}
-        @endslot
-        @slot('name')
-            {{ $song['name'] }}
-        @endslot
-        @slot('uploader')
-            {{ $song['uploader'] }}
-        @endslot
-        @slot('authorName')
-            {{ $song['authorName'] }}
-        @endslot
-        @slot('songName')
-            {{ $song['songName'] }}
-        @endslot
-        @slot('songSubName')
-            {{ $song['songSubName'] }}
-        @endslot
-        @slot('description')
-            {{ $song['description'] }}
-        @endslot
+        @slot('id', $song['id'])
+        @slot('key', $song['key'])
+        @slot('name', $song['name'])
+        @slot('uploader', $song['uploader'])
+        @slot('authorName', $song['authorName'])
+        @slot('songName', $song['songName'])
+        @slot('songSubName', $song['songSubName'])
+        @slot('description', $song['description'])
         @slot('difficulties')
             @foreach($song['difficulties'] as $diff => $data)
                 {{ $diff }}@if(!$loop->last), @endif
@@ -36,35 +19,15 @@
                 @endphp
             @endforeach
         @endslot
-        @slot('events')
-            {{ $events }}
-        @endslot
-        @slot('downloadCount')
-            {{ $song['downloadCount'] }}
-        @endslot
-        @slot('playedCount')
-            {{ $song['playedCount'] }}
-        @endslot
-        @slot('upVotes')
-            {{ $song['upVotes'] }}
-        @endslot
-        @slot('downVotes')
-            {{ $song['downVotes'] }}
-        @endslot
-        @slot('version')
-            {{ $song['version'] }}
-        @endslot
-        @slot('createdAt')
-            {{ $song['createdAt'] }}
-        @endslot
-        @slot('linkUrl')
-            {{ $song['linkUrl'] }}
-        @endslot
-        @slot('downloadUrl')
-            {{ $song['downloadUrl'] }}
-        @endslot
-        @slot('coverUrl')
-            {{ $song['coverUrl'] }}
-        @endslot
+        @slot('events', $events)
+        @slot('downloadCount', $song['downloadCount'])
+        @slot('playedCount', $song['playedCount'])
+        @slot('upVotes', $song['upVotes'])
+        @slot('downVotes', $song['downVotes'])
+        @slot('version', $song['version'])
+        @slot('createdAt', $song['createdAt'])
+        @slot('linkUrl', $song['linkUrl'])
+        @slot('downloadUrl', $song['downloadUrl'])
+        @slot('coverUrl', $song['coverUrl'])
     @endcomponent
 @endsection

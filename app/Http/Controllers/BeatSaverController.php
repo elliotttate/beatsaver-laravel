@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\SongUploaded;
 use App\Exceptions\UploadParserException;
+use App\Http\Requests\DeleteSongRequest;
 use App\Http\Requests\SearchRequest;
+use App\Http\Requests\UpdateSongRequest;
 use App\Http\Requests\UploadRequest;
 use App\Http\Requests\VoteRequest;
 use App\Models\User;
@@ -32,7 +34,13 @@ class BeatSaverController extends Controller
      */
     public function topDownloads($start = 0, SongListComposer $composer)
     {
-        return view('browse.downloads')->with(['songs' => $composer->getTopDownloadedSongs($start), 'start' => $start, 'steps' => $composer::DEFAULT_LIMIT]);
+        return view('browse.songlist')->with([
+            'title' => 'Top Downloads',
+            'songs' => $composer->getTopDownloadedSongs($start),
+            'start' => $start,
+            'steps' => $composer::DEFAULT_LIMIT,
+        ]);
+
     }
 
     /**
@@ -43,7 +51,12 @@ class BeatSaverController extends Controller
      */
     public function topPlayed($start = 0, SongListComposer $composer)
     {
-        return view('browse.played')->with(['songs' => $composer->getTopPlayedSongs($start), 'start' => $start, 'steps' => $composer::DEFAULT_LIMIT]);
+        return view('browse.songlist')->with([
+            'title' => 'Top Played',
+            'songs' => $composer->getTopPlayedSongs($start),
+            'start' => $start,
+            'steps' => $composer::DEFAULT_LIMIT
+        ]);
     }
 
     /**
@@ -54,7 +67,12 @@ class BeatSaverController extends Controller
      */
     public function newest($start = 0, SongListComposer $composer)
     {
-        return view('browse.newest')->with(['songs' => $composer->getNewestSongs($start), 'start' => $start, 'steps' => $composer::DEFAULT_LIMIT]);
+        return view('browse.songlist')->with([
+            'title' => 'Newest',
+            'songs' => $composer->getNewestSongs($start),
+            'start' => $start,
+            'steps' => $composer::DEFAULT_LIMIT
+        ]);
     }
 
     /**
@@ -74,7 +92,13 @@ class BeatSaverController extends Controller
         $name = $user->name;
         $userId = $user->id;
 
-        return view('browse.user')->with(['songs' => $composer->getSongsByUser($id, $start), 'username' => $name, 'userId' => $userId, 'start' => $start, 'steps' => $composer::DEFAULT_LIMIT]);
+        return view('browse.user')->with([
+            'songs'    => $composer->getSongsByUser($id, $start),
+            'username' => $name,
+            'userId'   => $userId,
+            'start'    => $start,
+            'steps'    => $composer::DEFAULT_LIMIT
+        ]);
     }
 
     /**
@@ -195,7 +219,13 @@ class BeatSaverController extends Controller
             $songs = $composer->search($parameter);
         }
 
-        return view('browse.search')->with(['songs' => $songs, 'key' => $key]);
+        return view('browse.search')->with([
+            'title' => 'Song Search',
+            'songs' => $songs,
+            'key'   => $key,
+            'start' => 0,
+            'steps' => $composer::DEFAULT_LIMIT
+        ]);
     }
 
 
@@ -210,7 +240,7 @@ class BeatSaverController extends Controller
         return redirect()->route('browse.user', ['id' => auth()->id()]);
     }
 
-    public function songEditSubmit($id)
+    public function songEditSubmit($id, UpdateSongRequest $request)
     {
         dd(request()->all());
     }
@@ -226,7 +256,7 @@ class BeatSaverController extends Controller
         return redirect()->route('browse.user', ['id' => auth()->id()]);
     }
 
-    public function songDeleteSubmit($id, SongComposer $composer)
+    public function songDeleteSubmit($id, DeleteSongRequest $request, SongComposer $composer)
     {
         dd(request()->all());
 

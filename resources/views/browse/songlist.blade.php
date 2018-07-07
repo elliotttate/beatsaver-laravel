@@ -1,11 +1,11 @@
 @extends('layout')
-@section('title', '- Top Downloads')
+@section('title', '- '.$title)
 
 @section('content')
-    @each('browse.song-data-frontpage',$songs,'song')
+    @each('browse.song-preview',$songs,'song')
 
     @if($start >= 0 && $songs && count($songs) == $steps )
-        <a href="{{ route('browse.top.downloads',['start' => $start + $steps]) }}" class="pull-right">
+        <a href="{{ route(Route::currentRouteName(),['start' => $start + $steps]) }}" class="pull-right">
             <button type="button" class="btn btn-default">
                 Next Page ({{(floor($start / $steps)?: 1) +1 }}) <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
             </button>
@@ -13,7 +13,7 @@
     @endif
 
     @if($start >= 0 && ($start - $steps) >= 0)
-        <a href="{{ route('browse.top.downloads',['start' => $start - $steps]) }}" class="pull-left">
+        <a href="{{ route(Route::currentRouteName(),['start' => $start - $steps]) }}" class="pull-left">
             <button type="button" class="btn btn-default">
                 <span class="glyphicon glyphicon-backwards" aria-hidden="true"></span> Previous Page ({{ (floor($start / $steps) ?: 1) }})
             </button>

@@ -2,7 +2,7 @@
 @section('title', '- Songs by '.$username)
 
 @section('content')
-    @each('browse.song-data-frontpage',$songs,'song')
+    @each('browse.song-preview',$songs,'song')
 
     @if($start >= 0 && count($songs) > 0)
         <a href="{{ route('browse.user',['id' => $userId, 'start' => $start + $steps]) }}" class="pull-right">

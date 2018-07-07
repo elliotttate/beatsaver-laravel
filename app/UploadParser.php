@@ -29,12 +29,7 @@ class UploadParser
     /**
      * @var string
      */
-    protected $fileName;
-
-    /**
-     * @var string
-     */
-    protected $fullPath;
+    protected $file;
 
     /**
      * UploadParser constructor.
@@ -45,8 +40,7 @@ class UploadParser
      */
     public function __construct($file)
     {
-        $this->fileName = $file;
-        $this->fullPath = storage_path('app/') . $file;
+        $this->file = $file;
         $this->openZip();
         $this->indexData = $this->createZipIndex();
     }
@@ -128,7 +122,7 @@ class UploadParser
 
             if ($hashBase) {
                 $songData['hashMD5'] = md5($hashBase);
-                $songData['hashSHA1'] = sha1_file($this->fullPath);
+                $songData['hashSHA1'] = sha1_file($this->file);
             }
         }
 
@@ -223,15 +217,14 @@ class UploadParser
 
     /**
      * Open a ZipArchive.
-     * The zip file has to be under storage/app !
      *
      * @throws UploadParserException
      */
     protected function openZip()
     {
         $zip = new ZipArchive();
-        if (!$zip->open($this->fullPath)) {
-            throw new UploadParserException('Cannot open zip file (' . $this->fullPath . ')');
+        if (!$this->file || !$zip->open($this->file)) {
+            throw new UploadParserException('Cannot open zip file (' . $this->file . ')');
         }
         $this->zipFile = $zip;
 

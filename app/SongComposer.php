@@ -33,15 +33,22 @@ class SongComposer
      * and a fresh result is returned.
      *
      * @param string $key
+     * @param bool   $apiFormat
      * @param bool   $updateCache
      *
      * @return array
      */
-    public function get(string $key, $updateCache = false): array
+    public function get(string $key, $apiFormat = false, $updateCache = false): array
     {
         if ($updateCache) {
+            Log::debug('Force Cache Update: ' . $key);
             $song = $this->compose($key);
-            $this->updateCache($song);
+            if ($song) {
+                $this->updateCache($song);
+                if ($apiFormat) {
+                    $song = $this->convertSongToApiFormat($song);
+                }
+            }
             return $song;
         }
 
@@ -60,12 +67,17 @@ class SongComposer
                 $version['downVotes'] = Cache::tags(['song-' . $split['songId']])->get("votes-{$split['detailId']}-0", 0);
                 $version['downloadCount'] = Cache::tags(['song-' . $split['songId']])->get("downloads-{$split['detailId']}", 0);
             }
-            return $song;
+            return $apiFormat ? $this->convertSongToApiFormat($song) : $song;
         }
 
         Log::debug('cache empty ' . $key . ' try compose');
         if ($song = $this->compose($key)) {
-            $this->updateCache($song);
+            if ($song) {
+                $this->updateCache($song);
+                if ($apiFormat) {
+                    $song = $this->convertSongToApiFormat($song);
+                }
+            }
             return $song;
         }
         Log::debug('compose failed');
@@ -128,7 +140,7 @@ class SongComposer
         if (empty($file)) {
             return [
                 'status' => static::SONG_UPDATED,
-                'song'   => $this->get($song->id, true)
+                'song'   => $this->get($song->id, false, true)
             ];
         }
 
@@ -423,5 +435,38 @@ class SongComposer
             Cache::tags(['song-' . $split['songId']])->put("votes-{$split['detailId']}-0", $version['downVotes'], config('beatsaver.songCacheDuration'));
             Cache::tags(['song-' . $split['songId']])->put("downloads-{$split['detailId']}", $version['downloadCount'], config('beatsaver.songCacheDuration'));
         }
+    }
+
+    /**
+     * @param array $song
+     *
+     * @return array
+     */
+    protected function convertSongToApiFormat(array $song): array
+    {
+        return [
+            'id'             => $song['id'],
+            'key'            => $song['key'],
+            'name'           => $song['name'],
+            'description'    => $song['description'],
+            'uploader'       => $song['uploader'],
+            'uploaderId'     => $song['uploaderId'],
+            'songName'       => $song['version'][$song['key']]['songName'],
+            'songSubName'    => $song['version'][$song['key']]['songSubName'],
+            'authorName'     => $song['version'][$song['key']]['authorName'],
+            'bpm'            => $song['version'][$song['key']]['bpm'],
+            'difficulties'   => $song['version'][$song['key']]['difficulties'],
+            'downloadCount'  => $song['version'][$song['key']]['downloadCount'],
+            'playedCount'    => $song['version'][$song['key']]['playedCount'],
+            'upVotes'        => $song['version'][$song['key']]['upVotes'],
+            'upVotesTotal'   => 0,
+            'downVotes'      => $song['version'][$song['key']]['downVotes'],
+            'downVotesTotal' => 0,
+            'version'        => $song['key'],
+            'createdAt'      => $song['version'][$song['key']]['createdAt'],
+            'linkUrl'        => $song['version'][$song['key']]['linkUrl'],
+            'downloadUrl'    => $song['version'][$song['key']]['downloadUrl'],
+            'coverUrl'       => $song['version'][$song['key']]['coverUrl'],
+        ];
     }
 }

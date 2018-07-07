@@ -19,7 +19,7 @@ class ApiController extends Controller
      */
     public function topDownloads(int $start = 0, SongListComposer $composer)
     {
-        $songs = $composer->getTopDownloadedSongs($start);
+        $songs = $composer->getTopDownloadedSongs($start, SongListComposer::DEFAULT_LIMIT, true);
         $total = $composer->getSongCount();
 
         return Response::json(['songs' => $songs, 'total' => $total]);
@@ -33,7 +33,7 @@ class ApiController extends Controller
      */
     public function topPlayed(int $start = 0, SongListComposer $composer)
     {
-        $songs = $composer->getTopPlayedSongs($start);
+        $songs = $composer->getTopPlayedSongs($start, SongListComposer::DEFAULT_LIMIT, true);
         $total = $composer->getSongCount();
 
         return Response::json(['songs' => $songs, 'total' => $total]);
@@ -47,7 +47,7 @@ class ApiController extends Controller
      */
     public function newest(int $start = 0, SongListComposer $composer)
     {
-        $songs = $composer->getNewestSongs($start);
+        $songs = $composer->getNewestSongs($start, SongListComposer::DEFAULT_LIMIT, true);
         $total = $composer->getSongCount();
 
         return Response::json(['songs' => $songs, 'total' => $total]);
@@ -69,7 +69,7 @@ class ApiController extends Controller
             $name = '';
         }
 
-        $songs = $composer->getSongsByUser($id, $start);
+        $songs = $composer->getSongsByUser($id, $start, SongListComposer::DEFAULT_LIMIT, true);
         $total = $composer->getUserSongCount($id);
 
         return Response::json(['songs' => $songs, 'total' => $total]);
@@ -83,7 +83,7 @@ class ApiController extends Controller
      */
     public function detail(string $key, SongComposer $composer)
     {
-        $song = $composer->get($key);
+        $song = $composer->get($key, true);
         return Response::json(['song' => $song]);
     }
 

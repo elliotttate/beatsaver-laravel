@@ -37,10 +37,11 @@ class SongListComposer
      * @param array $parameter
      * @param int   $offset
      * @param int   $limit
+     * @param bool  $apiFormat
      *
      * @return Collection
      */
-    public function search(array $parameter, int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    public function search(array $parameter, int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT, $apiFormat = false): Collection
     {
         if (!$parameter) {
             return collect();
@@ -74,80 +75,83 @@ class SongListComposer
         if (!$doSearch) {
             return collect();
         }
-        return $this->prepareSongInfo($songs->get());
+        return $this->prepareSongInfo($songs->get(), $apiFormat);
     }
 
     /**
      * Get songs ordered by play count descending.
      * If a song has multiple versions only get the latest one.
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int  $offset
+     * @param int  $limit
+     * @param bool $apiFormat
      *
      * @return Collection
      */
-    public function getTopPlayedSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    public function getTopPlayedSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT, $apiFormat = false): Collection
     {
         $orderBy = 'play_count';
         $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
-        return $this->prepareSongInfo($songs->get());
+        return $this->prepareSongInfo($songs->get(), $apiFormat);
     }
 
     /**
      * Get songs ordered by download count descending.
      * If a song has multiple versions only get the latest one.
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int  $offset
+     * @param int  $limit
+     * @param bool $apiFormat
      *
      * @return Collection
      */
-    public function getTopDownloadedSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    public function getTopDownloadedSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT, $apiFormat = false): Collection
     {
         $orderBy = 'download_count';
 
         $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
-
-        return $this->prepareSongInfo($songs->get());
+        return $this->prepareSongInfo($songs->get(), $apiFormat);
     }
 
     /**
      * Get songs ordered by creation date descending.
      * If a song has multiple versions only get the latest one.
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int  $offset
+     * @param int  $limit
+     * @param bool $apiFormat
      *
      * @return Collection
      */
-    public function getNewestSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    public function getNewestSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT, $apiFormat = false): Collection
     {
         $orderBy = 'created_at';
         $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
-        return $this->prepareSongInfo($songs->get());
+        return $this->prepareSongInfo($songs->get(), $apiFormat);
     }
 
     /**
      * Get songs uploaded by user {$id] ordered by creation date.
      * If a song has multiple versions only get the latest one.
      *
-     * @param int $userId
-     * @param int $offset
-     * @param int $limit
+     * @param int  $userId
+     * @param int  $offset
+     * @param int  $limit
+     * @param bool $apiFormat
      *
      * @return Collection
      */
-    public function getSongsByUser(int $userId, int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT): Collection
+    public function getSongsByUser(int $userId, int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT, $apiFormat = false): Collection
     {
         $orderBy = 'created_at';
         $songs = $this->prepareQuery($orderBy, $offset, $limit)
             ->leftJoin('users as u', 's.user_id', '=', 'u.id')
             ->whereNull('u.deleted_at')->where('s.user_id', $userId);
 
-        return $this->prepareSongInfo($songs->get());
+        return $this->prepareSongInfo($songs->get(), $apiFormat);
     }
 
     /**
@@ -170,15 +174,16 @@ class SongListComposer
      * Converts a list of song keys into song info data.
      *
      * @param Collection $songs
+     * @param bool       $apiFormat
      *
      * @return Collection
      */
-    protected function prepareSongInfo(Collection $songs): Collection
+    protected function prepareSongInfo(Collection $songs, $apiFormat = false): Collection
     {
         $composer = new SongComposer();
 
-        $songs->transform(function ($item, $key) use ($composer) {
-            return $composer->get($item->songKey);
+        $songs->transform(function ($item, $key) use ($composer, $apiFormat) {
+            return $composer->get($item->songKey, $apiFormat);
         });
 
         return $songs;

@@ -224,7 +224,7 @@ class BeatSaverController extends Controller
             'songs' => $songs,
             'key'   => $key,
             'start' => 0,
-            'steps' => $composer::DEFAULT_LIMIT
+            'steps' => $composer::DEFAULT_LIMIT + 1 // +1 for disabling paging since paging is not supported while searching
         ]);
     }
 
@@ -240,8 +240,10 @@ class BeatSaverController extends Controller
         return redirect()->route('browse.user', ['id' => auth()->id()]);
     }
 
-    public function songEditSubmit($id, UpdateSongRequest $request)
+    public function songEditSubmit($id, UpdateSongRequest $request, SongComposer $composer)
     {
+        $composer->delete();
+
         dd(request()->all());
     }
 

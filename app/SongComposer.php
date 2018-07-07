@@ -85,11 +85,11 @@ class SongComposer
 
         $user->songs()->save($song);
         $song->details()->save($songDetails);
-        if (!Storage::disk()->exists('public/songs')) {
-            Storage::disk()->makeDirectory('public/songs');
+        if (!Storage::disk()->exists('public/songs/' . $song->id)) {
+            Storage::disk()->makeDirectory('public/songs/' . $song->id);
         }
-        Storage::disk()->move($metadata['tempFile'], "public/songs/{$song->id}-{$songDetails->id}.zip");
-        Storage::disk()->put("public/songs/{$song->id}-{$songDetails->id}.{$songData['coverType']}", base64_decode($songData['coverData']));
+        Storage::disk()->move($metadata['tempFile'], "public/songs/{$song->id}/{$song->id}-{$songDetails->id}.zip");
+        Storage::disk()->put("public/songs/{$song->id}/{$song->id}-{$songDetails->id}.{$songData['coverType']}", base64_decode($songData['coverData']));
 
         return [
             'id'             => $song->id,
@@ -113,7 +113,7 @@ class SongComposer
             'createdAt'      => $songDetails->created_at,
             'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $songDetails->id]),
             'downloadUrl'    => route('download', ['key' => $song->id . '-' . $songDetails->id]),
-            'coverUrl'       => asset("storage/songs/{$song->id}-{$songDetails->id}.$songDetails->cover"),
+            'coverUrl'       => asset("storage/songs/{$song->id}/{$song->id}-{$songDetails->id}.$songDetails->cover"),
 
         ];
     }
@@ -203,8 +203,8 @@ class SongComposer
 
         // @todo stop/prevent download count faking
         if ($downloadCount = SongDetail::where('id', $split['detailId'])->where('song_id', $split['songId'])->increment('download_count', 1)) {
-            //@todo use download count to cache
-            return \response()->download(storage_path("app/public/songs") . "/$key.zip");
+            //@todo update cache with new download count
+            return \response()->download(storage_path("app/public/songs") . "/{$split['songId']}/{$split['songId']}-{$split['detailId']}.zip");
         }
 
         return abort(404);
@@ -268,7 +268,7 @@ class SongComposer
             'createdAt'      => $details->created_at,
             'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $details->id]),
             'downloadUrl'    => route('download', ['key' => $song->id . '-' . $details->id]),
-            'coverUrl'       => asset("storage/songs/{$song->id}-{$details->id}.$details->cover"),
+            'coverUrl'       => asset("storage/songs/{$song->id}/{$song->id}-{$details->id}.$details->cover"),
         ];
 
     }

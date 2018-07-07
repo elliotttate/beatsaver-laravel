@@ -5,7 +5,7 @@
     </strong>
 </div>
 
-<form method="post" enctype="multipart/form-data" action="{{ route('browse.detail.edit.submit',['id' => $id]) }}">
+<form id="update-form" method="post" enctype="multipart/form-data" action="{{ route('browse.detail.edit.submit',['id' => $id]) }}">
     {{ csrf_field() }}
     <h2>
         <input type="text" name="name" value="{{ $name }}" id="inputTrackName" class="form-control" placeholder="Track Name e.g. My awesome track!" maxlength="160" required autofocus/>
@@ -47,8 +47,8 @@
         <tr>
             <td>
                 <label id="song-archive-label" class="btn btn-danger" for="song-archive">
-                    <input id="song-archive" type="file" style="display:none;" name="fileupload" accept=".zip, application/zip" onchange="$('#song-archive-label').html(this.files[0].name)">
-                    (optional) Select updated song archive...
+                    <input id="song-archive" type="file" style="display: none" name="fileupload" accept=".zip, application/zip" onchange="$('#song-archive-label span').html(this.files[0].name)">
+                    <span>(optional) Select updated song archive...</span>
                 </label>
             </td>
             <td class="text-right">

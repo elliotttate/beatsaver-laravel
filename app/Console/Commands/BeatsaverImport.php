@@ -51,7 +51,7 @@ class BeatsaverImport extends Command
      */
     public function handle()
     {
-        if ($this->confirm('This import is for empty databases only! Du you want to continue?')) {
+        if ($this->confirm('This import is for empty databases only! Do you want to continue?')) {
             $this->importUser();
             $this->importSongs();
             $this->importVotes();

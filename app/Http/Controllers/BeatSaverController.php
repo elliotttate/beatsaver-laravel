@@ -162,9 +162,12 @@ class BeatSaverController extends Controller
         }
         $process = $request->file('fileupload');
 
-        $metadata = $request->only(['name', 'description']);
-        $metadata['userId'] = auth()->id();
-        $metadata['songId'] = null;
+        $metadata = [
+            'userId'      => auth()->id(),
+            'songId'      => null,
+            'name'        => $request->input('name'),
+            'description' => $request->input('description'),
+        ];
 
         $song = $composer->createOrUpdate($metadata, $process);
 

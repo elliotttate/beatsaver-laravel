@@ -11,14 +11,14 @@ class Song extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['name', 'description', 'user_id'];
+    protected $fillable = ['id', 'name', 'description', 'user_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function uploader()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -32,7 +32,7 @@ class Song extends Model
     protected static function boot()
     {
         parent::boot();
-        static::deleting(function($song) {
+        static::deleting(function ($song) {
             foreach ($song->details()->get() as $details) {
                 $details->delete();
             }

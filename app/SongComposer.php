@@ -132,9 +132,14 @@ class SongComposer
         $song = $user->songs()->updateOrCreate([
             'id' => $metadata['songId'],
         ], [
-            'name'        => $metadata['name'],
-            'description' => $metadata['description'],
+            'name'        => trim(strip_tags($metadata['name'])),
+            'description' => trim(strip_tags($metadata['description'])),
         ]);
+
+        if (!empty($metadata['created_at'])) {
+            $song->setCreatedAt($metadata['created_at']);
+            $song->save();
+        }
 
         // return song early if we only update meta data
         if (empty($file)) {
@@ -155,6 +160,10 @@ class SongComposer
             'hash_md5'          => $songData['hashMD5'],
             'hash_sha1'         => $songData['hashSHA1'],
         ]);
+
+        if (!empty($metadata['created_at'])) {
+            $songDetails->setCreatedAt($metadata['created_at']);
+        }
 
         $song->details()->save($songDetails);
 

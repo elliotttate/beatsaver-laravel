@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Exceptions\UploadParserException;
+use Log;
 use ZipArchive;
 
 class UploadParser
@@ -40,9 +41,11 @@ class UploadParser
      */
     public function __construct($file)
     {
+        Log::debug('parser started');
         $this->file = $file;
         $this->openZip();
         $this->indexData = $this->createZipIndex();
+        Log::debug('loaded ' . $file);
     }
 
 
@@ -60,6 +63,7 @@ class UploadParser
     public function getSongData($noCache = false)
     {
         if ($noCache || empty($this->songData)) {
+            Log::debug('force parse song data');
             $this->songData = $this->parseSong();
         }
 
@@ -83,10 +87,12 @@ class UploadParser
         $info = json_decode($info, true);
 
         if ($info) {
-            $songData['songName'] = $info['songName'];
-            $songData['songSubName'] = $info['songSubName'];
-            $songData['authorName'] = $info['authorName'];
-            $songData['beatsPerMinute'] = $info['beatsPerMinute'];
+            Log::debug('found info.json');
+
+            $songData['songName'] = trim($info['songName']);
+            $songData['songSubName'] = trim(($info['songSubName'] ?? ''));
+            $songData['authorName'] = trim($info['authorName']);
+            $songData['beatsPerMinute'] = $info['beatsPerMinute'] > 0 ?: 0;
             $songData['difficultyLevels'] = [];
             $songData['hashMD5'] = null;
             $songData['hashSHA1'] = null;
@@ -96,6 +102,8 @@ class UploadParser
             if ($this->zipHasFile($info['coverImagePath'])) {
                 $songData['coverType'] = pathinfo($info['coverImagePath'], PATHINFO_EXTENSION);
                 $songData['coverData'] = base64_encode($this->readFromZip($info['coverImagePath']));
+            } else {
+                throw new UploadParserException('Cannot find cover image ' . $info['coverImagePath'] . '!');
             }
 
             $hashBase = '';
@@ -117,12 +125,20 @@ class UploadParser
 
                         $songData['difficultyLevels'][$difficultyLevel['difficulty']]['stats'] = $this->analyzeDifficulty($difficultyDataRaw);
                     }
+                } else {
+                    Log::debug('error parsing difficulty level: ' . $difficultyLevel['difficulty']);
+                    Log::debug('audio file "' . $difficultyLevel['audioPath'] . '": ' . $this->zipHasFile($difficultyLevel['audioPath']));
+                    Log::debug('json file "' . $difficultyLevel['jsonPath'] . '": ' . $this->zipHasFile($difficultyLevel['jsonPath']));
+
                 }
             }
 
             if ($hashBase) {
                 $songData['hashMD5'] = md5($hashBase);
                 $songData['hashSHA1'] = sha1_file($this->file);
+            } else {
+                // without hashes the parsing failed
+                throw new UploadParserException('Song hash could not be calculated!');
             }
         }
 
@@ -153,11 +169,11 @@ class UploadParser
                 @$noteType[$data['_cutDirection']]++; // suppress invalid index on first insert
             }
 
-            $difficultyStats['time'] = max($noteTime);
+            $difficultyStats['time'] = $noteTime ? max($noteTime) : 0;
             $difficultyStats['slashstat'] = $noteType;
-            $difficultyStats['events'] = count($difficultyData['_events']);
-            $difficultyStats['notes'] = count($difficultyData['_notes']);
-            $difficultyStats['obstacles'] = count($difficultyData['_obstacles']);
+            $difficultyStats['events'] = count($difficultyData['_events'] ?? []);
+            $difficultyStats['notes'] = count($difficultyData['_notes'] ?? []);
+            $difficultyStats['obstacles'] = count($difficultyData['_obstacles'] ?? []);
         }
 
         return $difficultyStats;
@@ -170,6 +186,8 @@ class UploadParser
      */
     protected function zipHasFile($fileName): bool
     {
+        Log::debug('check zip index for file: ' . strtolower($fileName));
+        Log::debug(array_keys($this->indexData));
         return array_key_exists(strtolower($fileName), $this->indexData);
     }
 
@@ -185,8 +203,9 @@ class UploadParser
     {
         // every index is lowercase
         $indexName = strtolower($indexName);
-
+        Log::debug('search index for: ' . $indexName);
         if ($this->zipFile && array_key_exists($indexName, $this->indexData)) {
+            Log::debug('found index ' . $this->indexData[$indexName]['index']);
             return $this->zipFile->getFromIndex($this->indexData[$indexName]['index']);
         }
         throw new UploadParserException('Invalid index (' . $indexName . ')');
@@ -209,6 +228,7 @@ class UploadParser
                     $index[strtolower(basename($stat['name']))] = $stat;
                 }
             }
+            Log::debug($index);
             return $index;
         }
 

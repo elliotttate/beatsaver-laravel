@@ -1,0 +1,1 @@
+@includeFirst(['themes.'.config('themes.current').'.pages.dmca','themes.default.pages.dmca'])

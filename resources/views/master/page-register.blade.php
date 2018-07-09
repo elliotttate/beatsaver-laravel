@@ -1,0 +1,1 @@
+@includeFirst(['themes.'.config('themes.current').'.pages.users.register','themes.default.pages.users.register'])

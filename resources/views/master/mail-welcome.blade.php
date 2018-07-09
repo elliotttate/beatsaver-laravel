@@ -1,0 +1,1 @@
+@includeFirst(['themes.'.config('themes.current').'.mails.welcome','themes.default.mails.welcome'])

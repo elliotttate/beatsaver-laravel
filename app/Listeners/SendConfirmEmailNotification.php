@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\UserRegistered;
-use App\Mail\EmailVerification;
+use App\Mail\Welcome;
 use Mail;
 
 class SendConfirmEmailNotification
@@ -32,6 +32,6 @@ class SendConfirmEmailNotification
         }
 
         $token = $event->getUser()->verification_code;
-        Mail::to($event->getUser()->email)->send(new EmailVerification($event->getUser(),$token));
+        Mail::to($event->getUser()->email)->send(new Welcome($event->getUser(), $token));
     }
 }

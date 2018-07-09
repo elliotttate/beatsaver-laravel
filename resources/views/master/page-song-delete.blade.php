@@ -1,0 +1,1 @@
+@includeFirst(['themes.'.config('themes.current').'.pages.songs.delete','themes.default.pages.songs.delete'])

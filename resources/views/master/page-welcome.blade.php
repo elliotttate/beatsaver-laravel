@@ -1,0 +1,1 @@
+@includeFirst(['themes.'.config('themes.current').'.pages.welcome','themes.default.pages.welcome'])

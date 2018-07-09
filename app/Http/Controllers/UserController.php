@@ -21,7 +21,7 @@ class UserController extends Controller
 {
     public function register()
     {
-        return view('auth.register');
+        return view('master.page-register');
     }
 
     /**
@@ -82,7 +82,7 @@ class UserController extends Controller
      */
     public function login()
     {
-        return view('auth.login');
+        return view('master.page-login');
     }
 
     /**
@@ -113,7 +113,7 @@ class UserController extends Controller
      */
     public function resetPassword()
     {
-        return view('auth.password-reset');
+        return view('master.page-password-reset');
     }
 
     /**
@@ -138,7 +138,7 @@ class UserController extends Controller
      */
     public function confirmPasswordReset($token)
     {
-        return view('auth.password-reset-complete')->with(['token' => $token]);
+        return view('master.page-password-reset-complete')->with(['token' => $token]);
     }
 
     /**
@@ -163,7 +163,7 @@ class UserController extends Controller
 
     public function profile()
     {
-        return view('profile');
+        return view('master.page-profile');
     }
 
     public function updateEmail(UpdateEmailRequest $request)

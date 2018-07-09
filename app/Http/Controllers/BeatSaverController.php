@@ -24,7 +24,7 @@ class BeatSaverController extends Controller
      */
     public function welcome()
     {
-        return view('welcome');
+        return view('master.page-welcome');
     }
 
     /**
@@ -35,7 +35,7 @@ class BeatSaverController extends Controller
      */
     public function topDownloads($start = 0, SongListComposer $composer)
     {
-        return view('browse.songlist')->with([
+        return view('master.page-songs-by-top-downloads')->with([
             'title' => 'Top Downloads',
             'songs' => $composer->getTopDownloadedSongs($start),
             'start' => $start,
@@ -52,7 +52,7 @@ class BeatSaverController extends Controller
      */
     public function topPlayed($start = 0, SongListComposer $composer)
     {
-        return view('browse.songlist')->with([
+        return view('master.page-songs-by-played')->with([
             'title' => 'Top Played',
             'songs' => $composer->getTopPlayedSongs($start),
             'start' => $start,
@@ -68,7 +68,7 @@ class BeatSaverController extends Controller
      */
     public function newest($start = 0, SongListComposer $composer)
     {
-        return view('browse.songlist')->with([
+        return view('master.page-songs-by-created')->with([
             'title' => 'Newest',
             'songs' => $composer->getNewestSongs($start),
             'start' => $start,
@@ -87,13 +87,13 @@ class BeatSaverController extends Controller
     {
         $user = User::find($id);
         if (!$user) {
-            return view('browse.user')->with(['songs' => [], 'username' => 'Unknown User', 'userId' => 0, 'start' => 0, 'steps' => 1]);
+            return view('master.page-songs-by-user')->with(['songs' => [], 'username' => 'Unknown User', 'userId' => 0, 'start' => 0, 'steps' => 1]);
         }
 
         $name = $user->name;
         $userId = $user->id;
 
-        return view('browse.user')->with([
+        return view('master.page-songs-by-user')->with([
             'songs'    => $composer->getSongsByUser($id, $start),
             'username' => $name,
             'userId'   => $userId,
@@ -110,7 +110,7 @@ class BeatSaverController extends Controller
      */
     public function detail($key, SongComposer $composer)
     {
-        return view('browse.detail')->with(['song' => $composer->get($key)]);
+        return view('master.page-song-detail')->with(['song' => $composer->get($key)]);
     }
 
     /**
@@ -146,7 +146,7 @@ class BeatSaverController extends Controller
      */
     public function upload()
     {
-        return view('upload');
+        return view('master.page-song-upload');
     }
 
     /**
@@ -186,7 +186,7 @@ class BeatSaverController extends Controller
      */
     public function search()
     {
-        return view('search');
+        return view('master.page-search');
     }
 
     /**
@@ -218,7 +218,7 @@ class BeatSaverController extends Controller
             $songs = $composer->search($parameter);
         }
 
-        return view('browse.search')->with([
+        return view('master.page-search')->with([
             'title' => 'Song Search',
             'songs' => $songs,
             'key'   => $key,
@@ -233,7 +233,7 @@ class BeatSaverController extends Controller
         $song = $composer->get($id);
 
         if ($song && auth()->id() == $song['uploaderId']) {
-            return view('edit.edit')->with(['song' => $song]);
+            return view('master.page-song-edit')->with(['song' => $song]);
         }
 
         return redirect()->route('browse.user', ['id' => auth()->id()]);
@@ -279,7 +279,7 @@ class BeatSaverController extends Controller
         $song = $composer->get($id);
 
         if ($song && auth()->id() == $song['uploaderId']) {
-            return view('edit.delete')->with(['song' => $song]);
+            return view('master.page-song-delete')->with(['song' => $song]);
         }
 
         return redirect()->route('browse.user', ['id' => auth()->id()]);

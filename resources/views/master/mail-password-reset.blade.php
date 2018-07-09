@@ -1,0 +1,1 @@
+@includeFirst(['themes.'.config('themes.current').'.mails.password-reset','themes.default.mails.password-reset'])

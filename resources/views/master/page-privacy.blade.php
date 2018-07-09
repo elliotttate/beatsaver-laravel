@@ -1,0 +1,1 @@
+@includeFirst(['themes.'.config('themes.current').'.pages.privacy','themes.default.pages.privacy'])

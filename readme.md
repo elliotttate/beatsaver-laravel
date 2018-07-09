@@ -3,18 +3,13 @@
 - Beatsaver is a custom song platform for Beatsaber (http://beatsaber.com/)
 - In order to use custom song see [BeatSaberModInstaller](https://github.com/Umbranoxio/BeatSaberModInstaller/releases)
 
-
-
 ## Roadmap
 
-- rewrite of all functions from the original beatsaver project
 - layout overhaul
 - song tagging
-- up/downvote songs
 - song rating depending on difficulties included (highlight songs with more than just expert/+ difficulty) 
 - download queues (select songs via website and have the ingame downloader load them on next start)
 - scoresaber.com integration for uploaded songs (or more) 
-- updating existing songs
 - ability to link preview videos for songs
 
 <p><b>Please note:</b></p>

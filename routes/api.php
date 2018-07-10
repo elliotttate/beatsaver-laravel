@@ -18,6 +18,6 @@ Route::get('/songs/plays/{start?}','ApiController@topPlayed');
 Route::get('/songs/new/{start?}','ApiController@newest');
 Route::get('/songs/byuser/{id}/{start?}','ApiController@byUser');
 Route::get('/songs/detail/{key}','ApiController@detail');
-Route::get('/songs/vote/{key}/{$type}/{$votekey}','ApiController@vote');
+Route::get('/songs/vote/{key}/{type}/{accessToken}', 'ApiController@vote');
 //Route::post('/songs/vote/{key}','ApiController@vote'); // @todo use post instead of get
 Route::get('/songs/search/{type}/{key}','ApiController@search');

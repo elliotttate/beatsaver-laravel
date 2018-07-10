@@ -48,6 +48,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tokens()
+    {
+        return $this->hasMany(AccessToken::class);
+    }
+
+    /**
      * Create email verification code.
      *
      * @return string

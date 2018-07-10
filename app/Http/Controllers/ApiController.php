@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccessToken;
 use App\Models\User;
 use App\SongComposer;
 use App\SongListComposer;
@@ -90,20 +91,20 @@ class ApiController extends Controller
     /**
      * @param string       $key
      * @param int          $type
-     * @param string       $votekey
+     * @param string       $accessToken
      * @param SongComposer $composer
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function vote(string $key, int $type, string $votekey, SongComposer $composer)
+    public function vote(string $key, int $type, string $accessToken, SongComposer $composer)
     {
-        $user = User::where('votekey', $votekey)->first();
+        $user = AccessToken::canWrite()->where('token', $accessToken)->first();
 
         if (!$user) {
             return Response::json([], 403);
         }
 
-        if ($composer->vote($key, $user, $type)) {
+        if ($composer->vote($key, $user->user, $type)) {
             return Response::json([]);
         }
 

@@ -1,0 +1,1 @@
+@includeFirst(['themes.'.config('themes.current').'.pages.songs.search','themes.default.pages.songs.search'])

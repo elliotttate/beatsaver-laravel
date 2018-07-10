@@ -21,8 +21,10 @@
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ auth()->user()->name }}<span class="caret"></span></a>
             <ul class="dropdown-menu">
-                <li class="@if(Route::currentRouteName() == 'profile')active @endif"><a href="{{ route('profile') }}">Profile</a></li>
                 <li><a href="{{ route('browse.user',['id' => auth()->id()]) }}">My Songs</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="{{ route('profile') }}">Profile</a></li>
+                <li><a href="{{ route('profile.token') }}">Access Tokens</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="{{ route('logout') }}">Logout</a></li>
             </ul>

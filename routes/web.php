@@ -25,6 +25,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/profile', 'UserController@profile')->name('profile');
     Route::post('/profile/update/email', 'UserController@updateEmail')->name('profile.update.email');
     Route::post('/profile/update/password', 'UserController@updatePassword')->name('profile.update.password');
+    Route::get('/profile/token', 'UserController@token')->name('profile.token');
+    Route::post('/profile/token', 'UserController@tokenSubmit')->name('profile.token.submit');
 
     Route::get('/auth/register/verify/{token}', 'UserController@verifyEmail')->name('register.verify');
     Route::post('/auth/register/verify/resend', 'UserController@verifyEmailResend')->name('register.verify.resend');

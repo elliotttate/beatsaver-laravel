@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Events\UserRegistered;
 use App\Http\Requests\ConfirmPasswordResetRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\NewTokenRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResendEmailVerificationRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UpdateEmailRequest;
 use App\Http\Requests\UpdatePasswordRequest;
+use App\Models\AccessToken;
 use App\Models\User;
 use Carbon\Carbon;
 use Hash;
@@ -19,6 +21,8 @@ use Password;
 
 class UserController extends Controller
 {
+    const MAX_ACCESS_TOKENS = 4;
+
     public function register()
     {
         return view('master.page-register');
@@ -161,15 +165,23 @@ class UserController extends Controller
         return redirect()->route('password.reset.complete.form')->with('status-error', 'Reset failed. Please try again');
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function profile()
     {
         return view('master.page-profile');
     }
 
+    /**
+     * @param UpdateEmailRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateEmail(UpdateEmailRequest $request)
     {
         $user = auth()->user();
-        if (User::where('email', sha1($request->input('email')))->where('id','<>', $user->id)->first()) {
+        if (User::where('email', sha1($request->input('email')))->where('id', '<>', $user->id)->first()) {
             return redirect()->back()->withErrors('Email is not available!');
         }
 
@@ -182,16 +194,44 @@ class UserController extends Controller
         return redirect()->route('profile')->with('status-error', 'Email could not be changed! Please try again.');
     }
 
+    /**
+     * @param UpdatePasswordRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatePassword(UpdatePasswordRequest $request)
     {
         $user = auth()->user();
-        if(!Hash::check($request->input('password_old'),$user->password)){
+        if (!Hash::check($request->input('password_old'), $user->password)) {
             return redirect()->back()->withErrors('Passwords do not match');
         }
         $user->password = Hash::make($request->input('password'));
         $user->save();
 
-        return redirect()->route('profile')->with('status-success','Password successfully changed');
+        return redirect()->route('profile')->with('status-success', 'Password successfully changed');
+    }
+
+    public function token()
+    {
+        $tokens = AccessToken::where('user_id', auth()->id())->get();
+        return view('master.page-token')->with(['tokens' => $tokens, 'max' => static::MAX_ACCESS_TOKENS]);
+    }
+
+    public function tokenSubmit(NewTokenRequest $request)
+    {
+
+        $tokens = AccessToken::where('user_id', auth()->id())->get()->keyBy('id');
+
+        if ($request->has('delete')) {
+            $tokens->get($request->input('delete'))->delete();
+        } elseif ($request->has('new') && $tokens->count() < static::MAX_ACCESS_TOKENS) {
+            auth()->user()->tokens()->save(new AccessToken([
+                'token' => str_random(60),
+                'type'  => $request->input('new'),
+            ]));
+        }
+
+        return redirect()->route('profile.token');
     }
 
     /**

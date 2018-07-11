@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use DB;
-use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
+use Schema;
 use URL;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,6 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
+
         if (env('APP_ENV') === 'production') {
             // force all generated urls to https on production
             Url::forceScheme('https');

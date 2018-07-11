@@ -76,6 +76,13 @@ return [
             'driver' => 'errorlog',
             'level' => 'debug',
         ],
+
+        'production' => [
+            'driver' => 'daily',
+            'path'   => storage_path('logs/production.log'),
+            'level'  => 'info',
+            'days'   => 7,
+        ],
     ],
 
 ];

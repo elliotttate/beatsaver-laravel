@@ -165,6 +165,7 @@ class SongListComposer
             'author' => 'sd.author_name',
             'name'   => 's.name',
             'user'   => 'u.name',
+            'hash'   => 'sd.hash_md5',
             'song'   => ['sd.song_name', 'sd.song_sub_name'],
             'all'    => ['sd.song_name', 'sd.song_sub_name', 'sd.author_name', 's.name', 'u.name'],
         ];

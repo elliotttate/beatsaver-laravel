@@ -92,7 +92,7 @@ class UploadParser
             $songData['songName'] = trim($info['songName']);
             $songData['songSubName'] = trim(($info['songSubName'] ?? ''));
             $songData['authorName'] = trim($info['authorName']);
-            $songData['beatsPerMinute'] = $info['beatsPerMinute'] > 0 ?: 0;
+            $songData['beatsPerMinute'] = $info['beatsPerMinute'] > 0 ? $info['beatsPerMinute'] : 0;
             $songData['difficultyLevels'] = [];
             $songData['hashMD5'] = null;
             $songData['hashSHA1'] = null;

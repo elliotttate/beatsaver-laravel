@@ -194,11 +194,13 @@ class SongComposer
                 'upVotesTotal'   => 0,
                 'downVotes'      => 0,
                 'downVotesTotal' => 0,
-                'version'        => $song->details->count(), //@todo fix version if $detailId is specified
-                'createdAt'      => $songDetails->created_at,
-                'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $songDetails->id]),
-                'downloadUrl'    => route('download', ['key' => $song->id . '-' . $songDetails->id]),
-                'coverUrl'       => asset("storage/songs/{$song->id}/{$song->id}-{$songDetails->id}.$songDetails->cover"),
+                'version'     => $song->details->count(), //@todo fix version if $detailId is specified
+                'createdAt'   => $songDetails->created_at,
+                'linkUrl'     => route('browse.detail', ['key' => $song->id . '-' . $songDetails->id]),
+                'downloadUrl' => route('download', ['key' => $song->id . '-' . $songDetails->id]),
+                'coverUrl'    => asset("storage/songs/{$song->id}/{$song->id}-{$songDetails->id}.$songDetails->cover"),
+                'hashMd5'     => $songDetails->hash_md5,
+                'hashSha1'    => $songDetails->hash_sha1,
             ]
         ];
     }
@@ -391,6 +393,8 @@ class SongComposer
                 'linkUrl'        => route('browse.detail', ['key' => $song->id . '-' . $detail->id]),
                 'downloadUrl'    => route('download', ['key' => $song->id . '-' . $detail->id]),
                 'coverUrl'       => asset("storage/songs/{$song->id}/{$song->id}-{$detail->id}.$detail->cover"),
+                'hashMd5'        => $detail->hash_md5,
+                'hashSha1'       => $detail->hash_sha1,
             ];
         }
 
@@ -476,6 +480,8 @@ class SongComposer
             'linkUrl'        => $song['version'][$song['key']]['linkUrl'],
             'downloadUrl'    => $song['version'][$song['key']]['downloadUrl'],
             'coverUrl'       => $song['version'][$song['key']]['coverUrl'],
+            'hashMd5'        => $song['version'][$song['key']]['hashMd5'],
+            'hashSha1'       => $song['version'][$song['key']]['hashSha1'],
         ];
     }
 }

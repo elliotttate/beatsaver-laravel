@@ -318,7 +318,7 @@ class SongComposer
     /**
      * @param $key
      *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function serveFileDownload($key)
     {
@@ -327,7 +327,7 @@ class SongComposer
         // @todo stop/prevent download count faking
         if ($downloadCount = SongDetail::where('id', $split['detailId'])->where('song_id', $split['songId'])->increment('download_count', 1)) {
             Cache::tags(['song-' . $split['songId']])->increment("downloads-{$split['detailId']}", 1);
-            return \response()->download(storage_path("app/public/songs") . "/{$split['songId']}/{$split['songId']}-{$split['detailId']}.zip");
+            return \response()->redirectTo(asset("storage/songs/{$split['songId']}/{$split['songId']}-{$split['detailId']}.zip"));
         }
 
         return abort(404);

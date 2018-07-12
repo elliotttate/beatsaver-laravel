@@ -51,7 +51,7 @@ class BeatsaverImport extends Command
      */
     public function handle()
     {
-        if ($this->confirm('This import is for empty databases only! Do you want to continue?')) {
+        if (config('beatsaver.legacy.enabled') && $this->confirm('This import is for empty databases only! Do you want to continue?')) {
             $this->importUser();
             $this->importSongs();
             $this->importVotes();
@@ -61,13 +61,13 @@ class BeatsaverImport extends Command
     protected function importUser()
     {
         $this->info('Start User Import');
-        $this->legacyConnection->table('users')->orderBy('id')->chunk(300, function ($users) {
+        $this->legacyConnection->table('users')->orderBy('id')->chunk(1000, function ($users) {
             foreach ($users as $user) {
                 $newUser = new User();
                 $newUser->id = $user->id;
                 $newUser->name = $user->username;
                 $newUser->password = $user->password;
-                $newUser->email = $user->email . $user->id; //@todo remove id after test
+                $newUser->email = $user->email;
                 $newUser->created_at = Carbon::createFromTimestamp($user->registered);
                 $newUser->save();
             }
@@ -78,7 +78,7 @@ class BeatsaverImport extends Command
     {
         $this->info('Start Song Import');
         $composer = new SongComposer();
-        $this->legacyConnection->table('beats')->orderBy('id')->chunk(300, function ($songs) use ($composer) {
+        $this->legacyConnection->table('beats')->orderBy('id')->chunk(1000, function ($songs) use ($composer) {
             foreach ($songs as $song) {
                 $file = realpath(config('beatsaver.legacy.songPath') . '/' . $song->id . '.zip');
                 if ($file) {
@@ -107,7 +107,7 @@ class BeatsaverImport extends Command
     protected function importVotes()
     {
         $this->info('Start Votes Import');
-        $this->legacyConnection->table('votes')->orderBy('id')->chunk(300, function ($votes) {
+        $this->legacyConnection->table('votes')->orderBy('id')->chunk(1000, function ($votes) {
             foreach ($votes as $vote) {
                 if (User::find($vote->userid)) {
                     if ($song = Song::find($vote->beatid)) {

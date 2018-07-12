@@ -23,6 +23,7 @@ return [
         'syncMinDownloadCount' => env('BS_SCORESABER_SYNC_MIN_DOWNLOAD', 100),
     ],
     'legacy'            => [
+        'enabled'  => env('BS_LEGACY_IMPORT_ENABLED', false),
         'songPath' => env('BS_LEGACY_SONG_PATH', storage_path()),
     ]
 ];

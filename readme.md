@@ -39,7 +39,7 @@ php artisan migrate
 Start:
 
 ```
-php -S localhost:8080 -t public
+php artisan serve --port=8080
 ```
 
 Visit the development site:

@@ -83,7 +83,7 @@ class BeatsaverImport extends Command
                 $file = realpath(config('beatsaver.legacy.songPath') . '/' . $song->id . '.zip');
                 if ($file) {
 //                    $this->line('Importing: ID ' . $song->id . ' PATH ' . $file);
-                    $status = $composer->createOrUpdate([
+                    $status = $composer->create([
                         'userId'      => $song->ownerid,
                         'songId'      => $song->id,
                         'name'        => html_entity_decode($song->beatname, ENT_QUOTES | ENT_HTML5),

@@ -34,17 +34,16 @@ class SongComposer
      *
      * @param string $key
      * @param bool   $apiFormat
-     * @param bool   $updateCache
+     * @param bool   $noCache
      *
      * @return array
      */
-    public function get(string $key, $apiFormat = false, $updateCache = false): array
+    public function get(string $key, $apiFormat = false, $noCache = false): array
     {
-        if ($updateCache) {
+        if ($noCache) {
             Log::debug('Force Cache Update: ' . $key);
             $song = $this->compose($key);
             if ($song) {
-                $this->updateCache($song);
                 if ($apiFormat) {
                     $song = $this->convertSongToApiFormat($song);
                 }
@@ -73,7 +72,6 @@ class SongComposer
         Log::debug('cache empty ' . $key . ' try compose');
         if ($song = $this->compose($key)) {
             if ($song) {
-                $this->updateCache($song);
                 if ($apiFormat) {
                     $song = $this->convertSongToApiFormat($song);
                 }
@@ -93,7 +91,7 @@ class SongComposer
      *
      * @return array
      */
-    public function createOrUpdate(array $metadata, string $file): array
+    protected function createOrUpdate(array $metadata, string $file): array
     {
         //check if song fingerprint already exists
         if (!empty($file)) {
@@ -145,7 +143,7 @@ class SongComposer
         if (empty($file)) {
             return [
                 'status' => static::SONG_UPDATED,
-                'song'   => $this->get($song->id, false, true)
+                'key'    => $song->id,
             ];
         }
 
@@ -176,33 +174,24 @@ class SongComposer
 
         return [
             'status' => static::SONG_CREATED,
-            'song'   => [
-                'id'             => $song->id,
-                'key'            => $song->id . '-' . $songDetails->id,
-                'name'           => $song->name,
-                'description'    => $song->description,
-                'uploader'       => $song->uploader->name,
-                'uploaderId'     => $song->uploader->id,
-                'songName'       => $songDetails->song_name,
-                'songSubName'    => $songDetails->song_sub_name,
-                'authorName'     => $songDetails->author_name,
-                'bpm'            => $songDetails->bpm,
-                'difficulties'   => $songData['difficultyLevels'],
-                'downloadCount'  => 0,
-                'playedCount'    => 0,
-                'upVotes'        => 0,
-                'upVotesTotal'   => 0,
-                'downVotes'      => 0,
-                'downVotesTotal' => 0,
-                'version'     => $song->details->count(), //@todo fix version if $detailId is specified
-                'createdAt'   => $songDetails->created_at,
-                'linkUrl'     => route('browse.detail', ['key' => $song->id . '-' . $songDetails->id]),
-                'downloadUrl' => route('download', ['key' => $song->id . '-' . $songDetails->id]),
-                'coverUrl'    => asset("storage/songs/{$song->id}/{$song->id}-{$songDetails->id}.$songDetails->cover"),
-                'hashMd5'     => $songDetails->hash_md5,
-                'hashSha1'    => $songDetails->hash_sha1,
-            ]
+            'key'    => $song->id . '-' . $songDetails->id,
         ];
+    }
+
+    /**
+     * @param array  $metadata
+     * @param string $file
+     *
+     * @return array
+     */
+    public function create(array $metadata, string $file): array
+    {
+        $songData = $this->createOrUpdate($metadata, $file);
+        if ($songData['status'] == static::SONG_CREATED) {
+            $songData['song'] = $this->compose($songData['key']);
+        }
+
+        return $songData;
     }
 
     /**
@@ -211,12 +200,19 @@ class SongComposer
      *
      * @return array
      */
-    public function update(Song $song, array $metadata)
+    public function update(Song $song, array $metadata): array
     {
         if ($song) {
+            // update song version if we have a new song archive
             if (!empty($metadata['updateFile'])) {
                 Log::debug('found update file');
-                return $this->createOrUpdate($metadata, $metadata['updateFile']);
+
+                $songData = $this->createOrUpdate($metadata, $metadata['updateFile']);
+                if ($songData['status'] == static::SONG_CREATED) {
+                    $songData['status'] = static::SONG_UPDATED;
+                    $songData['song'] = $this->compose($songData['key']);
+                }
+                return $songData;
             }
 
             Log::debug('only update meta data');
@@ -225,7 +221,8 @@ class SongComposer
             $song->description = $metadata['description'];
             $song->save();
 
-            return $this->get($song->id);
+            $songData = $this->compose($song->id);
+            return $songData;
         }
 
         Log::debug('no song');
@@ -398,6 +395,7 @@ class SongComposer
             ];
         }
 
+        $this->updateCache($songData);
 
         return $songData;
     }

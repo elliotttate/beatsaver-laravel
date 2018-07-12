@@ -134,7 +134,7 @@ class BeatSaverController extends Controller
      * @param              $key
      * @param SongComposer $composer
      *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function download($key, SongComposer $composer)
     {
@@ -169,7 +169,7 @@ class BeatSaverController extends Controller
             'description' => $request->input('description'),
         ];
 
-        $song = $composer->createOrUpdate($metadata, $process);
+        $song = $composer->create($metadata, $process);
 
         if ($song['status'] != $composer::SONG_CREATED) {
             Log::debug($song['status']);
@@ -265,7 +265,7 @@ class BeatSaverController extends Controller
         $metadata['updateFile'] = $process;
         $metadata['songId'] = $song->id;
 
-        $info = $composer->createOrUpdate($metadata, $process);
+        $info = $composer->update($song, $metadata);
 
         if ($info['status'] == $composer::SONG_CREATED || $info['status'] == $composer::SONG_UPDATED) {
             return redirect()->route('browse.detail', ['key' => $info['song']['key']]);

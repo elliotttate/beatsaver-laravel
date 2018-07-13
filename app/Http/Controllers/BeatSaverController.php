@@ -20,19 +20,11 @@ use Log;
 class BeatSaverController extends Controller
 {
     /**
-     * @param int              $start
-     * @param SongListComposer $composer
-     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function welcome($start = 0, SongListComposer $composer)
+    public function welcome()
     {
-        return view('master.page-welcome')->with([
-            'title' => 'Newest',
-            'songs' => $composer->getNewestSongs($start),
-            'start' => $start,
-            'steps' => $composer::DEFAULT_LIMIT
-        ]);
+        return redirect()->route('browse.top.newest');
     }
 
     /**
@@ -45,8 +37,8 @@ class BeatSaverController extends Controller
     {
         return view('master.page-songs-by-top-downloads')->with([
             'title' => 'Top Downloads',
-            'songs' => $composer->getTopDownloadedSongs($start),
-            'start' => $start,
+            'songs' => $composer->getTopDownloadedSongs((int)$start),
+            'start' => (int)$start,
             'steps' => $composer::DEFAULT_LIMIT,
         ]);
 
@@ -78,8 +70,8 @@ class BeatSaverController extends Controller
     {
         return view('master.page-songs-by-created')->with([
             'title' => 'Newest',
-            'songs' => $composer->getNewestSongs($start),
-            'start' => $start,
+            'songs' => $composer->getNewestSongs((int)$start),
+            'start' => (int)$start,
             'steps' => $composer::DEFAULT_LIMIT
         ]);
     }
@@ -102,10 +94,10 @@ class BeatSaverController extends Controller
         $userId = $user->id;
 
         return view('master.page-songs-by-user')->with([
-            'songs'    => $composer->getSongsByUser($id, $start),
+            'songs'    => $composer->getSongsByUser($id, (int)$start),
             'username' => $name,
             'userId'   => $userId,
-            'start'    => $start,
+            'start'    => (int)$start,
             'steps'    => $composer::DEFAULT_LIMIT
         ]);
     }

@@ -43,7 +43,7 @@ class ScoresaberUpdate extends Command
                 foreach ($details as $detail) {
                     $url = "https://scoresaber.com/api.php?function=getPlays&param1=" . strtoupper($detail->hash_md5) . "&key=" . config('beatsaver.scoreSaber.authKey');
                     $playCount = file_get_contents($url) ?: 0;
-                    $detail->play_count = $playCount;
+                    $detail->play_count = is_numeric($playCount) ? $playCount : 0;
                     $detail->save();
                 }
             });

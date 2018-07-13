@@ -1,5 +1,6 @@
 <?php
 
+Route::get('/', 'BeatSaverController@welcome')->name('home');
 
 Route::get('/browse/downloads/{start?}', 'BeatSaverController@topDownloads')->name('browse.top.downloads');
 Route::get('/browse/played/{start?}', 'BeatSaverController@topPlayed')->name('browse.top.played');
@@ -50,4 +51,3 @@ Route::group(['middleware' => ['guest']], function () {
     Route::post('/auth/forgotpw/confirm', 'UserController@confirmPasswordResetSubmit')->name('password.reset.complete.submit');
 });
 Route::any('/auth/logout', 'UserController@logout')->name('logout');
-Route::get('/{start?}', 'BeatSaverController@welcome')->name('home');

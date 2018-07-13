@@ -20,11 +20,19 @@ use Log;
 class BeatSaverController extends Controller
 {
     /**
+     * @param int              $start
+     * @param SongListComposer $composer
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function welcome()
+    public function welcome($start = 0, SongListComposer $composer)
     {
-        return view('master.page-welcome');
+        return view('master.page-welcome')->with([
+            'title' => 'Newest',
+            'songs' => $composer->getNewestSongs($start),
+            'start' => $start,
+            'steps' => $composer::DEFAULT_LIMIT
+        ]);
     }
 
     /**

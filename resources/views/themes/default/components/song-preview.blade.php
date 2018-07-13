@@ -1,4 +1,4 @@
-<h2>{{ $name }}</h2>
+<a href="{{ $linkUrl }}"><h2>{{ $name }}</h2></a>
 <table id="song-{{ $id }}" class="table" style="table-layout:fixed;">
     <tr>
         <th rowspan="5" style="width: 15%;" class="text-center">

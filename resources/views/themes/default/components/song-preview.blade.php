@@ -7,7 +7,7 @@
             </div>
             <br/>
             <div>
-                <a class="btn btn-default" href="{{ $linkUrl }}" role="button">Details</a>
+                <a class="btn btn-default btn-primary" href="{{ $linkUrl }}" role="button">Details</a>
             </div>
         </th>
         <th colspan="2">

@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', 'BeatSaverController@welcome')->name('home');
+Route::get('/{start?}', 'BeatSaverController@welcome')->name('home');
 
 Route::get('/browse/downloads/{start?}', 'BeatSaverController@topDownloads')->name('browse.top.downloads');
 Route::get('/browse/played/{start?}', 'BeatSaverController@topPlayed')->name('browse.top.played');

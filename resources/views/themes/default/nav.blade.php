@@ -1,8 +1,7 @@
 <ul class="nav navbar-nav">
-    <li class="@if(Route::currentRouteName() == 'home')active @endif"><a href="{{ route('home') }}">Home</a></li>
+    <li class="@if(Route::currentRouteName() == 'browse.top.newest')active @endif"><a href="{{ route('browse.top.newest') }}">Newest</a></li>
     <li class="@if(Route::currentRouteName() == 'browse.top.downloads')active @endif"><a href="{{ route('browse.top.downloads') }}">Top Downloads</a></li>
     <li class="@if(Route::currentRouteName() == 'browse.top.played')active @endif"><a href="{{ route('browse.top.played') }}">Top Played</a></li>
-    <li class="@if(Route::currentRouteName() == 'browse.top.newest')active @endif"><a href="{{ route('browse.top.newest') }}">Newest</a></li>
     <li class="@if(Route::currentRouteName() == 'search' || Route::currentRouteName() == 'browse.user' || Route::currentRouteName() == 'browse.detail' )active @endif"><a href="{{ route('search') }}">Search</a>
     </li>
     <li><a href="https://scoresaber.com/">ScoreSaber</a></li>

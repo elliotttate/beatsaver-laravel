@@ -58,15 +58,41 @@ class SongListComposer
             if (array_key_exists($key, $searchableKeys)) {
                 $doSearch = true;
 
-                // add multiple columns via or if the searchable key is a combined search criteria
-                if (is_array($searchableKeys[$key])) {
-                    $songs->where(function ($query) use ($searchableKeys, $search, $key) {
-                        foreach ($searchableKeys[$key] as $searchColumn) {
-                            $query->orWhere($searchColumn, 'LIKE', "%$search%");
-                        }
-                    });
-                } else {
-                    $songs->where($searchableKeys[$key], 'LIKE', "%$search%");
+                $fields = $searchableKeys[$key]['fields'];
+
+                switch ($searchableKeys[$key]['type']) {
+                    case "fulltext" :
+                        $this->addFullTextWhere($songs, $fields, $search);
+                        break;
+                    case "like":
+                        $this->addLikeWhere($songs, $fields, $search);
+                        break;
+                    case "equal":
+                        $this->addEqualWhere($songs, $fields, $search);
+                        break;
+                    case "mixed":
+
+                        $songs->where(function ($query) use ($searchableKeys, $fields, $search) {
+                            foreach ($fields as $group) {
+                                switch ($searchableKeys[$group]['type']) {
+                                    case "fulltext" :
+                                        $this->addFullTextWhere($query, $searchableKeys[$group]['fields'], $search, 'or');
+                                        break;
+                                    case "like":
+                                        $this->addLikeWhere($query, $searchableKeys[$group]['fields'], $search, 'or');
+                                        break;
+                                    case "equal":
+                                        $this->addEqualWhere($query, $searchableKeys[$group]['fields'], $search, 'or');
+                                        break;
+                                    default:
+
+                                }
+                            }
+                        });
+                        break;
+                    default:
+                        $doSearch = false;
+
                 }
             }
         }
@@ -75,7 +101,91 @@ class SongListComposer
         if (!$doSearch) {
             return collect();
         }
+
         return $this->prepareSongInfo($songs->get(), $apiFormat);
+    }
+
+    /**
+     * searchable key to column mapper
+     *
+     * @return array
+     */
+    protected function searchableKeys()
+    {
+        return [
+            'author' => [
+                'type'   => 'like',
+                'fields' => ['sd.author_name'],
+            ],
+            'name'   => [
+                'type'   => 'fulltext',
+                'fields' => ['s.name'],
+            ],
+            'user'   => [
+                'type'   => 'like',
+                'fields' => ['u.name'],
+            ],
+            'hash'   => [
+                'type'   => 'equal',
+                'fields' => ['sd.hash_md5'],
+            ],
+            'song'   => [
+                'type'   => 'fulltext',
+                'fields' => ['sd.song_name', 'sd.song_sub_name', 'sd.author_name'],
+            ],
+            'all'    => [
+                'type'   => 'mixed',
+                'fields' => ['name', 'user', 'song'],
+            ],
+        ];
+    }
+
+    /**
+     * @param Builder $builder
+     * @param array   $matches
+     * @param string  $search
+     * @param string  $type
+     */
+    protected function addFullTextWhere(Builder $builder, array $matches, string $search, $type = 'and')
+    {
+        \Log::debug('FullTextWhere: ' . $search);
+        $builder->whereRaw('(MATCH(' . implode(',', $matches) . ') AGAINST(? IN BOOLEAN MODE) > 0)', ["*" . $search . "*"], $type);
+    }
+
+    /**
+     * @param Builder $builder
+     * @param array   $fields
+     * @param string  $search
+     * @param string  $type
+     */
+    protected function addLikeWhere(Builder $builder, array $fields, string $search, $type = 'and')
+    {
+        \Log::debug('LikeWhere:');
+        $builder->where(function ($query) use ($fields, $search) {
+            foreach ($fields as $field) {
+                \Log::debug(' : ' . $search);
+                $query->orWhere($field, 'LIKE', "%$search%");
+            }
+        }, null, null, $type);
+
+    }
+
+    /**
+     * @param Builder $builder
+     * @param array   $fields
+     * @param string  $search
+     * @param string  $type
+     */
+    protected function addEqualWhere(Builder $builder, array $fields, string $search, $type = 'and')
+    {
+        \Log::debug('FullTextWhere:');
+        $builder->where(function ($query) use ($fields, $search) {
+            foreach ($fields as $field) {
+                \Log::debug(' : ' . $search);
+                $query->orWhere($field, $search);
+            }
+        }, null, null, $type);
+
     }
 
     /**
@@ -152,23 +262,6 @@ class SongListComposer
             ->whereNull('u.deleted_at')->where('s.user_id', $userId);
 
         return $this->prepareSongInfo($songs->get(), $apiFormat);
-    }
-
-    /**
-     * searchable key to column mapper
-     *
-     * @return array
-     */
-    protected function searchableKeys()
-    {
-        return [
-            'author' => 'sd.author_name',
-            'name'   => 's.name',
-            'user'   => 'u.name',
-            'hash'   => 'sd.hash_md5',
-            'song'   => ['sd.song_name', 'sd.song_sub_name'],
-            'all'    => ['sd.song_name', 'sd.song_sub_name', 'sd.author_name', 's.name', 'u.name'],
-        ];
     }
 
     /**

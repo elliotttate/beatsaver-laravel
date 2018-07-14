@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="row">
-        <form class="form-signin" method="post" action="{{ route('search.submit',['type' => 'all']) }}">
+        <form class="form-signin" method="post" action="{{ route('search.submit') }}">
             {{ csrf_field() }}
             <div class="col-md-6 col-md-offset-3">
                 <div class="input-group">

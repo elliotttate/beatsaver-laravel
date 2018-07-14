@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'tracking'          => env('BS_TRACKING',false),
     'githubUrl'         => env('BS_GITHUB_URL', 'https://github.com/Byorun/beatsaver-laravel'),
     'legalEmail'        => env('BS_LEAGAL_EMAIL'),
     'songCacheDuration' => env('BS_SONG_CACHE_DURATION', \App\SongComposer::CACHE_DURATION),

@@ -54,9 +54,13 @@ class SongComposer
         $split = $this->parseKey($key);
 
         // no version selected try to find default one
-//        if (is_null($split['detailId'])) {
-//            $split = $this->parseKey(Cache::tags(['song-' . $split['songId']])->get('default', $split));
-//        }
+        if (is_null($split['detailId'])) {
+            $defaultKey = Cache::tags(['song-' . $split['songId']])->get('default');
+            Log::debug("Key $key Default = $defaultKey");
+            if ($defaultKey) {
+                $split = $this->parseKey($defaultKey);
+            }
+        }
 
         $song = Cache::tags(['song-' . $split['songId']])->get('info');
         if ($song) {
@@ -291,7 +295,7 @@ class SongComposer
             return true;
         }
 
-        if(! $songDetail = SongDetail::where('song_id', $split['songId'])->where('id', $split['detailId'])->first()){
+        if (!$songDetail = SongDetail::where('song_id', $split['songId'])->where('id', $split['detailId'])->first()) {
             return false;
         }
 

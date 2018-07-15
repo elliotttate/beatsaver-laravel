@@ -7,6 +7,7 @@ use App\Models\User;
 use App\SongComposer;
 use App\SongListComposer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Response;
 
 class ApiController extends Controller
@@ -85,7 +86,10 @@ class ApiController extends Controller
     public function detail(string $key, SongComposer $composer)
     {
         $song = $composer->get($key, true);
-        return Response::json(['song' => $song]);
+        if ($song) {
+            return Response::json(['song' => $song]);
+        }
+        return Response::json(['message' => "{$key} not found"], 404);
     }
 
     /**
@@ -98,17 +102,23 @@ class ApiController extends Controller
      */
     public function vote(string $key, int $type, string $accessToken, SongComposer $composer)
     {
-        $user = AccessToken::canWrite()->where('token', $accessToken)->first();
+        $user = AccessToken::where('token', $accessToken)->first();
 
         if (!$user) {
-            return Response::json([], 403);
+            return Response::json(['message' => 'invalid API token'], 401);
+        }
+
+        if ($user->isReadOnly()) {
+            return Response::json(['message' => 'this token has no permission to vote'], 403);
         }
 
         if ($composer->vote($key, $user->user, $type)) {
-            return Response::json([]);
+            $song = $composer->get($key, true);
+
+            return Response::json(Arr::only($song, ['upVotes', 'upVotesTotal', 'downVotes', 'downVotesTotal']));
         }
 
-        return Response::json([], 400);
+        return Response::json(['message' => 'invalid song key'], 400);
     }
 
     /**

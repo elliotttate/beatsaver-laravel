@@ -28,4 +28,9 @@ class AccessToken extends Model
     {
         return $query->where('type', static::TYPE_READ_WRITE);
     }
+
+    public function isReadOnly()
+    {
+        return $this->type == static::TYPE_READ_ONLY;
+    }
 }

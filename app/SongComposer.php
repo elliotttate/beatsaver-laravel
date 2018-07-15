@@ -291,11 +291,17 @@ class SongComposer
             return true;
         }
 
-        $vote = Vote::updateOrCreate([
-            'song_id'   => $split['songId'],
-            'detail_id' => $split['detailId'],
-            'user_id'   => $user->id,
-        ], ['direction' => $direction]);
+        if(! $songDetail = SongDetail::where('song_id', $split['songId'])->where('id', $split['detailId'])->first()){
+            return false;
+        }
+
+        if ($direction == static::VOTE_UP) {
+            $vote = $songDetail->voteUp($user);
+        } elseif ($direction == static::VOTE_DOWN) {
+            $vote = $songDetail->voteDown($user);
+        } else {
+            return false;
+        }
 
         if ($vote->wasRecentlyCreated && $direction == static::VOTE_UP) {
             Cache::tags(['song-' . $split['songId']])->increment("votes-{$split['detailId']}-1", 1);
@@ -359,6 +365,11 @@ class SongComposer
                 }
             },
         ])->findOrFail($split['songId']);
+
+        // empty song details, return early because valid songedata cannot be returned
+        if ($song->details->isEmpty()) {
+            return [];
+        }
 
         $songData = [
             'id'          => $song->id,

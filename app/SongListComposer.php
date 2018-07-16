@@ -219,7 +219,6 @@ class SongListComposer
     public function getTopDownloadedSongs(int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT, $apiFormat = false): Collection
     {
         $orderBy = 'download_count';
-
         $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
         return $this->prepareSongInfo($songs->get(), $apiFormat);
@@ -257,9 +256,7 @@ class SongListComposer
     public function getSongsByUser(int $userId, int $offset = 0, int $limit = SongListComposer::DEFAULT_LIMIT, $apiFormat = false): Collection
     {
         $orderBy = 'created_at';
-        $songs = $this->prepareQuery($orderBy, $offset, $limit)
-            ->leftJoin('users as u', 's.user_id', '=', 'u.id')
-            ->whereNull('u.deleted_at')->where('s.user_id', $userId);
+        $songs = $this->prepareQuery($orderBy, $offset, $limit)->where('s.user_id', $userId);
 
         return $this->prepareSongInfo($songs->get(), $apiFormat);
     }
@@ -300,7 +297,8 @@ class SongListComposer
     {
         return DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id))as songKey"))
             ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
-            ->whereNull('s.deleted_at')->whereNull('sd.deleted_at')
+            ->leftJoin('users as u', 's.user_id', '=', 'u.id')
+            ->whereNull('s.deleted_at')->whereNull('sd.deleted_at')->whereNull('u.deleted_at')
             ->groupBy(['sd.song_id'])->orderByRaw("(select {$orderBy} from song_details where id = max(sd.id) and deleted_at is null) desc")
             ->offset($offset)->limit($limit);
 

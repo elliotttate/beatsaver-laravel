@@ -26,6 +26,7 @@ class SongComposer
     const ERROR_ALREADY_EXISTS = 2;
     const ERROR_INVALID_USER = 3;
     const SONG_UPDATED = 4;
+    const SONG_UPDATE_FAILED = 5;
 
     /**
      * Get the song info from $key, return cached data (if exists).
@@ -206,6 +207,7 @@ class SongComposer
      */
     public function update(Song $song, array $metadata): array
     {
+        $songData = ['status' => static::SONG_UPDATE_FAILED];
         if ($song) {
             // update song version if we have a new song archive
             if (!empty($metadata['updateFile'])) {
@@ -223,15 +225,17 @@ class SongComposer
             // only update meta data
             $song->name = $metadata['name'];
             $song->description = $metadata['description'];
-            $song->save();
 
-            $songData = $this->compose($song->id);
-            return $songData;
+            if ($song->save()) {
+                $songData['status'] = static::SONG_CREATED;
+                $songData['song'] = $this->compose($song->id);
+                return $songData;
+            }
         }
 
         Log::debug('no song');
 
-        return [];
+        return $songData;
     }
 
     /**

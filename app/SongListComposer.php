@@ -47,11 +47,14 @@ class SongListComposer
             return collect();
         }
 
+        \Log::debug('start search');
+        \Log::debug($parameter);
+
+
         $doSearch = false;
         $orderBy = 'created_at';
 
-        $songs = $this->prepareQuery($orderBy, $offset, $limit)
-            ->leftJoin('users as u', 's.user_id', '=', 'u.id');
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
         foreach ($parameter as $key => $search) {
             $searchableKeys = $this->searchableKeys();
@@ -149,16 +152,16 @@ class SongListComposer
     protected function addFullTextWhere(Builder $builder, array $matches, string $search, $type = 'and')
     {
         \Log::debug('FullTextWhere: ' . $search);
-        $searchTerms = explode(' ', $search);
+        $searchTerms = explode(' ', str_replace(['@', '*', '+', '-'], ' ', $search));
+        $search = "'";
         foreach ($searchTerms as $index => $term) {
-          if(strlen($term) >= 3)
-          {
-            $term = $term . '*';
-          }
-          $term = '+' . $term;
-          $searchTerms[$index] = $term;
+            $term = trim($term);
+            if (strlen($term) >= 3) {
+                $term = '+' . $term . '*';
+                $search .= $term . ' ';
+            }
         }
-        $search = implode(' ', $searchTerms);
+        $search .= "'";
         $builder->whereRaw('(MATCH(' . implode(',', $matches) . ') AGAINST(? IN BOOLEAN MODE) > 0)', [$search], $type);
     }
 

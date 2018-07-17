@@ -6,6 +6,7 @@ use App\Models\Song;
 use DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class SongListComposer
 {
@@ -52,7 +53,7 @@ class SongListComposer
 
 
         $doSearch = false;
-        $orderBy = 'created_at';
+        $orderBy = 'download_count';
 
         $songs = $this->prepareQuery($orderBy, $offset, $limit);
 
@@ -152,16 +153,21 @@ class SongListComposer
     protected function addFullTextWhere(Builder $builder, array $matches, string $search, $type = 'and')
     {
         \Log::debug('FullTextWhere: ' . $search);
-        $searchTerms = explode(' ', str_replace(['@', '*', '+', '-', '<', '~', '>', '(', ')'], ' ', $search));
+        preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', str_replace(['@', '*', '+', '-', '<', '~', '>', '(', ')'], ' ', $search), $searchTerms);
         $search = "'";
-        foreach ($searchTerms as $index => $term) {
+        foreach (array_shift($searchTerms) as $index => $term) {
             $term = trim($term);
-            if (strlen($term) >= 3) {
-                $term = '+' . $term . '*';
+            if (Str::startsWith($term, '"') && Str::endsWith($term, '"')) {
+
+            } else {
+                if (strlen($term) >= 3) {
+                    $term = '+' . $term . '*';
+                }
             }
             $search .= $term . ' ';
         }
-        $search .= "'";
+        $search = trim($search) . "'";
+        \Log::debug($search);
         $builder->whereRaw('(MATCH(' . implode(',', $matches) . ') AGAINST(? IN BOOLEAN MODE) > 0)', [$search], $type);
     }
 

@@ -149,7 +149,17 @@ class SongListComposer
     protected function addFullTextWhere(Builder $builder, array $matches, string $search, $type = 'and')
     {
         \Log::debug('FullTextWhere: ' . $search);
-        $builder->whereRaw('(MATCH(' . implode(',', $matches) . ') AGAINST(? IN BOOLEAN MODE) > 0)', ["*" . $search . "*"], $type);
+        $searchTerms = explode(' ', $search);
+        foreach ($searchTerms as $index => $term) {
+          if(strlen($term) >= 3)
+          {
+            $term = $term . '*';
+          }
+          $term = '+' . $term;
+          $searchTerms[$index] = $term;
+        }
+        $search = implode(' ', $searchTerms);
+        $builder->whereRaw('(MATCH(' . implode(',', $matches) . ') AGAINST(? IN BOOLEAN MODE) > 0)', [$search], $type);
     }
 
     /**

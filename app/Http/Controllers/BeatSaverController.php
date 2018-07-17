@@ -110,7 +110,11 @@ class BeatSaverController extends Controller
      */
     public function detail($key, SongComposer $composer)
     {
-        return view('master.page-song-detail')->with(['song' => $composer->get($key)]);
+        $song = $composer->get($key);
+        if ($song) {
+            return view('master.page-song-detail')->with(['song' => $song]);
+        }
+        abort(404);
     }
 
     /**

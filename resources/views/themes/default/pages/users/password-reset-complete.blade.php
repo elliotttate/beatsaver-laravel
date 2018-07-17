@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('themes.default.layout')
 @section('title', '- Complete Password Reset')
 
 @section('content')

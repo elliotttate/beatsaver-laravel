@@ -158,8 +158,8 @@ class SongListComposer
             $term = trim($term);
             if (strlen($term) >= 3) {
                 $term = '+' . $term . '*';
-                $search .= $term . ' ';
             }
+            $search .= $term . ' ';
         }
         $search .= "'";
         $builder->whereRaw('(MATCH(' . implode(',', $matches) . ') AGAINST(? IN BOOLEAN MODE) > 0)', [$search], $type);

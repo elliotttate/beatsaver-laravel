@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\Song\ComposerContract;
 use App\Models\Song;
 use App\Models\SongDetail;
 use App\Models\User;
@@ -11,22 +12,8 @@ use File;
 use Log;
 use Storage;
 
-class SongComposer
+class SongComposer implements ComposerContract
 {
-
-    /**
-     * Default cache duration in minutes
-     */
-    const CACHE_DURATION = 60;
-    const VOTE_UP = 1;
-    const VOTE_DOWN = 0;
-
-    const SONG_CREATED = 0;
-    const ERROR_INVALID_FORMAT = 1;
-    const ERROR_ALREADY_EXISTS = 2;
-    const ERROR_INVALID_USER = 3;
-    const SONG_UPDATED = 4;
-    const SONG_UPDATE_FAILED = 5;
 
     /**
      * Get the song info from $key, return cached data (if exists).
@@ -34,21 +21,15 @@ class SongComposer
      * and a fresh result is returned.
      *
      * @param string $key
-     * @param bool   $apiFormat
      * @param bool   $noCache
      *
      * @return array
      */
-    public function get(string $key, $apiFormat = false, $noCache = false): array
+    public function get(string $key, $noCache = false): array
     {
         if ($noCache) {
             Log::debug('Force Cache Update: ' . $key);
             $song = $this->compose($key);
-            if ($song) {
-                if ($apiFormat) {
-                    $song = $this->convertSongToApiFormat($song);
-                }
-            }
             return $song;
         }
 
@@ -71,16 +52,11 @@ class SongComposer
                 $version['downVotes'] = Cache::tags(['song-' . $split['songId']])->get("votes-{$split['detailId']}-0", 0);
                 $version['downloadCount'] = Cache::tags(['song-' . $split['songId']])->get("downloads-{$split['detailId']}", 0);
             }
-            return $apiFormat ? $this->convertSongToApiFormat($song) : $song;
+            return $song;
         }
 
         Log::debug('cache empty ' . $key . ' try compose');
         if ($song = $this->compose($key)) {
-            if ($song) {
-                if ($apiFormat) {
-                    $song = $this->convertSongToApiFormat($song);
-                }
-            }
             return $song;
         }
         Log::debug('compose failed');
@@ -467,38 +443,4 @@ class SongComposer
         }
     }
 
-    /**
-     * @param array $song
-     *
-     * @return array
-     */
-    protected function convertSongToApiFormat(array $song): array
-    {
-        return [
-            'id'             => $song['id'],
-            'key'            => $song['key'],
-            'name'           => $song['name'],
-            'description'    => $song['description'],
-            'uploader'       => $song['uploader'],
-            'uploaderId'     => $song['uploaderId'],
-            'songName'       => $song['version'][$song['key']]['songName'],
-            'songSubName'    => $song['version'][$song['key']]['songSubName'],
-            'authorName'     => $song['version'][$song['key']]['authorName'],
-            'bpm'            => $song['version'][$song['key']]['bpm'],
-            'difficulties'   => $song['version'][$song['key']]['difficulties'],
-            'downloadCount'  => $song['version'][$song['key']]['downloadCount'],
-            'playedCount'    => $song['version'][$song['key']]['playedCount'],
-            'upVotes'        => $song['version'][$song['key']]['upVotes'],
-            'upVotesTotal'   => 0,
-            'downVotes'      => $song['version'][$song['key']]['downVotes'],
-            'downVotesTotal' => 0,
-            'version'        => $song['key'],
-            'createdAt'      => $song['version'][$song['key']]['createdAt'],
-            'linkUrl'        => $song['version'][$song['key']]['linkUrl'],
-            'downloadUrl'    => $song['version'][$song['key']]['downloadUrl'],
-            'coverUrl'       => $song['version'][$song['key']]['coverUrl'],
-            'hashMd5'        => $song['version'][$song['key']]['hashMd5'],
-            'hashSha1'       => $song['version'][$song['key']]['hashSha1'],
-        ];
-    }
 }

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\AccessToken;
-use App\Models\User;
-use App\SongComposer;
-use App\SongListComposer;
+use App\SongComposerApi;
+use App\SongListComposerApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Response;
@@ -14,78 +13,71 @@ class ApiController extends Controller
 {
 
     /**
-     * @param int              $start
-     * @param SongListComposer $composer
+     * @param int                 $start
+     * @param SongListComposerApi $composer
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function topDownloads(int $start = 0, SongListComposer $composer)
+    public function topDownloads(int $start = 0, SongListComposerApi $composer)
     {
-        $songs = $composer->getTopDownloadedSongs($start, SongListComposer::DEFAULT_LIMIT, true);
+        $songs = $composer->getTopDownloadedSongs($start, $composer::DEFAULT_LIMIT);
         $total = $composer->getSongCount();
 
         return Response::json(['songs' => $songs, 'total' => $total]);
     }
 
     /**
-     * @param int              $start
-     * @param SongListComposer $composer
+     * @param int                 $start
+     * @param SongListComposerApi $composer
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function topPlayed(int $start = 0, SongListComposer $composer)
+    public function topPlayed(int $start = 0, SongListComposerApi $composer)
     {
-        $songs = $composer->getTopPlayedSongs($start, SongListComposer::DEFAULT_LIMIT, true);
+        $songs = $composer->getTopPlayedSongs($start, $composer::DEFAULT_LIMIT);
         $total = $composer->getSongCount();
 
         return Response::json(['songs' => $songs, 'total' => $total]);
     }
 
     /**
-     * @param int              $start
-     * @param SongListComposer $composer
+     * @param int                 $start
+     * @param SongListComposerApi $composer
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function newest(int $start = 0, SongListComposer $composer)
+    public function newest(int $start = 0, SongListComposerApi $composer)
     {
-        $songs = $composer->getNewestSongs($start, SongListComposer::DEFAULT_LIMIT, true);
+        $songs = $composer->getNewestSongs($start, $composer::DEFAULT_LIMIT);
         $total = $composer->getSongCount();
 
         return Response::json(['songs' => $songs, 'total' => $total]);
     }
 
     /**
-     * @param int              $id
-     * @param int              $start
-     * @param SongListComposer $composer
+     * @param int                 $id
+     * @param int                 $start
+     * @param SongListComposerApi $composer
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function byUser(int $id, int $start = 0, SongListComposer $composer)
+    public function byUser(int $id, int $start = 0, SongListComposerApi $composer)
     {
-        $user = User::find($id);
-        if ($user) {
-            $name = $user->name;
-        } else {
-            $name = '';
-        }
-
-        $songs = $composer->getSongsByUser($id, $start, SongListComposer::DEFAULT_LIMIT, true);
+        $songs = $composer->getSongsByUser($id, $start, $composer::DEFAULT_LIMIT);
         $total = $composer->getUserSongCount($id);
 
         return Response::json(['songs' => $songs, 'total' => $total]);
     }
 
     /**
-     * @param string       $key
-     * @param SongComposer $composer
+     * @param string          $key
+     * @param SongComposerApi $composer
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function detail(string $key, SongComposer $composer)
+    public function detail(string $key, SongComposerApi $composer)
     {
-        $song = $composer->get($key, true);
+        $song = $composer->get($key);
         if ($song) {
             return Response::json(['song' => $song]);
         }
@@ -93,14 +85,14 @@ class ApiController extends Controller
     }
 
     /**
-     * @param string       $key
-     * @param int          $type
-     * @param string       $accessToken
-     * @param SongComposer $composer
+     * @param string          $key
+     * @param int             $type
+     * @param string          $accessToken
+     * @param SongComposerApi $composer
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function vote(string $key, int $type, string $accessToken, SongComposer $composer)
+    public function vote(string $key, int $type, string $accessToken, SongComposerApi $composer)
     {
         $user = AccessToken::where('token', $accessToken)->first();
 
@@ -122,20 +114,20 @@ class ApiController extends Controller
     }
 
     /**
-     * @param string           $type
-     * @param string           $key
-     * @param SongListComposer $composer
+     * @param string              $type
+     * @param string              $key
+     * @param SongListComposerApi $composer
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function search(string $type, string $key, SongListComposer $composer)
+    public function search(string $type, string $key, SongListComposerApi $composer)
     {
         if (strlen($key) < 3) {
             return Response::json(['songs' => [], 'total' => 0]);
         }
 
         $parameter = [strtolower($type) => $key];
-        $songs = $composer->search($parameter, 0, SongListComposer::DEFAULT_LIMIT, true);
+        $songs = $composer->search($parameter, 0, $composer::DEFAULT_LIMIT);
         $total = count($songs);
         return Response::json(['songs' => $songs, 'total' => $total]);
     }

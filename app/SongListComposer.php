@@ -109,6 +109,132 @@ class SongListComposer implements ListComposerContract
     }
 
     /**
+     * Get songs ordered by play count descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopPlayedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        return $this->prepareSongInfo($this->getTopPlayedKeys($offset, $limit));
+    }
+
+    /**
+     * Get song keys ordered by play count descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopPlayedKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        $orderBy = 'play_count';
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
+
+        return $songs->get();
+    }
+
+    /**
+     * Get songs ordered by download count descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopDownloadedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        return $this->prepareSongInfo($this->getTopDownloadedKeys($offset, $limit));
+    }
+
+    /**
+     * Get song keys ordered by download count descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopDownloadedKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        $orderBy = 'download_count';
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
+
+        return $songs->get();
+    }
+
+    /**
+     * Get songs ordered by creation date descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getNewestSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        return $this->prepareSongInfo($this->getNewestKeys($offset, $limit));
+    }
+
+    /**
+     * Get song keys ordered by creation date descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getNewestKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        $orderBy = 'created_at';
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
+
+        return $songs->get();
+    }
+
+    /**
+     * Get songs uploaded by user {$id] ordered by creation date.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $userId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getSongsByUser(int $userId, int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        return $this->prepareSongInfo($this->getKeysByUser($userId, $offset, $limit));
+    }
+
+    /**
+     * Get song keys uploaded by user {$id] ordered by creation date.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $userId
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getKeysByUser(int $userId, int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        $orderBy = 'created_at';
+        $songs = $this->prepareQuery($orderBy, $offset, $limit)->where('s.user_id', $userId);
+
+        return $songs->get();
+    }
+
+    /**
      * searchable key to column mapper
      *
      * @return array
@@ -204,75 +330,6 @@ class SongListComposer implements ListComposerContract
             }
         }, null, null, $type);
 
-    }
-
-    /**
-     * Get songs ordered by play count descending.
-     * If a song has multiple versions only get the latest one.
-     *
-     * @param int  $offset
-     * @param int  $limit
-     *
-     * @return Collection
-     */
-    public function getTopPlayedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
-    {
-        $orderBy = 'play_count';
-        $songs = $this->prepareQuery($orderBy, $offset, $limit);
-
-        return $this->prepareSongInfo($songs->get());
-    }
-
-    /**
-     * Get songs ordered by download count descending.
-     * If a song has multiple versions only get the latest one.
-     *
-     * @param int  $offset
-     * @param int  $limit
-     *
-     * @return Collection
-     */
-    public function getTopDownloadedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
-    {
-        $orderBy = 'download_count';
-        $songs = $this->prepareQuery($orderBy, $offset, $limit);
-
-        return $this->prepareSongInfo($songs->get());
-    }
-
-    /**
-     * Get songs ordered by creation date descending.
-     * If a song has multiple versions only get the latest one.
-     *
-     * @param int  $offset
-     * @param int  $limit
-     *
-     * @return Collection
-     */
-    public function getNewestSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
-    {
-        $orderBy = 'created_at';
-        $songs = $this->prepareQuery($orderBy, $offset, $limit);
-
-        return $this->prepareSongInfo($songs->get());
-    }
-
-    /**
-     * Get songs uploaded by user {$id] ordered by creation date.
-     * If a song has multiple versions only get the latest one.
-     *
-     * @param int  $userId
-     * @param int  $offset
-     * @param int  $limit
-     *
-     * @return Collection
-     */
-    public function getSongsByUser(int $userId, int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
-    {
-        $orderBy = 'created_at';
-        $songs = $this->prepareQuery($orderBy, $offset, $limit)->where('s.user_id', $userId);
-
-        return $this->prepareSongInfo($songs->get());
     }
 
     /**

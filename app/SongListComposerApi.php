@@ -6,8 +6,6 @@ use Illuminate\Support\Collection;
 
 class SongListComposerApi extends SongListComposer
 {
-    const DEFAULT_LIMIT = 15;
-
     /**
      * Converts a list of song keys into song info data.
      *

@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('beatsaver:scoresaber-update')->cron('0 */3 * * *')->withoutOverlapping();
+        $schedule->command('beatsaver:update-search-cache')->everyFifteenMinutes()->withoutOverlapping();
     }
 
     /**

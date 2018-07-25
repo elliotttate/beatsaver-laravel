@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Contracts\Song\ComposerContract;
+use App\Events\SongUpdated;
+use App\Events\SongUploaded;
 use App\Models\Song;
 use App\Models\SongDetail;
 use App\Models\User;
@@ -170,6 +172,7 @@ class SongComposer implements ComposerContract
         $songData = $this->createOrUpdate($metadata, $file);
         if ($songData['status'] == static::SONG_CREATED) {
             $songData['song'] = $this->compose($songData['key']);
+            event(new SongUploaded($songData['song']));
         }
 
         return $songData;
@@ -193,6 +196,7 @@ class SongComposer implements ComposerContract
                 if ($songData['status'] == static::SONG_CREATED) {
                     $songData['status'] = static::SONG_UPDATED;
                     $songData['song'] = $this->compose($songData['key']);
+                    event(new SongUpdated($songData['song']));
                 }
                 return $songData;
             }
@@ -205,6 +209,7 @@ class SongComposer implements ComposerContract
             if ($song->save()) {
                 $songData['status'] = static::SONG_CREATED;
                 $songData['song'] = $this->compose($song->id);
+                event(new SongUploaded($songData['song']));
                 return $songData;
             }
         }

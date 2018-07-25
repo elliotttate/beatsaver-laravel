@@ -180,8 +180,6 @@ class BeatSaverController extends Controller
             return redirect()->back()->withErrors($composer->getErrorText($song['status']));
         }
 
-        event(new SongUploaded($song['song']));
-
         return redirect()->route('browse.user', ['id' => auth()->id()]);
     }
 

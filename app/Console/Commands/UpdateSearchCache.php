@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\SongListComposer;
 use Cache;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class UpdateSearchCache extends Command
@@ -45,9 +46,10 @@ class UpdateSearchCache extends Command
     protected function top100()
     {
         $composer = new SongListComposer;
+        $now = Carbon::now();
 
-        Cache::tags(['top100'])->put('newest', $composer->getNewestKeys(0, 100), config('beatsaver.songCacheDuration'));
-        Cache::tags(['top100'])->put('downloads', $composer->getTopDownloadedKeys(0, 100), config('beatsaver.songCacheDuration'));
-        Cache::tags(['top100'])->put('played', $composer->getTopPlayedKeys(0, 100), config('beatsaver.songCacheDuration'));
+        Cache::tags(['top100'])->put('newest', ['keys' => $composer->getNewestKeys(0, 100), config('beatsaver.songCacheDuration'), 'updated' => $now]);
+        Cache::tags(['top100'])->put('downloads', ['keys' => $composer->getTopDownloadedKeys(0, 100), config('beatsaver.songCacheDuration'), 'updated' => $now]);
+        Cache::tags(['top100'])->put('played', ['keys' => $composer->getTopPlayedKeys(0, 100), config('beatsaver.songCacheDuration'), 'updated' => $now]);
     }
 }

@@ -120,9 +120,9 @@ class SongListComposer implements ListComposerContract
      */
     public function getTopPlayedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
     {
-        if($offset < 100) {
+        if ($offset < 100) {
             $cache = Cache::tags(['top100'])->get('played');
-            if($cache) {
+            if ($cache['keys']->forPage($offset / $limit, $limit)) {
                 return $this->prepareSongInfo($cache['keys']);
             }
         }
@@ -158,9 +158,9 @@ class SongListComposer implements ListComposerContract
      */
     public function getTopDownloadedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
     {
-        if($offset < 100) {
+        if ($offset < 100) {
             $cache = Cache::tags(['top100'])->get('downloads');
-            if($cache) {
+            if ($cache['keys']->forPage($offset / $limit, $limit)) {
                 return $this->prepareSongInfo($cache['keys']);
             }
         }
@@ -196,9 +196,9 @@ class SongListComposer implements ListComposerContract
      */
     public function getNewestSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
     {
-        if($offset < 100) {
+        if ($offset < 100) {
             $cache = Cache::tags(['top100'])->get('newest');
-            if($cache) {
+            if ($cache['keys']->forPage($offset / $limit, $limit)) {
                 return $this->prepareSongInfo($cache['keys']);
             }
         }

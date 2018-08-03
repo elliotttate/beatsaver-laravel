@@ -4,6 +4,7 @@ namespace App;
 
 use App\Contracts\Song\ListComposerContract;
 use App\Models\Song;
+use Cache;
 use DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
@@ -119,6 +120,13 @@ class SongListComposer implements ListComposerContract
      */
     public function getTopPlayedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
     {
+        if($offset < 100) {
+            $cache = Cache::tags(['top100'])->get('played');
+            if($cache) {
+                return $this->prepareSongInfo($cache['keys']);
+            }
+        }
+
         return $this->prepareSongInfo($this->getTopPlayedKeys($offset, $limit));
     }
 
@@ -150,6 +158,13 @@ class SongListComposer implements ListComposerContract
      */
     public function getTopDownloadedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
     {
+        if($offset < 100) {
+            $cache = Cache::tags(['top100'])->get('downloads');
+            if($cache) {
+                return $this->prepareSongInfo($cache['keys']);
+            }
+        }
+
         return $this->prepareSongInfo($this->getTopDownloadedKeys($offset, $limit));
     }
 
@@ -181,6 +196,13 @@ class SongListComposer implements ListComposerContract
      */
     public function getNewestSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
     {
+        if($offset < 100) {
+            $cache = Cache::tags(['top100'])->get('newest');
+            if($cache) {
+                return $this->prepareSongInfo($cache['keys']);
+            }
+        }
+
         return $this->prepareSongInfo($this->getNewestKeys($offset, $limit));
     }
 

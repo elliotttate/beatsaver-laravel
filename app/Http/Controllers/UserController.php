@@ -127,6 +127,12 @@ class UserController extends Controller
      */
     public function resetPasswordSubmit(ResetPasswordRequest $request)
     {
+        // update legacy sha1 emails to plain text mails
+        if($user = User::where('email', sha1($request->input('email')))->first()){
+            $user->email = $request->input('email');
+            $user->save();
+        }
+
         Password::broker()->sendResetLink(['email' => $request->input('email')]);
 
         // always sent a positive response in order to prevent email fishing

@@ -127,7 +127,7 @@ class ApiController extends Controller
         }
 
         $parameter = [strtolower($type) => $key];
-        $songs = $composer->search($parameter, 0, $composer::DEFAULT_LIMIT);
+        $songs = $composer->search($parameter, 0, 30);
         $total = count($songs);
         return Response::json(['songs' => $songs, 'total' => $total]);
     }

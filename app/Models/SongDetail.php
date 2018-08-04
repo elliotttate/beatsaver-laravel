@@ -14,7 +14,7 @@ class SongDetail extends Model
 
     protected $touches = ['song'];
 
-    protected $fillable = ['song_id', 'song_name', 'song_sub_name', 'author_name', 'cover', 'play_count', 'download_count', 'bpm', 'difficulty_levels', 'hash_md5', 'hash_sha1'];
+    protected $fillable = ['song_id', 'song_name', 'song_sub_name', 'author_name', 'genre', 'cover', 'play_count', 'download_count', 'bpm', 'difficulty_levels', 'hash_md5', 'hash_sha1'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

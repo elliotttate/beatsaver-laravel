@@ -14,7 +14,7 @@ class Song extends Model
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['id', 'name', 'description', 'user_id'];
+    protected $fillable = ['id', 'name', 'description', 'genre', 'user_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -13,8 +13,8 @@ class AddSongGenre extends Migration
      */
     public function up()
     {
-        Schema::table('song_details', function (Blueprint $table) {
-            $table->string('genre')->after('author_name');
+        Schema::table('songs', function (Blueprint $table) {
+            $table->string('genre')->after('description');
         });
     }
 
@@ -25,7 +25,7 @@ class AddSongGenre extends Migration
      */
     public function down()
     {
-        Schema::table('song_details', function (Blueprint $table) {
+        Schema::table('songs', function (Blueprint $table) {
             $table->dropColumn('genre');
         });
     }

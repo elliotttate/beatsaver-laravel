@@ -365,7 +365,7 @@ class SongListComposer implements ListComposerContract
     {
         $composer = new SongComposer();
 
-        $songs->transform(function ($item, $key) use ($composer) {
+        $songs = $songs->values()->transform(function ($item, $key) use ($composer) {
             return $composer->get($item->songKey);
         });
 

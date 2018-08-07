@@ -17,7 +17,7 @@ class SongListComposerApi extends SongListComposer
     {
         $composer = new SongComposerApi();
 
-        $songs->transform(function ($item, $key) use ($composer) {
+        $songs = $songs->values()->transform(function ($item, $key) use ($composer) {
             return $composer->get($item->songKey);
         });
 

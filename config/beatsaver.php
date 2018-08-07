@@ -15,7 +15,7 @@ return [
             'enabled'   => env('BS_DISCORD_WEBHOOKS_ENABLED', false),
             'username'  => env('BS_DISCORD_WEBHOOKS_USERNAME', null),
             'avatarUrl' => env('BS_DISCORD_WEBHOOKS_AVATAR', null),
-            'channel'   => env('BS_DISCORD_WEBHOOKS_CHANNEL'),
+            'channel'   => env('BS_DISCORD_WEBHOOKS_CHANNEL',''),
         ],
     ],
     'scoreSaber'        => [

@@ -207,26 +207,30 @@ class BeatSaverController extends Controller
     /**
      * @param string           $type
      * @param string           $key
+     * @param integer          $start
      * @param SongListComposer $composer
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function searchResult($type = 'all', $key = null, SongListComposer $composer)
+    public function searchResult($type = 'all', $key = null, $start = 0, SongListComposer $composer)
     {
         $songs = [];
 
-        if (!is_null($key) && strlen($key) >= 3) {
+        if ($key !== null && \strlen($key) >= 3) {
             $parameter = [strtolower($type) => $key];
-            $songs = $composer->search($parameter, 0, 30);
+            $songs = $composer->search($parameter, $start, $composer::DEFAULT_LIMIT);
         }
 
-        return view('master.page-search')->with([
-            'title' => 'Song Search',
-            'songs' => $songs,
-            'key'   => $key,
-            'start' => 0,
-            'steps' => $composer::DEFAULT_LIMIT + 1 // +1 for disabling paging since paging is not supported while searching
-        ]);
+        return view('master.page-search')->with(
+            [
+                'title'  => 'Song Search',
+                'songs'  => $songs,
+                'key'    => $key,
+                'start'  => $start,
+                'steps'  => $composer::DEFAULT_LIMIT,
+                'params' => ['type' => $type, 'key' => $key]
+            ]
+        );
     }
 
 

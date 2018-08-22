@@ -1,0 +1,64 @@
+version: '3'
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  mariadb:
+    driver: local
+
+services:
+  mariadb:
+    build: ./docker/mariadb
+    volumes:
+    - mariadb:/var/lib/mysql
+    - ./docker/mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+    - "3306:3306"
+    environment:
+    - MYSQL_DATABASE=${DB_DATABASE}
+    - MYSQL_USER=${DB_USERNAME}
+    - MYSQL_PASSWORD=${DB_PASSWORD}
+    - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    networks:
+    - backend
+  memcached:
+    image: memcached
+    networks:
+      - backend
+  php-fpm:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    volumes:
+    - ./docker/php-fpm/php7.2.ini:/usr/local/etc/php/php.ini
+    - ./:/var/www
+    working_dir: /var/www
+    expose:
+    - "9000"
+    depends_on:
+    - mariadb
+    - memcached
+    networks:
+    - backend
+  nginx:
+    build:
+      context: ./docker/nginx
+      args:
+      - PHP_UPSTREAM_CONTAINER=php-fpm
+      - PHP_UPSTREAM_PORT=9000
+    volumes:
+    - ./:/var/www
+    - ./logs/nginx:/var/log/nginx
+    - ./docker/nginx/sites:/etc/nginx/sites-available
+    ports:
+    - "80:80"
+    - "443:443"
+    depends_on:
+    - php-fpm
+    networks:
+    - frontend
+    - backend

@@ -8,6 +8,42 @@ For more infomation visit [https://github.com/Byorun/beatsaver-laravel/wiki](htt
 
 ## Setup instructions
 
+### Docker
+
+Base requirements:
+
+* Docker
+* Docker Compose
+
+Setup the configuration file:
+
+```bash
+cp .env.example .env
+```
+
+Install dependencies:
+
+```
+Windows: docker run --rm --interactive --tty --volume %CD%:/app composer install
+Linux: docker run --rm --interactive --tty --volume $PWD:/app composer install
+```
+
+Start the application stack:
+
+```bash
+docker-compose up -d
+```
+
+Generate secure key, run migrations, and link storage folder:
+
+```bash
+docker-compose exec php-fpm php artisan key:generate
+docker-compose exec php-fpm php artisan migrate
+docker-compose exec php-fpm php artisan storage:link
+```
+
+### Manual
+
 Base requirements:
 
 * PHP >=7.1
@@ -15,13 +51,13 @@ Base requirements:
 
 Install dependencies:
 
-```
+```bash
 composer install
 ```
 
 Setup the configuration file:
 
-```
+```bash
 cp .env.example .env
 ```
 
@@ -31,14 +67,14 @@ Don't forget to configure the email driver. You can set `MAIL_DRIVER=log` during
 
 Run setup and database migrations:
 
-```
+```bash
 php artisan key:generate
 php artisan migrate
 ```
 
 Start:
 
-```
+```bash
 php artisan serve --port=8080
 ```
 

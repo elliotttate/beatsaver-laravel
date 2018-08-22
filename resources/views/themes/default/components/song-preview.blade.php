@@ -32,6 +32,7 @@
     <tr>
         <td colspan="2">
             <a class="btn btn-default" href="{{ $downloadUrl }}" role="button">Download File</a>
+            <a class="btn btn-default" href="https://bsaber.com/songs/{{ $id }}" role="button">view at bsaber.com</a>
         </td>
     </tr>
 </table>

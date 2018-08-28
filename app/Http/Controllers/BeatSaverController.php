@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\SongUploaded;
 use App\Http\Requests\DeleteSongRequest;
 use App\Http\Requests\SearchRequest;
 use App\Http\Requests\UpdateSongRequest;
@@ -54,8 +53,8 @@ class BeatSaverController extends Controller
     {
         return view('master.page-songs-by-played')->with([
             'title' => 'Top Played',
-            'songs' => $composer->getTopPlayedSongs($start),
-            'start' => $start,
+            'songs' => $composer->getTopPlayedSongs((int)$start),
+            'start' => (int)$start,
             'steps' => $composer::DEFAULT_LIMIT
         ]);
     }

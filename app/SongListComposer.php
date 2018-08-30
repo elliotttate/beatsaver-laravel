@@ -186,6 +186,54 @@ class SongListComposer implements ListComposerContract
     }
 
     /**
+     * Get songs ordered by upvote count descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopVotedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        if ($offset < 100) {
+            $cache = Cache::tags(['top100'])->get('voted');
+            if ($cache) {
+                return $this->prepareSongInfo($cache['keys']->forPage(1 + ($offset / $limit), $limit));
+            }
+        }
+
+        return $this->prepareSongInfo($this->getTopVotedKeys($offset, $limit));
+    }
+
+    /**
+     * Get song keys ordered by download count descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopVotedKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        $orderBy = DB::table('song_details as v')->select(DB::raw('SUM(direction)')
+            ->join('users as vu', 'v.user_id', '=', 'vu.id')
+            ->whereNull('u.deleted_at')
+            ->where(DB::raw('song_id = max(sd.id)'))
+            ->toSQL();
+
+        $songs = DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id)) as songKey"))
+            ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
+            ->leftJoin('users as u', 's.user_id', '=', 'u.id')
+            ->whereNull('s.deleted_at')->whereNull('sd.deleted_at')->whereNull('u.deleted_at')
+            ->groupBy(['sd.song_id'])->orderByRaw('('.$orderBy.') desc')
+            ->offset($offset)->limit($limit);
+
+        return $songs->get();
+    }
+
+    /**
      * Get songs ordered by creation date descending.
      * If a song has multiple versions only get the latest one.
      *

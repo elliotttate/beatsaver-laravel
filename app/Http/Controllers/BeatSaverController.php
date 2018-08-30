@@ -49,6 +49,23 @@ class BeatSaverController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+    public function topVoted($start = 0, SongListComposer $composer)
+    {
+        return view('master.page-songs-by-top-voted')->with([
+            'title' => 'Top Voted',
+            'songs' => $composer->getTopVotedSongs((int)$start),
+            'start' => (int)$start,
+            'steps' => $composer::DEFAULT_LIMIT,
+        ]);
+
+    }
+
+    /**
+     * @param int              $start
+     * @param SongListComposer $composer
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function topPlayed($start = 0, SongListComposer $composer)
     {
         return view('master.page-songs-by-played')->with([

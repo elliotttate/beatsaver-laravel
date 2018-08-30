@@ -2,6 +2,7 @@
     <li class="@if(Route::currentRouteName() == 'browse.top.newest')active @endif"><a href="{{ route('browse.top.newest') }}">Newest</a></li>
     <li class="@if(Route::currentRouteName() == 'browse.top.downloads')active @endif"><a href="{{ route('browse.top.downloads') }}">Top Downloads</a></li>
     <li class="@if(Route::currentRouteName() == 'browse.top.played')active @endif"><a href="{{ route('browse.top.played') }}">Top Played</a></li>
+    <li class="@if(Route::currentRouteName() == 'browse.top.voted')active @endif"><a href="{{ route('browse.top.voted') }}">Top Voted</a></li>
     <li class="@if(Route::currentRouteName() == 'search' || Route::currentRouteName() == 'browse.user' || Route::currentRouteName() == 'browse.detail' )active @endif"><a href="{{ route('search') }}">Search</a></li>
     <li class="navbar-text">|</li>
     <li><a href="https://scoresaber.com/">ScoreSaber</a></li>

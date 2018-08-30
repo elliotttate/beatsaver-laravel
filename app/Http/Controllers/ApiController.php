@@ -32,6 +32,20 @@ class ApiController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    public function topVoted($start = 0, SongListComposerApi $composer)
+    {
+        $songs = $composer->getTopVotedSongs($start, $composer::DEFAULT_LIMIT);
+        $total = $composer->getSongCount();
+
+        return Response::json(['songs' => $songs, 'total' => $total]);
+    }
+
+    /**
+     * @param int                 $start
+     * @param SongListComposerApi $composer
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function topPlayed($start = 0, SongListComposerApi $composer)
     {
         $songs = $composer->getTopPlayedSongs((int)$start, $composer::DEFAULT_LIMIT);

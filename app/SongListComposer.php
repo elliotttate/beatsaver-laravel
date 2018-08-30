@@ -6,6 +6,7 @@ use App\Contracts\Song\ListComposerContract;
 use App\Models\Song;
 use Cache;
 use DB;
+use Log;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -196,12 +197,12 @@ class SongListComposer implements ListComposerContract
      */
     public function getTopVotedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
     {
-        if ($offset < 100) {
-            $cache = Cache::tags(['top100'])->get('voted');
-            if ($cache) {
-                return $this->prepareSongInfo($cache['keys']->forPage(1 + ($offset / $limit), $limit));
-            }
-        }
+        // if ($offset < 100) {
+        //     $cache = Cache::tags(['top100'])->get('voted');
+        //     if ($cache) {
+        //         return $this->prepareSongInfo($cache['keys']->forPage(1 + ($offset / $limit), $limit));
+        //     }
+        // }
 
         return $this->prepareSongInfo($this->getTopVotedKeys($offset, $limit));
     }
@@ -217,10 +218,11 @@ class SongListComposer implements ListComposerContract
      */
     public function getTopVotedKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
     {
-        $orderBy = DB::table('song_details as v')->select(DB::raw('SUM(direction)')
+        $orderBy = DB::table('votes as v')->select(DB::raw('SUM(if(v.direction = 0, -1, 1))'))
             ->join('users as vu', 'v.user_id', '=', 'vu.id')
             ->whereNull('u.deleted_at')
-            ->where(DB::raw('song_id = max(sd.id)'))
+            ->whereRaw('v.song_id = max(sd.id)')
+            ->groupBy(['v.song_id'])
             ->toSQL();
 
         $songs = DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id)) as songKey"))

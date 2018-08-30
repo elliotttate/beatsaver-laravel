@@ -186,7 +186,7 @@ class SongListComposer implements ListComposerContract
     }
 
     /**
-     * Get songs ordered by upvote count descending.
+     * Get songs ordered by vote count descending, calculated as (upvote - downvote).
      * If a song has multiple versions only get the latest one.
      *
      * @param int $offset

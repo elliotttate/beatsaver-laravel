@@ -207,7 +207,7 @@ class SongListComposer implements ListComposerContract
     }
 
     /**
-     * Get song keys ordered by download count descending.
+     * Get song keys ordered by vote count descending, calculated as (upvote - downvote).
      * If a song has multiple versions only get the latest one.
      *
      * @param int $offset

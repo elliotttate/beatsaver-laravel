@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 interface ListComposerContract
 {
-    const DEFAULT_LIMIT = 15;
+    const DEFAULT_LIMIT = 20;
 
     /**
      * Get song count of all songs.

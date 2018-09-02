@@ -216,7 +216,7 @@ class BeatSaverController extends Controller
 
         if (!is_null($key) && strlen($key) >= 3) {
             $parameter = [strtolower($type) => $key];
-            $songs = $composer->search($parameter, 0, 30);
+            $songs = $composer->search($parameter, 0, 40);
         }
 
         return view('master.page-search')->with([

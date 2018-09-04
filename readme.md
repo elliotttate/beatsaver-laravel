@@ -8,45 +8,48 @@ For more infomation visit [https://github.com/Byorun/beatsaver-laravel/wiki](htt
 
 ## Setup instructions
 
-Base requirements:
+#### Base requirements:
 
 * PHP >=7.1
 * MariaDB >=10.2
 
-Install dependencies:
+#### Install dependencies:
 
 ```
 composer install
 ```
 
-Setup the configuration file:
+#### Setup the configuration file:
 
 ```
 cp .env.example .env
 ```
 
-Configure the database by editing `.env`
+#### Configure the database by editing `.env`
 
 Don't forget to configure the email driver. You can set `MAIL_DRIVER=log` during development.
 
-Run setup and database migrations:
+#### Run setup and database migrations:
 
 ```
 php artisan key:generate
 php artisan migrate
+
+// Creating a migration:
+php artisan make:migration name_of_migration
 ```
 
-Start:
+#### Start:
 
 ```
 php artisan serve --port=8080
 ```
 
-Visit the development site:
+#### Visit the development site:
 
 http://localhost:8080
 
-You can now register a user.
+You can now register a user.  
 
 ## License
 

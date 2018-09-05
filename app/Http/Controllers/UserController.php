@@ -128,7 +128,7 @@ class UserController extends Controller
     public function resetPasswordSubmit(ResetPasswordRequest $request)
     {
         // update legacy sha1 emails to plain text mails
-        if($user = User::where('email', sha1($request->input('email')))->first()){
+        if ($user = User::where('email', sha1($request->input('email')))->first()) {
             $user->email = $request->input('email');
             $user->save();
         }
@@ -229,7 +229,10 @@ class UserController extends Controller
         $tokens = AccessToken::where('user_id', auth()->id())->get()->keyBy('id');
 
         if ($request->has('delete')) {
-            $tokens->get($request->input('delete'))->delete();
+            $oldToken = $tokens->get($request->input('delete'));
+            if ($oldToken) {
+                $oldToken->delete();
+            }
         } elseif ($request->has('new') && $tokens->count() < static::MAX_ACCESS_TOKENS) {
             auth()->user()->tokens()->save(new AccessToken([
                 'token' => str_random(60),

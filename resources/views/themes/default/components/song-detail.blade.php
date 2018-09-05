@@ -10,7 +10,10 @@
                 <a class="btn btn-default" href="{{ $downloadUrl }}" role="button">Download File</a>
             </div>
             <br/>
-
+            <div>
+                <a class="btn btn-default" href="https://bsaber.com/songs/{{ $id }}" role="button">view at bsaber.com</a>
+            </div>
+            <br/>
             <div>
                 <a class="btn btn-default" href="{{ route('browse.top.newest') }}">Back</a>
             </div>

@@ -9,6 +9,7 @@ use App\Http\Requests\UploadRequest;
 use App\Http\Requests\VoteRequest;
 use App\Models\Song;
 use App\Models\User;
+use App\GenreComposer;
 use App\SongComposer;
 use App\SongListComposer;
 use Illuminate\Http\Request;
@@ -147,9 +148,9 @@ class BeatSaverController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function upload()
+    public function upload(GenreComposer $composer)
     {
-        return view('master.page-song-upload');
+        return view('master.page-song-upload')->with('genres', $composer->getGenres());
     }
 
     /**
@@ -170,6 +171,7 @@ class BeatSaverController extends Controller
             'songId'      => null,
             'name'        => $request->input('name'),
             'description' => $request->input('description'),
+            'genreId'     => $request->input('genre_id'),
         ];
 
         $song = $composer->create($metadata, $process);

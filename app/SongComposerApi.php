@@ -32,6 +32,8 @@ class SongComposerApi extends SongComposer
             'description'    => $song['description'],
             'uploader'       => $song['uploader'],
             'uploaderId'     => $song['uploaderId'],
+            'genre'          => $song['genre'],
+            'genreId'        => $song['genreId'],
             'songName'       => $song['version'][$song['key']]['songName'],
             'songSubName'    => $song['version'][$song['key']]['songSubName'],
             'authorName'     => $song['version'][$song['key']]['authorName'],

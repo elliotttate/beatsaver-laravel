@@ -2,6 +2,7 @@
     @slot('id', $song['id'])
     @slot('key', $song['key'])
     @slot('name', $song['name'])
+    @slot('genre', $song['genre'])
     @slot('uploader', $song['uploader'])
     @slot('uploaderId', $song['uploaderId'])
     @slot('authorName', $song['version'][$song['key']]['authorName'])

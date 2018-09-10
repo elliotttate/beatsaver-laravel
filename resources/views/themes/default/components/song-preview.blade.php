@@ -24,6 +24,13 @@
     </tr>
     <tr>
         <td>
+            Genre: {{ $genre }}
+        </td> 
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td>
             Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }} || <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> {{ $upVotes }} / <span
                     class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> {{ $downVotes }}
         </td>

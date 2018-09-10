@@ -115,6 +115,7 @@ class SongComposer implements ComposerContract
         ], [
             'name'        => trim(strip_tags($metadata['name'])),
             'description' => trim(strip_tags($metadata['description'])),
+            'genre_id'    => trim(strip_tags($metadata['genreId'])),
         ]);
 
         if (!empty($metadata['created_at'])) {
@@ -338,6 +339,7 @@ class SongComposer implements ComposerContract
 
         $song = Song::with([
             'uploader',
+            'genre',
             'details' => function ($query) use ($split) {
                 $query->withCount([
                     'votes as upVotes'   => function ($query) {
@@ -355,7 +357,7 @@ class SongComposer implements ComposerContract
             },
         ])->findOrFail($split['songId']);
 
-        // empty song details, return early because valid songedata cannot be returned
+        // empty song details, return early because valid songdata cannot be returned
         if ($song->details->isEmpty()) {
             return [];
         }
@@ -367,6 +369,8 @@ class SongComposer implements ComposerContract
             'description' => $song->description,
             'uploader'    => $song->uploader->name,
             'uploaderId'  => $song->uploader->id,
+            'genre'       => $song->genre->name,
+            'genreId'     => $song->genre->id,
             'version'     => [
 
             ],

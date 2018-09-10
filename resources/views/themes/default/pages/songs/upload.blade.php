@@ -11,6 +11,14 @@
                     <input type="text" name="name" id="inputTitle" class="form-control" placeholder="160 Letters Max" maxlength="160" required autofocus/>
                 </div>
                 <div class="form-group">
+                    <label for="GenreDropdown">Genre</label>
+                        <select name="genre_id" id="GenreDropdown" class="form-control">
+                            @foreach ($genres as $genre)
+                                <option value={{ $genre->id }}>{{ $genre->name }}</option>
+                            @endforeach
+                        </select> 
+                </div>
+                <div class="form-group">
                     <label for="InputFile">File input</label>
                     <input type="file" id="InputFile" name="fileupload" accept=".zip, application/zip"/>
                     <p class="help-block">Must meet the following upload rules<br>

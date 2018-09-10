@@ -17,6 +17,7 @@ Route::get('/songs/top/{start?}','ApiController@topDownloads');
 Route::get('/songs/plays/{start?}','ApiController@topPlayed');
 Route::get('/songs/new/{start?}','ApiController@newest');
 Route::get('/songs/byuser/{id}/{start?}','ApiController@byUser');
+Route::get('/genres','ApiController@getGenre');
 Route::get('/songs/detail/{key}','ApiController@detail');
 Route::get('/songs/vote/{key}/{type}/{accessToken}', 'ApiController@vote');
 //Route::post('/songs/vote/{key}','ApiController@vote'); // @todo use post instead of get

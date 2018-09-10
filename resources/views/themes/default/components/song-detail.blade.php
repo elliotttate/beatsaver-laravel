@@ -32,6 +32,13 @@
     </tr>
     <tr>
         <td>
+            Genre: {{ $genre }}
+        </td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td>
             Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }}
         </td>
         <td>

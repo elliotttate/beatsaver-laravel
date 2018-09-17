@@ -1,0 +1,20 @@
+ip: 192.168.10.10
+memory: 2048
+cpus: 1
+provider: virtualbox
+mariadb: true
+authorize: ~/.ssh/id_rsa.pub
+keys:
+    - ~/.ssh/id_rsa
+folders:
+    -
+        map: .
+        to: /home/vagrant/code
+sites:
+    -
+        map: beatsaver.test
+        to: /home/vagrant/code/public
+databases:
+    - homestead
+name: beatsaver-laravel
+hostname: beatsaver-laravel

@@ -55,9 +55,9 @@
     <hr>
 </div> <!-- /container -->
 <footer>
-    <p class="text-center">
-        <b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> || <a href="{{ config('beatsaver.githubUrl') }}">Github</a></b>
-    </p>
+    <div class="content has-text-centered">
+        <b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> || <a href="{{ config('beatsaver.githubUrl') }}">GitHub</a></b>
+    </div>
     @if( App::environment() == 'production' && config('beatsaver.tracking'))
         <script type="text/javascript">
             var _paq = _paq || [];

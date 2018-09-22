@@ -26,7 +26,7 @@
     </div>
 </nav>
 
-<div class="container">
+<div class="container" style="padding: 0 15px">
     <hr>
     @if($errors->isNotEmpty())
         <div class="alert alert-danger" role="alert">
@@ -49,9 +49,8 @@
         <br/>
         <div class="alert alert-success" role="alert">{{ session('status-success') }}</div>
     @endif
-    <div class="row">
-        @yield('content')
-    </div>
+    
+    @yield('content')
     <hr>
 </div> <!-- /container -->
 <footer>

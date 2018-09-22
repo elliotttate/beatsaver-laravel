@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ config('app.locale') }}">
+<html lang="{{ config('app.locale') }}" class="has-navbar-fixed-top">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,37 +7,26 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @yield('og-meta')
 <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.7.1/css/bulma.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-          crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
     <title>Beat Saver @yield('title')</title>
 </head>
 <body>
 
 <!-- Fixed navbar -->
-<nav class="navbar navbar-inverse navbar-expand navbar-fixed-top">
+<nav class="navbar has-shadow is-dark is-fixed-top">
     <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('/themes/default/img/beat_saver_logo_white.png') }}" height="35em" style="margin-top: -7px;"></a>
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{{ route('home') }}"><img src="{{ asset('/themes/default/img/beat_saver_logo_white.png') }}"></a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+        <div class="navbar-menu">
             @include('themes.default.nav')
         </div>
     </div>
 </nav>
-<div class="container" style="padding-top: 60px">
+
+<div class="container">
     <hr>
     @if($errors->isNotEmpty())
         <div class="alert alert-danger" role="alert">

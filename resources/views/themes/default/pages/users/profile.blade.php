@@ -2,54 +2,105 @@
 @section('title', '- Profile')
 
 @section('content')
-    <div class="container">
+    <div class="content">
         @if(! auth()->user()->isVerified() )
-            <br/>
-            <div class="alert alert-warning text-center" role="alert">
-                Your account is not verified. You won't be able to upload songs until you verify your account!
-                @if(session('last-verificatopn-sent') <= \Carbon\Carbon::now())
-                    <form action="{{ route('register.verify.resend') }}" method="post">
-                        {{ csrf_field() }}
-                        <button name="resend-email" value="1" type="submit" class="btn btn-default">Resend verification email</button>
-                    </form>
-                @else
-                    <b>You recently requested a resend. Please wait a few minutes.</b>
-                @endif
-            </div>
+            <article class="message is-danger">
+                <div class="message-body">
+                    <p>Your account is not verified. You won't be able to upload songs until you verify your account!</p>
+                    
+                    @if(session('last-verificatopn-sent') <= \Carbon\Carbon::now())
+                        <form action="{{ route('register.verify.resend') }}" method="post">
+                            {{ csrf_field() }}
+                            <button name="resend-email" value="1" type="submit" class="button">Resend verification email</button>
+                        </form>
+                    @else
+                        <p><b>You recently requested a resend. Please wait a few minutes.</b></p>
+                    @endif
+                </div>
+            </article>
         @endif
 
         @if( auth()->user()->hasLegacyEmail() )
-            <br/>
-            <div class="alert alert-warning text-center" role="alert">
-                <div>Your account was imported into the new system. Previously your email was stored as a SHA1 hash.</div>
-                <div>The new system requires us to save your email in plain text. <strong>You may use the same email to update your account.</strong></div>
-                <div>You may chose not to update your email, but <strong>we won't be able to send you password recovery</strong> mails or notifications (in case you subscribed to a user).</div>
-            </div>
+            <article class="message is-danger">
+                <div class="message-body">
+                    <p>Your account was imported into the new system. Previously your email was stored as a SHA1 hash.</p>
+                    <p>The new system requires us to save your email in plain text. <strong>You may use the same email to update your account.</strong></p>
+                    <p>You may chose not to update your email, but <strong>we won't be able to send you password recovery</strong> mails or notifications (in case you subscribed to a user).</p>
+                </div>
+            </article>
         @endif
 
-
-        <div class="row">
-            <div class="col-md-4 col-md-offset-1">
-                <h2 class="form-signin-heading">Update</h2>
+        <div class="columns">
+            <div class="column">
+                <h2>Update Email</h2>
                 <form class="form-signin" method="post" action="{{ route('profile.update.email') }}">
                     {{ csrf_field() }}
-                    <input type="text" name="email_old" id="inputEmail" class="form-control" placeholder="Old Email" required>
-                    <input type="text" name="email" id="inputNewEmail" class="form-control" placeholder="New Email" required>
-                    <input type="text" name="email_confirmation" id="inputNewEmailConfirm" class="form-control" placeholder="New Email Confirm" required><br/>
-                    <button class="btn btn-primary btn-block" type="submit">Update Email</button>
+                    
+                    <div class="field">
+                        <div class="control has-icons-left">
+                            <input type="text" name="email_old" id="inputEmail" class="input" placeholder="Old Email" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <div class="control has-icons-left">
+                            <input type="text" name="email" id="inputNewEmail" class="input" placeholder="New Email" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <div class="control has-icons-left">
+                            <input type="text" name="email_confirmation" id="inputNewEmailConfirm" class="input" placeholder="New Email Confirm" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <button class="button is-link is-fullwidth" type="submit">Update Email</button>
                 </form>
             </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-4">
-                <h2 class="form-signin-heading">Change Password</h2>
-                <form class="form-signin" method="post" action="{{ route('profile.update.password') }}">
-                    {{ csrf_field() }}
-                    <input type="password" id="inputOldPassword" class="form-control" placeholder="Old Password" name="password_old" required>
-                    <input type="password" id="inputNewPassword" class="form-control" placeholder="New Password" name="password" required>
-                    <input type="password" id="inputNewPasswordConfirm" class="form-control" placeholder="New Password Confirm" name="password_confirmation" required><br/>
-                    <button class="btn btn-primary btn-block" type="submit">Update Password</button>
-                </form>
 
+            <div class="column">
+                <h2>Update Password</h2>
+                <form class="form-signin" method="post" action="{{ route('profile.update.email') }}">
+                    {{ csrf_field() }}
+                    
+                    <div class="field">
+                        <div class="control has-icons-left">
+                            <input type="password" id="inputOldPassword" class="input" placeholder="Old Password" name="password_old" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <div class="control has-icons-left">
+                            <input type="password" id="inputNewPassword" class="input" placeholder="New Password" name="password" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <div class="control has-icons-left">
+                            <input type="password" id="inputNewPasswordConfirm" class="input" placeholder="New Password Confirm" name="password_confirmation" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <button class="button is-link is-fullwidth" type="submit">Update Password</button>
+                </form>
             </div>
         </div>
     </div>

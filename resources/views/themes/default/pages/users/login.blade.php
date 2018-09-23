@@ -2,27 +2,38 @@
 @section('title', '- Login/Register')
 
 @section('content')
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <form class="form-signin" method="post" action="{{ route('login.submit') }}">
+    <div class="content">
+        <div style="display: flex;flex-direction: column;align-items: center;">
+            <form style="max-width: 600px;width: 100%;" method="post" action="{{ route('login.submit') }}">
+                <h2>Sign In</h2>
                 {{ csrf_field() }}
-                <h2 class="form-signin-heading">Please sign in</h2>
-                <label for="inputEmail" class="sr-only">Username</label>
-                <input type="username" name="username" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required><br/>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+                <div class="field">
+                    <div class="control has-icons-left">
+                        <input type="username" name="username" id="inputEmail" class="input" placeholder="Username" required autofocus>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control has-icons-left">
+                        <input type="password" name="password" id="inputPassword" class="input" placeholder="Password" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                </div>
+                
+                <button class="button is-link is-fullwidth" type="submit">Sign in</button>
             </form>
 
+            <br />
+            <div>
+                <a href="{{ route('register.form') }}" class="button">Register</a>
+                <a href="{{ route('password.reset.request.form') }}" class="button">Forgot Password</a>
+            </div>
         </div>
-    </div>
-    <br/>
-    <div class="text-center">
-        <a href="{{ route('register.form') }}">
-            <button class="btn btn-primary" type="submit">Register</button>
-        </a>
-        <a href="{{ route('password.reset.request.form') }}">
-            <button class="btn btn-primary " type="submit">Forgot Password</button>
-        </a>
     </div>
 @endsection

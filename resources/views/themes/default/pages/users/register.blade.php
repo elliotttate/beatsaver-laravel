@@ -2,27 +2,59 @@
 @section('title', '- Register')
 
 @section('content')
-    <div class="container">
-        <h1 class="form-signin-heading text-center">Create New Account</h1>
-        <h2 class="alert-info text-center">Before you register please read our <a href="{{ route('legal.privacy') }}">privacy</a> page!</h2>
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-            <form class="form-signin" method="POST" action="{{ route('register.submit') }}">
+    <div class="content">
+        <div style="display: flex;flex-direction: column;align-items: center;">
+            <form style="max-width: 600px;width: 100%;" method="POST" action="{{ route('register.submit') }}">
+                <h2>Create New Account</h2>
                 {{ csrf_field() }}
-                <h3>Username (max. 16 chars, only letters and numbers)</h3>
-                <input type="username" id="inputPassword" class="form-control" placeholder="Username" name="username" maxlength="16" required autofocus>
-                <h3>Email address</h3>
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="email" required>
-                <h3>Password (min. 8 chars)</h3>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required><br/>
-                <input type="password" id="inputPasswordConfirm" class="form-control" placeholder="Password Confirm" name="password_confirmation" required>
-                <br/>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-                <br>
-            </form></div>
+
+                <article class="message is-info">
+                    <div class="message-body">
+                        Before you register please read our <a href="{{ route('legal.privacy') }}">privacy</a> page!
+                    </div>
+                </article>
+
+                <div class="field">
+                    <label class="label">Username <i>(max. 16 chars, only letters and numbers)</i></label>
+                    <div class="control has-icons-left">
+                        <input type="username" id="inputPassword" class="input" placeholder="Username" name="username" maxlength="16" required autofocus>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Email Address</label>
+                    <div class="control has-icons-left">
+                        <input type="email" id="inputEmail" class="input" placeholder="Email Address" name="email" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Password <i>(min. 8 chars)</i></label>
+                    <div class="control has-icons-left">
+                        <input type="password" id="inputPassword" class="input" placeholder="Password" name="password" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control has-icons-left">
+                        <input type="password" id="inputPasswordConfirm" class="input" placeholder="Password Confirm" name="password_confirmation" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <button class="button is-link is-fullwidth" type="submit">Sign Up</button>
+            </form>
         </div>
-
-
-
     </div>
 @endsection

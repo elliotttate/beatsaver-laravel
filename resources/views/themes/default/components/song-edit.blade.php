@@ -1,61 +1,72 @@
-<div class="alert alert-danger text-center" role="alert">
-    <strong>
-        <div>Selecting a new song archive will create a version of the song!</div>
-        <div>The new version will have its own votes, download count and scoreboard.</div>
-    </strong>
-</div>
+<article class="message is-danger">
+    <div class="message-body">
+        <strong>
+            <div>Selecting a new song archive will create a version of the song!</div>
+            <div>The new version will have its own votes, download count and scoreboard.</div>
+        </strong>
+    </div>
+</article>
 
 <form id="update-form" method="post" enctype="multipart/form-data" action="{{ route('browse.detail.edit.submit',['id' => $id]) }}">
-    {{ csrf_field() }}
     <h2>
-        <input type="text" name="name" value="{{ $name }}" id="inputTrackName" class="form-control" placeholder="Track Name e.g. My awesome track!" maxlength="160" required autofocus/>
+        <input type="text" name="name" value="{{ $name }}" id="inputTrackName" class="input" placeholder="Track Name e.g. My awesome track!" maxlength="160" required autofocus/>
     </h2>
 
-    <table id="song-{{ $id }}" class="table" style="table-layout:fixed;">
-        <tr>
-            <th rowspan="6" style="width: 15%;" class="text-center">
-                <div>
-                    <img src="{{ $coverUrl }}" alt="{{ $name }}" style="min-width: 10em; max-width: 10em;">
-                </div>
-                <br/>
-                <div>
-                    <a class="btn btn-default" href="{{ $downloadUrl }}" role="button">Download File</a>
-                </div>
-            </th>
-            <th colspan="2">
-                <small>Uploaded by: <a href="{{ route('browse.user',['id' => $uploaderId]) }}">{{ $uploader }}</a> ({{ $createdAt }})</small>
-            </th>
-        </tr>
-        <tr>
-            <td>Song: {{ $songName }} - {{ $songSubName }}</td>
-            <td class="text-right">Version: {{$version}}</td>
-        </tr>
-        <tr>
-            <td>Author: {{ $authorName }}</td>
-            <td>Difficulties: {{ $difficulties }}</td>
-        </tr>
-        <tr>
-            <td>
-                Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }}
-            </td>
-            <td>
-                Lighting Events: {{ $events }}
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2"><textarea name="description" rows="5" class="form-control">{{$description}}</textarea></td>
-        </tr>
-        <tr>
-            <td>
-                <label id="song-archive-label" class="btn btn-danger" for="song-archive">
-                    <input id="song-archive" type="file" style="display: none" name="fileupload" accept=".zip, application/zip" onchange="$('#song-archive-label span').html(this.files[0].name)">
-                    <span>(optional) Select updated song archive...</span>
-                </label>
-            </td>
-            <td class="text-right">
-                <button class="btn btn-primary" type="submit">Update</button>
-                <a class="btn btn-default" href="{{route('browse.detail',['key' => $id]) }}">Back</a>
-            </td>
-        </tr>
-    </table>
+    {{ csrf_field() }}
+
+    <div class="columns is-mobile" style="margin-top: 10px;">
+        <div class="column" style="max-width: 200px;">
+            <img src="{{ $coverUrl }}" alt="{{ $name }}" class="image" style="border-radius: 8px;">
+
+            <a class="button is-fullwidth has-text-weight-bold" href="{{ $downloadUrl }}" style="margin-top: 8px;">Download File</a>
+        </div>
+
+        <div class="column">
+            <table class="table is-fullwidth">
+                <tr>
+                    <th colspan="2">
+                        <small>Uploaded by: <a href="{{ route('browse.user',['id' => $uploaderId]) }}">{{ $uploader }}</a> ({{ $createdAt }})</small>
+                    </th>
+                </tr>
+
+                <tr>
+                    <td>Song: {{ $songName }} - {{ $songSubName }}</td>
+                    <td class="has-text-right">Version: {{$version}}</td>
+                </tr>
+
+                <tr>
+                    <td>Author: {{ $authorName }}</td>
+                    <td>Difficulties: {{ $difficulties }}</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }}
+                    </td>
+                    <td>
+                        Lighting Events: {{ $events }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <textarea name="description" rows="5" class="textarea">{{$description}}</textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label id="song-archive-label" class="button is-danger" for="song-archive">
+                            <input id="song-archive" type="file" style="display: none" name="fileupload" accept=".zip, application/zip" onchange="$('#song-archive-label span').html(this.files[0].name)">
+                            <span>(optional) Select updated song archive...</span>
+                        </label>
+                    </td>
+                    <td class="text-right">
+                        <a class="button" href="{{route('browse.detail',['key' => $id]) }}">Back</a>
+                        <button class="button is-link" type="submit">Update</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </form>

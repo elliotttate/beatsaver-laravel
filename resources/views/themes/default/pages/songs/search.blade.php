@@ -2,20 +2,24 @@
 @section('title', '- '.$title)
 
 @section('content')
-    <div class="row">
-        <form class="form-signin" method="post" action="{{ route('search.submit') }}">
+    <div style="display: flex;flex-direction: column;align-items: center;">
+        <form style="max-width: 600px;width: 100%;" method="post" action="{{ route('search.submit') }}">
             {{ csrf_field() }}
-            <div class="col-md-6 col-md-offset-3">
-                <div class="input-group">
-                    <input type="text" id="inputSearchKey" class="form-control" placeholder="Search for... Beat Name / Song Name / Author / Username" name="key" minlength="3" value="{{ $key }}"
+
+            <div class="field">
+                <div class="control has-icons-left">
+                    <input type="text" id="inputSearchKey" class="input" placeholder="Search for... Beat Name / Song Name / Author / Username" name="key" minlength="3" value="{{ $key }}"
                            required autofocus>
-                    <span class="input-group-btn">
-                    <button class="btn btn-primary btn-block" type="submit">Search</button>
-                </span>
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-search"></i>
+                    </span>
                 </div>
             </div>
+            
+            <button class="button is-link is-fullwidth" type="submit">Search</button>
         </form>
     </div>
+
     @each('themes.default.pages.songs.partial-preview',$songs,'song')
     @include('themes.default.pages.songs.partial-paging')
 @endsection

@@ -29,25 +29,36 @@
 <div class="container" style="padding: 0 15px">
     <hr>
     @if($errors->isNotEmpty())
-        <div class="alert alert-danger" role="alert">
-            <ul>
-                @foreach ($errors->all() as $message)
-                    <li>{{ $message }}</li>
-                @endforeach
-            </ul>
-        </div>
+        <article class="message is-danger">
+            <div class="message-body">
+                <ul>
+                    @foreach ($errors->all() as $message)
+                        <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </article>
     @endif
     @if(session('status-error'))
-        <br/>
-        <div class="alert alert-danger" role="alert">{{ session('status-error') }}</div>
+        <article class="message is-danger">
+            <div class="message-body">
+                {{ session('status-error') }}
+            </div>
+        </article>
     @endif
     @if(session('status-warning'))
-        <br/>
-        <div class="alert alert-warning" role="alert">{{ session('status-warning') }}</div>
+        <article class="message is-warning">
+            <div class="message-body">
+                {{ session('status-warning') }}
+            </div>
+        </article>
     @endif
     @if(session('status-success'))
-        <br/>
-        <div class="alert alert-success" role="alert">{{ session('status-success') }}</div>
+        <article class="message is-success">
+            <div class="message-body">
+                {{ session('status-success') }}
+            </div>
+        </article>
     @endif
     
     @yield('content')

@@ -58,10 +58,11 @@
 
         </div>
     @else
-        <br/>
-        <div class="alert alert-warning text-center" role="alert">
-            Your account is not verified. You won't be able to upload songs until you verify your account!
-            Please visit your <a href="{{ route('profile') }}">profile</a> page if you need re-request the verification mail.
-        </div>
+        <article class="message is-danger">
+            <div class="message-body">
+                Your account is not verified. You won't be able to upload songs until you verify your account!
+                Please visit your <a href="{{ route('profile') }}">profile</a> page if you need re-request the verification mail.
+            </div>
+        </article>
     @endif
 @endsection

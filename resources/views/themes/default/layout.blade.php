@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=1024">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @yield('og-meta')
-<!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bulma@0.7.1/css/bulma.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <!-- Navbar Burger Styles -->
+    <style>a.navbar-burger { color: white; } a.navbar-burger:hover { color: rgb(220, 220, 220); }</style>
 
     <title>Beat Saver @yield('title')</title>
 </head>
@@ -19,8 +22,14 @@
     <div class="container">
         <div class="navbar-brand">
             <a class="navbar-item" href="{{ route('home') }}"><img src="{{ asset('/themes/default/img/beat_saver_logo_white.png') }}"></a>
+
+            <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
         </div>
-        <div class="navbar-menu">
+        <div class="navbar-menu" id="navMenu">
             @include('themes.default.nav')
         </div>
     </div>
@@ -90,6 +99,19 @@
         </script>
     @endif
 </footer>
+
+<script>
+    const burgers = document.getElementsByClassName('navbar-burger')
+
+    for (const burger of burgers) {
+        burger.addEventListener('click', () => {
+            const target = document.getElementById(burger.dataset.target)
+
+            burger.classList.toggle('is-active')
+            target.classList.toggle('is-active')
+        })
+    }
+</script>
 
 </body>
 </html>

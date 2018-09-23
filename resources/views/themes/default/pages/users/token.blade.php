@@ -2,33 +2,35 @@
 @section('title', '- Profile')
 
 @section('content')
-    <div class="container text-center">
-        <h1 class="form-signin-heading text-center">API Access Tokens (max 4)</h1>
-        @foreach($tokens as $token)
-            <div class="row ">
-                <div class="col-md-8 col-md-offset-2">
-                    <form class="form-signin" method="post" action="{{ route('profile.token.submit') }}">
-                        {{ csrf_field() }}
-                        <div class="input-group">
-                            <span class="input-group-addon"><span
-                                        class="glyphicon @if($token->type == \App\Models\AccessToken::TYPE_READ_WRITE) glyphicon-pencil @else glyphicon-lock @endif"></span></span>
-                            <input type="text" class="form-control" value="{{ $token->token }}" readonly>
-                            <span class="input-group-btn">
-                            <button name="delete" value="{{ $token->id }}" class="btn btn-default btn-danger" type="submit">delete</button>
-                      </span>
+    <div class="content">
+        <div style="display: flex;flex-direction: column;align-items: center;">
+            <h1>API Access Tokens <i>(max 4)</i></h1>
+            @foreach($tokens as $token)
+                <form style="margin-bottom: 10px;width: 100%;max-width: 750px;" method="post" action="{{ route('profile.token.submit') }}">
+                    {{ csrf_field() }}
+                    <div class="field has-addons">
+                        <div class="control">
+                            <a class="button is-static">
+                                <i class="fas @if($token->type == \App\Models\AccessToken::TYPE_READ_WRITE) fa-pencil-alt @else fa-lock @endif"></i>
+                            </a>
                         </div>
-                    </form>
-                </div>
-            </div>
-            <br/>
-        @endforeach
+                        <div class="control is-expanded">
+                            <input type="text" class="input" value="{{ $token->token }}" readonly>
+                        </div>
+                        <div class="control">
+                            <button name="delete" value="{{ $token->id }}" class="button is-danger" type="submit">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            @endforeach
 
-        @if($tokens->count() < $max)
-            <form class="form-signin" method="post" action="{{ route('profile.token.submit') }}">
-                {{ csrf_field() }}
-                <button name="new" value="0" class="btn btn-default btn-primary" type="submit">New Read Only Token</button>
-                <button name="new" value="1" class="btn btn-default btn-warning" type="submit">New Read/Write Token</button>
-            </form>
-        @endif
+            @if($tokens->count() < $max)
+                <form class="form-signin" method="post" action="{{ route('profile.token.submit') }}">
+                    {{ csrf_field() }}
+                    <button name="new" value="0" class="button is-link" type="submit">New Read-Only Token</button>
+                    <button name="new" value="1" class="button is-warning" type="submit">New Read/Write Token</button>
+                </form>
+            @endif
+        </div>
     </div>
 @endsection

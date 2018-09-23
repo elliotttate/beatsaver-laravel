@@ -1,4 +1,4 @@
-@extends('themes.default.layout')
+@extends('themes.bulma.layout')
 @section('title', '- Complete Password Reset')
 
 @section('content')

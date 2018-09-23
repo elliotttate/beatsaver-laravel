@@ -30,7 +30,7 @@
             </a>
         </div>
         <div class="navbar-menu" id="navMenu">
-            @include('themes.default.nav')
+            @include('themes.bulma.nav')
         </div>
     </div>
 </nav>

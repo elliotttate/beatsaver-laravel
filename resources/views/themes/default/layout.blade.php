@@ -53,7 +53,7 @@
     @yield('content')
     <hr>
 </div> <!-- /container -->
-<footer>
+<footer style="margin-bottom: 25px;">
     <div class="content has-text-centered">
         <b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> || <a href="{{ config('beatsaver.githubUrl') }}">GitHub</a></b>
     </div>

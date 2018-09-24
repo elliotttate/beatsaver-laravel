@@ -1,7 +1,14 @@
 <ul class="nav navbar-nav">
-    <li class="@if(Route::currentRouteName() == 'browse.top.newest')active @endif"><a href="{{ route('browse.top.newest') }}">Newest</a></li>
-    <li class="@if(Route::currentRouteName() == 'browse.top.downloads')active @endif"><a href="{{ route('browse.top.downloads') }}">Top Downloads</a></li>
-    <li class="@if(Route::currentRouteName() == 'browse.top.played')active @endif"><a href="{{ route('browse.top.played') }}">Top Played</a></li>
+  <li class="@if(Route::currentRouteName() == 'browse.top.newest')active @endif"><a href="{{ route('browse.top.newest') }}">Newest</a></li>
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sort<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      <li class="@if(Route::currentRouteName() == 'browse.top.downloads')active @endif"><a href="{{ route('browse.top.downloads') }}">Top Downloads</a></li>
+      <li class="@if(Route::currentRouteName() == 'browse.top.played')active @endif"><a href="{{ route('browse.top.played') }}">Top Played</a></li>
+      <li class="@if(Route::currentRouteName() == 'browse.top.votes')active @endif"><a href="{{ route('browse.top.votes') }}">Top Votes</a></li>
+      <li role="separator" class="divider"></li>
+    </ul>
+  </li>
     <li class="@if(Route::currentRouteName() == 'search' || Route::currentRouteName() == 'browse.user' || Route::currentRouteName() == 'browse.detail' )active @endif"><a href="{{ route('search') }}">Search</a></li>
     <li class="navbar-text">|</li>
     <li><a href="https://scoresaber.com/">ScoreSaber</a></li>

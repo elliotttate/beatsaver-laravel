@@ -186,6 +186,49 @@ class SongListComposer implements ListComposerContract
     }
 
     /**
+     * Get songs ordered by vote count descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopVotedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        if ($offset < 100) {
+            $cache = Cache::tags(['top100'])->get('voted');
+            if ($cache) {
+                return $this->prepareSongInfo($cache['keys']->forPage(1 + ($offset / $limit), $limit));
+            }
+        }
+
+        return $this->prepareSongInfo($this->getTopVotedKeys($offset, $limit));
+    }
+
+    /**
+     * Get song keys ordered by vote count descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopVotedKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        $songs = DB::table('votes as v')->select(DB::raw("concat(v.song_id,'-',max(v.detail_id)) as songKey"))
+            ->leftJoin('songs as s', 'v.song_id', '=', 's.id')
+            ->leftJoin('users as u', 's.user_id', '=', 'u.id')
+            ->leftJoin('song_details as sd', 'v.song_id', '=', 'sd.song_id')
+            ->whereNull('s.deleted_at')->whereNull('sd.deleted_at')->whereNull('u.deleted_at')
+            ->groupBy(['v.song_id'])->orderByRaw("(select SUM(direction) from votes where detail_id = max(sd.id) and sd.deleted_at is null) desc")
+            ->offset($offset)->limit($limit);
+
+        return $songs->get();
+    }
+
+    /**
      * Get songs ordered by creation date descending.
      * If a song has multiple versions only get the latest one.
      *

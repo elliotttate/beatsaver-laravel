@@ -217,12 +217,12 @@ class SongListComposer implements ListComposerContract
      */
     public function getTopVotedKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
     {
-        $songs = DB::table('votes as v')->select(DB::raw("concat(v.song_id,'-',max(v.detail_id)) as songKey"))
-            ->leftJoin('songs as s', 'v.song_id', '=', 's.id')
+        $songs = DB::table('song_details as sd')->select(DB::raw("concat(sd.song_id,'-',max(sd.id))as songKey"))
+            ->leftJoin('songs as s', 'sd.song_id', '=', 's.id')
             ->leftJoin('users as u', 's.user_id', '=', 'u.id')
-            ->leftJoin('song_details as sd', 'v.song_id', '=', 'sd.song_id')
+            ->leftJoin('votes as v', 'sd.id', 'v.detail_id')
             ->whereNull('s.deleted_at')->whereNull('sd.deleted_at')->whereNull('u.deleted_at')
-            ->groupBy(['v.song_id'])->orderByRaw("(select SUM(direction) from votes where detail_id = max(sd.id) and sd.deleted_at is null) desc")
+            ->groupBy(['sd.song_id'])->orderByRaw("IFNULL((select AVG(direction) from votes where detail_id = max(sd.id) and sd.deleted_at is null), 1) desc")
             ->offset($offset)->limit($limit);
 
         return $songs->get();

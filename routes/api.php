@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 Route::get('/songs/top/{start?}','ApiController@topDownloads');
 Route::get('/songs/plays/{start?}','ApiController@topPlayed');
+Route::get('/songs/votes/{start?}','ApiController@topVotes');
 Route::get('/songs/new/{start?}','ApiController@newest');
 Route::get('/songs/byuser/{id}/{start?}','ApiController@byUser');
 Route::get('/songs/detail/{key}','ApiController@detail');

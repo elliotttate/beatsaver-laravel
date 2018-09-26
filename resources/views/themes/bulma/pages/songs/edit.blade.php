@@ -1,8 +1,8 @@
-@extends('themes.default.layout')
+@extends('themes.bulma.layout')
 @section('title', '- Song Edit')
 
 @section('content')
-    @component('themes.default.components.song-edit',['uploaderId' => $song['uploaderId']])
+    @component('themes.bulma.components.song-edit',['uploaderId' => $song['uploaderId']])
         @slot('id', $song['id'])
         @slot('key', $song['key'])
         @slot('name', $song['name'])

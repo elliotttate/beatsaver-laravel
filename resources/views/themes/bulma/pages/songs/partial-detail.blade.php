@@ -1,4 +1,4 @@
-@component('themes.default.components.song-detail',['uploaderId' => $song['uploaderId']])
+@component('themes.bulma.components.song-detail',['uploaderId' => $song['uploaderId']])
     @slot('id', $song['id'])
     @slot('key', $song['key'])
     @slot('name', $song['name'])

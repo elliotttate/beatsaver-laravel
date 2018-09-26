@@ -1,4 +1,4 @@
-@extends('themes.default.layout')
+@extends('themes.bulma.layout')
 @section('title', '- '.$title)
 
 @section('content')
@@ -20,6 +20,6 @@
         </form>
     </div>
 
-    @each('themes.default.pages.songs.partial-preview',$songs,'song')
-    @include('themes.default.pages.songs.partial-paging')
+    @each('themes.bulma.pages.songs.partial-preview',$songs,'song')
+    @include('themes.bulma.pages.songs.partial-paging')
 @endsection

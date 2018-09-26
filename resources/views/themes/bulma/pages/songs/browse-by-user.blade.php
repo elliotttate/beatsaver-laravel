@@ -1,7 +1,7 @@
-@extends('themes.default.layout')
+@extends('themes.bulma.layout')
 @section('title', '- Songs by '.$username)
 
 @section('content')
-    @each('themes.default.pages.songs.partial-preview',$songs,'song')
-    @include('themes.default.pages.songs.partial-paging-user')
+    @each('themes.bulma.pages.songs.partial-preview',$songs,'song')
+    @include('themes.bulma.pages.songs.partial-paging-user')
 @endsection

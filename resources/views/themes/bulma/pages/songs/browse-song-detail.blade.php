@@ -1,4 +1,4 @@
-@extends('themes.default.layout')
+@extends('themes.bulma.layout')
 @section('title', '- Song Detail')
 
 @section('og-meta')
@@ -15,5 +15,5 @@ Description: {{$song['description']}}
 @endsection
 
 @section('content')
-    @include('themes.default.pages.songs.partial-detail')
+    @include('themes.bulma.pages.songs.partial-detail')
 @endsection

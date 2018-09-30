@@ -9,6 +9,8 @@
         @slot('description', $song['description'])
         @slot('uploader', $song['uploader'])
         @slot('genre', $song['genre'])
+        @slot('genreId', $song['genreId'])
+        @slot('genres', $genres)
         @slot('authorName', $song['version'][$song['key']]['authorName'])
         @slot('songName', $song['version'][$song['key']]['songName'])
         @slot('songSubName', $song['version'][$song['key']]['songSubName'])

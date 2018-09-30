@@ -206,6 +206,7 @@ class SongComposer implements ComposerContract
             // only update meta data
             $song->name = $metadata['name'];
             $song->description = empty($metadata['description']) ? '' : $metadata['description'];
+            $song->genre_id = $metadata['genre_id'];
 
             if ($song->save()) {
                 $songData['status'] = static::SONG_CREATED;

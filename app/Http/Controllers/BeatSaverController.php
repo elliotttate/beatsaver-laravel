@@ -239,12 +239,12 @@ class BeatSaverController extends Controller
     }
 
 
-    public function songEdit($id, SongComposer $composer)
+    public function songEdit($id, SongComposer $composer, GenreComposer $genreComposer)
     {
         $song = $composer->get($id);
 
         if ($song && auth()->id() == $song['uploaderId']) {
-            return view('master.page-song-edit')->with(['song' => $song]);
+            return view('master.page-song-edit')->with(['song' => $song])->with('genres', $genreComposer->getGenres());
         }
 
         return redirect()->route('browse.user', ['id' => auth()->id()]);
@@ -271,7 +271,7 @@ class BeatSaverController extends Controller
             $process = false;
         }
 
-        $metadata = $request->only(['name', 'description']);
+        $metadata = $request->only(['name', 'description', 'genre_id']);
         $metadata['userId'] = auth()->id();
         $metadata['updateFile'] = $process;
         $metadata['songId'] = $song->id;

@@ -5,15 +5,15 @@
     </strong>
 </div>
 
-<form id="update-form" method="post" enctype="multipart/form-data" action="{{ route('browse.detail.edit.submit',['id' => $id]) }}">
+<form id="update-form" class="form-inline" method="post" enctype="multipart/form-data" action="{{ route('browse.detail.edit.submit',['id' => $id]) }}">
     {{ csrf_field() }}
     <h2>
-        <input type="text" name="name" value="{{ $name }}" id="inputTrackName" class="form-control" placeholder="Track Name e.g. My awesome track!" maxlength="160" required autofocus/>
+        <input type="text" name="name" value="{{ $name }}" id="inputTrackName"  style="width:100%;" class="form-control" placeholder="Track Name e.g. My awesome track!" maxlength="160" required autofocus/>
     </h2>
 
     <table id="song-{{ $id }}" class="table" style="table-layout:fixed;">
         <tr>
-            <th rowspan="6" style="width: 15%;" class="text-center">
+            <th rowspan="7" style="width: 15%;" class="text-center">
                 <div>
                     <img src="{{ $coverUrl }}" alt="{{ $name }}" style="min-width: 10em; max-width: 10em;">
                 </div>
@@ -36,7 +36,14 @@
         </tr>
         <tr>
             <td>
-                Genre: {{ $genre }}
+                <div class="form-group">
+                    Genre:
+                    <select name="genre_id" id="GenreDropdown" class="form-control">
+                        @foreach ($genres as $genre)
+                            <option value={{ $genre->id }} {{ $genreId == $genre->id ? 'selected' : '' }}>{{ $genre->name }}</option>
+                        @endforeach
+                    </select> 
+                </div>
             </td>
             <td>
             </td>
@@ -50,7 +57,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2"><textarea name="description" rows="5" class="form-control">{{$description}}</textarea></td>
+            <td colspan="2"><textarea name="description" rows="5" class="form-control" style="width:100%;">{{$description}}</textarea></td>
         </tr>
         <tr>
             <td>

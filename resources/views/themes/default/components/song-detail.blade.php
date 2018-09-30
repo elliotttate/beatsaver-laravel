@@ -1,7 +1,7 @@
 <h2>{{ $name }}</h2>
 <table id="song-{{ $id }}" class="table" style="table-layout:fixed;">
     <tr>
-        <th rowspan="6" style="width: 15%;" class="text-center">
+        <th rowspan="7" style="width: 15%;" class="text-center">
             <div>
                 <img src="{{ $coverUrl }}" alt="{{ $name }}" style="min-width: 10em; max-width: 10em;">
             </div>

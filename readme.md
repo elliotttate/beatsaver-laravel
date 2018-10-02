@@ -54,20 +54,51 @@ Install dependencies:
 composer install
 ```
 
+Setup required options in `php.ini`:
+
+```
+post_max_size = 16M
+upload_max_filesize = 16M
+```
+
 Setup the configuration file:
 
 ```
 cp .env.example .env
 ```
 
-Configure the database by editing `.env`
+Configure the database by editing `.env`. Recommended changes for development are:
+```
+# Use a non-persistent, in-memory cache
+CACHE_DRIVER=array
 
-Don't forget to configure the email driver. You can set `MAIL_DRIVER=log` during development.
+# Log all mail events to storage/logs/laraval.log
+# (Needed to view user registration links)
+MAIL_DRIVER=log
+```
+
+Create the database and user:
+
+```
+# Use the configured values in .env to create the user
+# These commands can also be run in the database's shell
+source .env
+echo "CREATE DATABASE \`${DB_DATABASE}\`;"\
+     "CREATE USER '${DB_USERNAME}'@localhost IDENTIFIED BY '${DB_PASSWORD}';"\
+     "GRANT ALL privileges ON \`${DB_DATABASE}\`.* TO '${DB_USERNAME}'@localhost;FLUSH PRIVILEGES;"\
+     | mysql -u root -p
+```
 
 Run setup and database migrations:
 
 ```
+# Generate an application key
 php artisan key:generate
+
+# Make stored files accessible from the web
+php artisan storage:link
+
+# Run database migrations
 php artisan migrate
 ```
 
@@ -81,7 +112,7 @@ Visit the development site:
 
 http://localhost:8080
 
-You can now register a user.
+You can now register a user and start using the application.
 
 ## License
 

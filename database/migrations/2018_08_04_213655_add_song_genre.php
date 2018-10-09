@@ -15,12 +15,11 @@ class AddSongGenre extends Migration
     {
         Schema::create('genres', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name',50);
+            $table->string('name', 50);
         });
 
         Schema::table('songs', function (Blueprint $table) {
-            $table->unsignedInteger('genre_id')->after('description');
-
+            $table->unsignedInteger('genre_id')->nullable()->after('description');
 
             $table->foreign('genre_id')->references('id')->on('genres');
         });
@@ -34,7 +33,10 @@ class AddSongGenre extends Migration
     public function down()
     {
         Schema::table('songs', function (Blueprint $table) {
+            $table->dropForeign('songs_genre_id_foreign');
             $table->dropColumn('genre_id');
         });
+
+        Schema::drop('genres');
     }
 }

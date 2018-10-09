@@ -38,7 +38,8 @@
             <td>
                 <div class="form-group">
                     Genre:
-                    <select name="genre_id" id="GenreDropdown" class="form-control">
+                    <select name="genre_id" id="GenreDropdown" class="form-control" required>
+                        <option value="" {{ $genreId == 0 ? 'selected' : '' }}>Please select a genre</option>
                         @foreach ($genres as $genre)
                             <option value={{ $genre->id }} {{ $genreId == $genre->id ? 'selected' : '' }}>{{ $genre->name }}</option>
                         @endforeach

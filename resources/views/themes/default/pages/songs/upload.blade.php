@@ -12,7 +12,7 @@
                 </div>
                 <div class="form-group">
                     <label for="GenreDropdown">Genre</label>
-                        <select name="genre_id" id="GenreDropdown" class="form-control">
+                        <select name="genre_id" id="GenreDropdown" class="form-control" required>
                             @foreach ($genres as $genre)
                                 <option value={{ $genre->id }}>{{ $genre->name }}</option>
                             @endforeach

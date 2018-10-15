@@ -120,7 +120,7 @@ class ApiController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function search(string $type, string $key, SongListComposerApi $composer)
+    public function search(string $type, $key, SongListComposerApi $composer)
     {
         if (strlen($key) < 3) {
             return Response::json(['songs' => [], 'total' => 0]);

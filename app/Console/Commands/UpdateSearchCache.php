@@ -48,8 +48,14 @@ class UpdateSearchCache extends Command
         $composer = new SongListComposer;
         $now = Carbon::now();
 
-        Cache::tags(['top100'])->put('newest', ['keys' => $composer->getNewestKeys(0, 100), 'updated' => $now], config('beatsaver.songCacheDuration'));
-        Cache::tags(['top100'])->put('downloads', ['keys' => $composer->getTopDownloadedKeys(0, 100), 'updated' => $now], config('beatsaver.songCacheDuration'));
-        Cache::tags(['top100'])->put('played', ['keys' => $composer->getTopPlayedKeys(0, 100), 'updated' => $now], config('beatsaver.songCacheDuration'));
+        if (config('beatsaver.cache.top100.newest')) {
+            Cache::tags(['top100'])->put('newest', ['keys' => $composer->getNewestKeys(0, 100), 'updated' => $now], config('beatsaver.cache.duration'));
+        }
+        if (config('beatsaver.cache.top100.downloads')) {
+            Cache::tags(['top100'])->put('downloads', ['keys' => $composer->getTopDownloadedKeys(0, 100), 'updated' => $now], config('beatsaver.cache.duration'));
+        }
+        if (config('beatsaver.cache.top100.played')) {
+            Cache::tags(['top100'])->put('played', ['keys' => $composer->getTopPlayedKeys(0, 100), 'updated' => $now], config('beatsaver.cache.duration'));
+        }
     }
 }

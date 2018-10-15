@@ -439,12 +439,12 @@ class SongComposer implements ComposerContract
     {
         $split = $this->parseKey($song['key']);
 
-        Cache::tags(['song-' . $split['songId']])->put('default', $song['key'], config('beatsaver.songCacheDuration'));
-        Cache::tags(['song-' . $split['songId']])->put('info', $song, config('beatsaver.songCacheDuration'));
+        Cache::tags(['song-' . $split['songId']])->put('default', $song['key'], config('beatsaver.cache.duration'));
+        Cache::tags(['song-' . $split['songId']])->put('info', $song, config('beatsaver.cache.duration'));
         foreach ($song['version'] as $version) {
-            Cache::tags(['song-' . $split['songId']])->put("votes-{$split['detailId']}-1", $version['upVotes'], config('beatsaver.songCacheDuration'));
-            Cache::tags(['song-' . $split['songId']])->put("votes-{$split['detailId']}-0", $version['downVotes'], config('beatsaver.songCacheDuration'));
-            Cache::tags(['song-' . $split['songId']])->put("downloads-{$split['detailId']}", $version['downloadCount'], config('beatsaver.songCacheDuration'));
+            Cache::tags(['song-' . $split['songId']])->put("votes-{$split['detailId']}-1", $version['upVotes'], config('beatsaver.cache.duration'));
+            Cache::tags(['song-' . $split['songId']])->put("votes-{$split['detailId']}-0", $version['downVotes'], config('beatsaver.cache.duration'));
+            Cache::tags(['song-' . $split['songId']])->put("downloads-{$split['detailId']}", $version['downloadCount'], config('beatsaver.cache.duration'));
         }
     }
 

@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'current' => env('BS_THEME', 'default')
+    'current' => env('BS_THEME', 'bulma')
 ];

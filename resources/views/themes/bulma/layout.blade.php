@@ -19,6 +19,29 @@
     <script>
         zip.workerScriptsPath = '/js/zip/'
         const preview = new PreviewPlayer(0.15)
+
+        const previewSong = async (button, url) => {
+            const playing = button.dataset.playing === 'true'
+            
+            if (playing) {
+                preview.stop()
+                button.innerHTML = 'Preview'
+            } else {
+                button.classList.toggle('is-loading')
+                await preview.play(url)
+
+                button.classList.toggle('is-loading')
+
+                for (const btn of document.getElementsByClassName('for-playing')) {
+                    btn.dataset.playing = false
+                    btn.innerHTML = 'Preview'
+                }
+
+                button.innerHTML = 'Stop Preview'
+            }
+
+            button.dataset.playing = !playing
+        }
     </script>
 
     <title>Beat Saver @yield('title')</title>

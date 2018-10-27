@@ -16,6 +16,10 @@
     <!-- Preview JS -->
     <script src="{{ asset('/js/zip/zip.js') }}"></script>
     <script src="{{ asset('/js/preview.js') }}"></script>
+    <script>
+        zip.workerScriptsPath = '/js/zip/'
+        const preview = new PreviewPlayer(0.15)
+    </script>
 
     <title>Beat Saver @yield('title')</title>
 </head>

@@ -13,6 +13,10 @@
     <!-- Navbar Burger Styles -->
     <style>a.navbar-burger { color: white; } a.navbar-burger:hover { color: rgb(220, 220, 220); }</style>
 
+    <!-- Preview JS -->
+    <script src="{{ asset('/js/zip/zip.js') }}"></script>
+    <script src="{{ asset('/js/preview.js') }}"></script>
+
     <title>Beat Saver @yield('title')</title>
 </head>
 <body>

@@ -55,7 +55,7 @@ class BeatSaverController extends Controller
             'title' => 'Top Played',
             'songs' => $composer->getTopPlayedSongs((int)$start),
             'start' => (int)$start,
-            'steps' => $composer::DEFAULT_LIMIT
+            'steps' => $composer::DEFAULT_LIMIT,
         ]);
     }
 
@@ -71,7 +71,7 @@ class BeatSaverController extends Controller
             'title' => 'Newest',
             'songs' => $composer->getNewestSongs((int)$start),
             'start' => (int)$start,
-            'steps' => $composer::DEFAULT_LIMIT
+            'steps' => $composer::DEFAULT_LIMIT,
         ]);
     }
 
@@ -97,7 +97,7 @@ class BeatSaverController extends Controller
             'username' => $name,
             'userId'   => $userId,
             'start'    => (int)$start,
-            'steps'    => $composer::DEFAULT_LIMIT
+            'steps'    => $composer::DEFAULT_LIMIT,
         ]);
     }
 
@@ -197,7 +197,8 @@ class BeatSaverController extends Controller
      */
     public function searchSubmit(SearchRequest $request)
     {
-        $params = $request->only(['key']);
+        $params = [];
+        $params['key'] = $request->input('key');
         $params['type'] = 'all';
 
         return redirect()->route('search', $params);
@@ -205,14 +206,14 @@ class BeatSaverController extends Controller
 
     /**
      * @param string           $type
-     * @param string           $key
      * @param SongListComposer $composer
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function searchResult($type = 'all', $key = null, SongListComposer $composer)
+    public function searchResult($type = 'all', SongListComposer $composer)
     {
         $songs = [];
+        $key = request()->input('key');
 
         if (!is_null($key) && strlen($key) >= 3) {
             $parameter = [strtolower($type) => $key];
@@ -222,7 +223,7 @@ class BeatSaverController extends Controller
         return view('master.page-search')->with([
             'title' => 'Song Search',
             'songs' => $songs,
-            'key'   => $key,
+            'key'   => request()->input('key'),
             'start' => 0,
             'steps' => $composer::DEFAULT_LIMIT + 1 // +1 for disabling paging since paging is not supported while searching
         ]);

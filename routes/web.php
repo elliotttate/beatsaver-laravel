@@ -8,6 +8,9 @@ Route::get('/browse/newest/{start?}', 'BeatSaverController@newest')->name('brows
 Route::get('/browse/detail/{key}', 'BeatSaverController@detail')->name('browse.detail');
 Route::get('/browse/byuser/{id}/{start?}', 'BeatSaverController@byUser')->name('browse.user');
 
+Route::get('/feeds/newest', 'FeedController@newest')->name('feeds.newest');
+Route::get('/feeds/byuser/{id}', 'FeedController@byUser')->name('feeds.user');
+
 Route::get('/download/{key}', 'BeatSaverController@download')->name('download');
 
 Route::post('/search', 'BeatSaverController@searchSubmit')->name('search.submit');

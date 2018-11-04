@@ -60,4 +60,16 @@ class SongDetail extends Model
             'user_id'   => $user->id,
         ], ['direction' => 0]);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($details) {
+            if ($details->isForceDeleting()) {
+                $details->votes()->get()->each->forceDelete();
+            } else {
+                $details->votes()->get()->each->delete();
+            }
+        });
+    }
 }

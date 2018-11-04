@@ -23,7 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'votekey',
-        'verification_code'
+        'verification_code',
     ];
 
     protected $dates = ['deleted_at'];
@@ -63,7 +63,7 @@ class User extends Authenticatable
     public function createVerificationCode(): string
     {
         $this->update(['verification_code' => str_random(40)]);
-        return  $this->verification_code;
+        return $this->verification_code;
     }
 
     /**
@@ -95,21 +95,27 @@ class User extends Authenticatable
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param  string $token
+     *
      * @return void
      */
     public function sendPasswordResetNotification($token)
     {
         //@todo switch with laravel notification
-        Mail::to($this->getEmailForPasswordReset())->send(new PasswordReset($this,$token));
+        Mail::to($this->getEmailForPasswordReset())->send(new PasswordReset($this, $token));
     }
 
     protected static function boot()
     {
         parent::boot();
-        static::deleting(function($user) {
-            foreach ($user->songs()->get() as $song) {
-                $song->delete();
+        static::deleting(function ($user) {
+            if ($user->isForceDeleting()) {
+                $user->songs()->withTrashed()->get()->each->forceDelete();
+                $user->tokens()->get()->each->forceDelete();
+                Vote::where('user_id', $user->id)->get()->each->forceDelete();
+            } else {
+                $user->songs()->withTrashed()->get()->each->delete();
+                $user->tokens()->get()->each->delete();
             }
         });
     }

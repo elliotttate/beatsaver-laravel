@@ -33,8 +33,10 @@ class Song extends Model
     {
         parent::boot();
         static::deleting(function ($song) {
-            foreach ($song->details()->get() as $details) {
-                $details->delete();
+            if ($song->isForceDeleting()) {
+                $song->details()->withTrashed()->get()->each->forceDelete();
+            } else {
+                $song->details()->withTrashed()->get()->each->delete();
             }
         });
     }

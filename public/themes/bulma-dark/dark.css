@@ -1,0 +1,36 @@
+html {
+  background-color: #242424;
+}
+
+body,
+.content table thead td, .content table thead th,
+.content h1, .content h2, .content h3, .content h4, .content h5, .content h6,
+.table, .table th,
+.label, strong {
+  color: #e6e6e6;
+}
+
+code {
+  color: #3273dc;
+}
+
+hr {
+  background-color: hsla(0,0%,96%,.29)
+}
+
+.navbar.has-shadow {
+  box-shadow: 0 2px 0 0 rgba(245, 245, 245, 0.07);
+}
+
+.table, .table th {
+  background-color: transparent;
+}
+
+a {
+  color: #50b4ff;
+  transition: .15s color;
+}
+
+a:hover {
+  color: #bdbdbd;
+}

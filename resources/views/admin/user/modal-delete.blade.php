@@ -7,7 +7,7 @@
                 <h4 class="modal-title">You sure?</h4>
             </div>
             <div class="modal-body">
-                <p>You are about to permanently delete {{ $user->name }}!</p>
+                <p>You are about to permanently delete {{ $user->name }}! This means you will also delete all songs the user has submitted.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Administration;
 use App\Http\Requests\Administration\StoreUserRequest;
 use App\Http\Requests\Administration\UpdateUserRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\Song;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -101,8 +103,17 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->forceDelete();
+        $songs = Song::withTrashed()->where('user_id', $user->id)->get();
 
-        return redirect()->route('admin.users.index')->withInfo("Permanently deleted $user->name");
+        if ($user->forceDelete()) {
+            foreach ($songs as $song) {
+                Storage::disk()->deleteDirectory("public/songs/$song->id");
+                $song->forceDelete();
+            }
+
+            return redirect()->route('admin.users.index')->withInfo("Permanently deleted $user->name");
+        }
+
+        return redirect()->route('admin.users.index')->withDanger("Something went wrong while deleting $user->name");
     }
 }

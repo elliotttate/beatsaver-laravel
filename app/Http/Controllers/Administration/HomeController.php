@@ -28,8 +28,8 @@ class HomeController extends Controller
     public function show()
     {
         $dashboard = [
-            'songCount' => count(Song::all()),
-            'userCount' => count(User::all()),
+            'songCount' => Song::all(['id'])->count(),
+            'userCount' => User::all(['id'])->count(),
         ];
 
         return view('admin.dashboard', ['dashboard' => $dashboard]);

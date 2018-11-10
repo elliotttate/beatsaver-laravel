@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="{{ config('app.locale') }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=1024">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @yield('og-meta')
+    <title>Beat Saver @yield('title')</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.min.css') }}">
+    <!-- AdminLTE Skin -->
+    <link rel="stylesheet" href="{{ asset('adminlte/css/skins/skin-blue.min.css') }}">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+    <header class="main-header">
+        @include('admin.layout.header')
+    </header>
+    <aside class="main-sidebar">
+        @include('admin.layout.sidebar')
+    </aside>
+    <div class="content-wrapper">
+        @yield('content')
+    </div>
+    <footer class="main-footer">
+        @include('admin.layout.footer')
+    </footer>
+</div>
+<!-- Jquery 3.3.1 -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<!-- Bootstrap JS 3.3.7 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('adminlte/js/adminlte.min.js') }}"></script>
+</body>
+</html>

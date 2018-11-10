@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Administration;
 
+use App\Http\Requests\Administration\StoreUserRequest;
 use App\Http\Requests\Administration\UpdateUserRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,7 +28,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('admin.user.index', ['users' => User::with('songs')->get()]);
+        return view('admin.user.index', ['users' => User::withTrashed()->with('songs')->get()]);
     }
 
     /**
@@ -36,18 +38,26 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.user.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param StoreUserRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $user = User::create($request->all());
+
+        if ($user) {
+            $user->createVerificationCode();
+
+            return redirect()->route('admin.users.index')->withSuccess("$user->name successfully created!");
+        }
+
+        return redirect()->route('admin.users.index')->withDanger("Failed to created new user: $request->name");
     }
 
     /**

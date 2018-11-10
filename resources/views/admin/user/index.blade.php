@@ -5,6 +5,7 @@
         <h1>
             Users
             <small>index page</small>
+            <a href="{{ route('admin.users.create') }}" class="btn btn-success btn-xs">Add user</a>
         </h1>
     </section>
     <section class="content">

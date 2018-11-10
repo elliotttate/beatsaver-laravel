@@ -51,3 +51,8 @@ Route::group(['middleware' => ['guest']], function () {
     Route::post('/auth/forgotpw/confirm', 'UserController@confirmPasswordResetSubmit')->name('password.reset.complete.submit');
 });
 Route::any('/auth/logout', 'UserController@logout')->name('logout');
+
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
+    Route::get('/', 'Administration\HomeController@show')->name('dashboard');
+
+});

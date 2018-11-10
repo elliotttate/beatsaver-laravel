@@ -10,14 +10,29 @@
         <ul class="nav navbar-nav">
             <li class="user user-menu">
                 <a href="#">
-                    <span class="hidden-xs">John Doe</span>
+                    <span class="hidden-xs">{{ Auth::user()->name }}</span>
                 </a>
             </li>
             <li class="user user-menu">
-                <a href="#">
-                    <span class="hidden-xs">Logout</span>
+                <a id="logoutButton">
+                    <span class="">Logout</span>
                 </a>
             </li>
+            <form id="logoutForm" method="post" action="{{ route('logout') }}">
+                @csrf
+            </form>
         </ul>
     </div>
 </nav>
+
+@push('scripts')
+    <script type="application/javascript">
+        $('#logoutButton').click(function () {
+            submitLogoutRequest()
+        });
+
+        function submitLogoutRequest() {
+            $('#logoutForm').submit();
+        }
+    </script>
+@endpush

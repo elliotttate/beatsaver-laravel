@@ -52,12 +52,13 @@
                                     Banned
                                 </label>
                             </div>
+                            <button id="deleteUser" class="btn btn-danger btn-outline-danger pull-left">Delete</button>
                             <button type="submit" class="btn btn-success pull-right">Save</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
     </section>
+    @include('admin.user.modal-delete', ['user' => $user])
 @endsection

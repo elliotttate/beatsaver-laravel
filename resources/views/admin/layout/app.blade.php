@@ -17,6 +17,10 @@
     <link rel="stylesheet" href="{{ asset('adminlte/css/adminlte.min.css') }}">
     <!-- AdminLTE Skin -->
     <link rel="stylesheet" href="{{ asset('adminlte/css/skins/skin-blue.min.css') }}">
+    <!-- Datatables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/r-2.2.2/datatables.min.css"/>
+    <!-- Custom Styling -->
+    <link rel="stylesheet" href="{{ asset('adminlte/css/style.css') }}">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -39,6 +43,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('adminlte/js/adminlte.min.js') }}"></script>
+<!-- Datatables JS -->
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.18/r-2.2.2/datatables.min.js"></script>
+
 @stack('scripts')
 </body>
 </html>

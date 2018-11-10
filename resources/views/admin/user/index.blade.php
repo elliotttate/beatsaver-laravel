@@ -19,6 +19,7 @@
                                 <th tabindex="0" rowspan="1" colspan="1">Name</th>
                                 <th tabindex="0" rowspan="1" colspan="1">Email</th>
                                 <th tabindex="0" rowspan="1" colspan="1">Songs Posted</th>
+                                <th tabindex="0" rowspan="1" colspan="1">States</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -28,6 +29,12 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->songs->count() }}</td>
+                                    <td>
+                                        {!! $user->deleted_at ? '<span class="label label-danger">Banned</span>' : '' !!}
+                                        {!! $user->created_at->diffInDays(Carbon\Carbon::now()) < 30  ? '<span class="label label-info">New</span>' : '' !!}
+                                        {!! $user->admin ? '<span class="label label-success">Administrator</span>' : '' !!}
+                                        {!! $user->verification_code ? '' : '<span class="label label-warning">Unverified</span>' !!}
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -37,6 +44,7 @@
                                 <th rowspan="1" colspan="1">Name</th>
                                 <th rowspan="1" colspan="1">Email</th>
                                 <th rowspan="1" colspan="1">Songs Posted</th>
+                                <th rowspan="1" colspan="1">States</th>
                             </tr>
                             </tfoot>
                         </table>

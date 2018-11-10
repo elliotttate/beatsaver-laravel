@@ -15,3 +15,7 @@
 .clickable-row {
     cursor: pointer;
 }
+
+.flash-message {
+    margin-top: 2rem;
+}

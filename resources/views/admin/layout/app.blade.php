@@ -31,6 +31,20 @@
         @include('admin.layout.sidebar')
     </aside>
     <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="flash-message">
+                        @foreach (['danger', 'warning', 'success', 'info'] as $message)
+                            @if(Session::has($message))
+                                <p class="alert alert-{{ $message }}">{{ Session::get($message) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @yield('content')
     </div>
     <footer class="main-footer">

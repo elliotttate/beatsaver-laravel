@@ -83,7 +83,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password ? Hash::make($request->password) : $user->password;
-        $user->admin = $request->has('admin') ? true : false;
+        $user->admin = $request->has('admin');
         $user->deleted_at = $request->has('banned') ? Carbon::now() : null;
 
         if ($user->save()) {

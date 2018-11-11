@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Administration;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Administration\UpdateSongRequest;
 use App\Models\Song;
 use Carbon\Carbon;
-use function foo\func;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class SongController extends Controller
 {
@@ -94,6 +92,10 @@ class SongController extends Controller
      */
     public function destroy(Song $song)
     {
-        //
+        if (Song::destroyWithRelated($song)) {
+            return redirect()->route('admin.songs.index')->withInfo("Permanently deleted $song->name");
+        }
+
+        return redirect()->route('admin.songs.index')->withDanger("Something went wrong while deleting $song->name");
     }
 }

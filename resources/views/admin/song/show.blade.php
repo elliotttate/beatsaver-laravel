@@ -39,6 +39,7 @@
                                     Hidden
                                 </label>
                             </div>
+                            <button id="deleteSong" type="button" class="btn btn-danger pull-left">Delete</button>
                             <button type="submit" class="btn btn-success pull-right">Save</button>
                         </form>
                     </div>
@@ -82,4 +83,5 @@
             </div>
         </div>
     </section>
+    @include('admin.song.modal-delete', ['song' => $song])
 @endsection

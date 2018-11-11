@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/dashboard', 'Administration\HomeController@show')->name('dashboard');
 
         Route::resource('/users', 'Administration\UserController');
+        Route::resource('/songs', 'Administration\SongController');
     });
 });
 

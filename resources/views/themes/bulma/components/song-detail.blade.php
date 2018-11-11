@@ -9,6 +9,14 @@
 
             <a class="button is-fullwidth has-text-weight-bold" href="{{ $downloadUrl }}" style="margin-top: 8px;">Download File</a>
             <a class="button is-fullwidth has-text-weight-bold" href="https://bsaber.com/songs/{{ $id }}" style="margin-top: 8px;">View on BeastSaber</a>
+            <button
+                class="button is-fullwidth has-text-weight-bold for-playing"
+                onclick="previewSong(this, '{{ $downloadUrl }}')"
+                role="button"
+                style="margin-top: 8px;"
+            >
+                Preview
+            </button>
             <a class="button is-fullwidth has-text-weight-bold" href="{{ route('browse.top.newest') }}" style="margin-top: 8px;">Back</a>
         </div>
 

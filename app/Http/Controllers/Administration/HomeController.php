@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Song;
 use App\Models\SongDetail;
 use App\Models\User;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -26,6 +27,36 @@ class HomeController extends Controller
      */
     public function show()
     {
+        $labels = [];
+        $data['registrations'] = [];
+        $data['uploads'] = [];
+
+        $months = 6;
+
+        while ($months >= 0) {
+            $monthIteration = Carbon::now()->subMonths($months);
+
+            $labels[] = $monthIteration->format('F y');
+
+            $data['registrations'][] = User::whereBetween(
+                'created_at',
+                [
+                    Carbon::now()->subMonths($months + 1),
+                    $monthIteration
+                ]
+            )->count();
+
+            $data['uploads'][] = Song::whereBetween(
+                'created_at',
+                [
+                    Carbon::now()->subMonths($months + 1),
+                    $monthIteration
+                ]
+            )->count();
+
+            $months--;
+        }
+
         $dashboard = [
             'songCount' => Song::all(['id'])->count(),
             'downloadCount' => SongDetail::all(['download_count'])->sum('download_count'),
@@ -33,6 +64,12 @@ class HomeController extends Controller
             'userCount' => User::all(['id'])->count(),
         ];
 
-        return view('admin.dashboard', ['dashboard' => $dashboard]);
+        return view('admin.dashboard', [
+            'dashboard' => $dashboard,
+            'registrationsUploadsChart' => [
+                'labels' => $labels,
+                'data' => $data
+            ],
+        ]);
     }
 }

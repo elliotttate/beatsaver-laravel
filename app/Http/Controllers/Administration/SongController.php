@@ -30,17 +30,6 @@ class SongController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-        return view('admin.song.create');
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Song  $song
@@ -51,17 +40,6 @@ class SongController extends Controller
         $song->details->first()->difficulty_levels = json_decode($song->details->first()->difficulty_levels);
 
         return view('admin.song.show', ['song' => $song]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Song  $song
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Song $song)
-    {
-        //
     }
 
     /**

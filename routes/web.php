@@ -39,8 +39,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('/dashboard', 'Administration\HomeController@show')->name('dashboard');
 
-        Route::resource('/users', 'Administration\UserController');
-        Route::resource('/songs', 'Administration\SongController');
+        Route::resource('/users', 'Administration\UserController')->except(['edit']);
+        Route::resource('/songs', 'Administration\SongController')->except(['edit', 'create']);
     });
 });
 

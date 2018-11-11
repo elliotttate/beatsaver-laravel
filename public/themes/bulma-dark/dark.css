@@ -34,3 +34,20 @@ a {
 a:hover {
   color: #bdbdbd;
 }
+
+.button.is-light {
+  background-color: #545454;
+  border-color: transparent;
+  color: #f5f5f5;
+}
+
+.button.is-light:hover {
+  background-color: #717171;
+  border-color: transparent;
+  color: #f5f5f5;
+}
+
+.button.is-light.is-focused:not(:active),.button.is-light:focus:not(:active) {
+  color: #f5f5f5;
+  box-shadow: 0 0 0 .125em rgba(255, 255, 255, 0.5);
+}

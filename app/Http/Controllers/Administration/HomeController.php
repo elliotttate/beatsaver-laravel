@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Administration;
 
-use App\Models\Song;
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\View\View;
+use App\Models\Song;
+use App\Models\SongDetail;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -23,12 +22,14 @@ class HomeController extends Controller
     /**
      * Shows the dashboard of the admin panel
      *
-     * @return View
+     * @return \Illuminate\Http\Response
      */
     public function show()
     {
         $dashboard = [
             'songCount' => Song::all(['id'])->count(),
+            'downloadCount' => SongDetail::all(['download_count'])->sum('download_count'),
+            'playCount' => SongDetail::all(['play_count'])->sum('play_count'),
             'userCount' => User::all(['id'])->count(),
         ];
 

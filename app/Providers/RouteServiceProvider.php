@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Song;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -28,6 +29,10 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::bind('user', function ($value) {
             return User::withTrashed()->where('id', $value)->first();
+        });
+
+        Route::bind('song', function ($value) {
+            return Song::withTrashed()->where('id', $value)->with('details.votes')->first();
         });
     }
 

@@ -19,9 +19,10 @@
     <style>a.navbar-burger { color: white; } a.navbar-burger:hover { color: rgb(220, 220, 220); }</style>
 
     <!-- Preview JS -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="{{ asset('/js/zip/zip.js') }}"></script>
-    <script src="{{ asset('/js/preview.js') }}"></script>
-    <script>
+    <script type="text/babel" src="{{ asset('/js/preview.js') }}"></script>
+    <script type="text/babel">
         zip.workerScriptsPath = '/js/zip/'
         const preview = new PreviewPlayer(0.15)
 

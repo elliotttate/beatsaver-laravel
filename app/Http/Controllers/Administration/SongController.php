@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Administration;
 
+use App\Http\Requests\Administration\UpdateSongRequest;
 use App\Models\Song;
+use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -71,9 +73,17 @@ class SongController extends Controller
      * @param  \App\Models\Song  $song
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Song $song)
+    public function update(UpdateSongRequest $request, Song $song)
     {
-        //
+        $song->name = $request->name;
+        $song->description = $request->description ? $request->description : '';
+        $song->deleted_at = $request->has('hidden') ? Carbon::now() : null;
+
+        if ($song->save()) {
+            return redirect()->back()->withSuccess("$song->name has been updated!");
+        }
+
+        return redirect()->back()->withDanger("Something went wrong while trying to update $song->name!");
     }
 
     /**

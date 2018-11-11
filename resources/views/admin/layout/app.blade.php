@@ -37,7 +37,7 @@
                     <div class="flash-message">
                         @foreach (['danger', 'warning', 'success', 'info'] as $message)
                             @if(Session::has($message))
-                                <p class="alert alert-{{ $message }}">{{ Session::get($message) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+                                <div class="alert alert-{{ $message }}">{{ Session::get($message) }} <button href="#" class="close" data-dismiss="alert" aria-label="close">&times;</button></div>
                             @endif
                         @endforeach
                     </div>

@@ -48,6 +48,8 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        $request->merge(['password' => Hash::make($request->password)]);
+
         $user = User::create($request->all());
 
         if ($user) {

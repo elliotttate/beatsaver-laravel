@@ -18,8 +18,11 @@
     <!-- Navbar Burger Styles -->
     <style>a.navbar-burger { color: white; } a.navbar-burger:hover { color: rgb(220, 220, 220); }</style>
 
-    <!-- Preview JS -->
+    <!-- Babel and Polyfills -->
+    <script src="https://unpkg.com/@babel/polyfill/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Preview JS -->
     <script src="{{ asset('/js/zip/zip.js') }}"></script>
     <script type="text/babel" src="{{ asset('/js/preview.js') }}"></script>
     <script type="text/babel">
@@ -55,6 +58,9 @@
 
             button.dataset.playing = !playing
         }
+
+        window.preview = preview
+        window.previewSong = previewSong
     </script>
 
     <title>Beat Saver @yield('title')</title>
@@ -144,7 +150,7 @@
     @endif
 </footer>
 
-<script>
+<script type="text/babel">
     const burgers = document.getElementsByClassName('navbar-burger')
 
     for (const burger of burgers) {

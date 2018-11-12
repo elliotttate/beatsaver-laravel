@@ -42,7 +42,7 @@
                     <td colspan="2">
                         <a class="button" href="{{ $downloadUrl }}" role="button">Download File</a>
                         <a class="button" href="https://bsaber.com/songs/{{ $id }}" role="button">View on BeastSaber</a>
-                        <button class="button for-playing" onclick="previewSong(this, '{{ $downloadUrl }}')" role="button">Preview</button>
+                        <button class="button for-playing" onclick="previewSong(this, '/storage/songs/{{ $id }}/{{ $key }}.zip')" role="button">Preview</button>
                     </td>
                 </tr>
             </table>

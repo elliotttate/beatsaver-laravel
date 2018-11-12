@@ -24,7 +24,15 @@ class SongController extends Controller
      */
     public function index()
     {
-        $songs = Song::withTrashed()->with(['details', 'details.votes', 'uploader'])->get();
+        $songs = Song::withTrashed()
+            ->with(['uploader' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with(['details' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->with('details.votes')
+            ->get();
 
         return view('admin.song.index', ['songs' => $songs]);
     }

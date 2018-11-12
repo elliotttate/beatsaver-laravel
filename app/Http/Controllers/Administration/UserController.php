@@ -106,6 +106,8 @@ class UserController extends Controller
             Song::destroyWithRelated($song);
         }
 
+        $user->votes()->delete();
+
         if ($user->forceDelete()) {
             return redirect()->route('admin.users.index')->withInfo("Permanently deleted $user->name");
         }

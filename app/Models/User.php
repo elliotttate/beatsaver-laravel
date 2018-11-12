@@ -4,8 +4,8 @@ namespace App\Models;
 
 use App\Mail\PasswordReset;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Mail;
 
@@ -53,6 +53,14 @@ class User extends Authenticatable
     public function tokens()
     {
         return $this->hasMany(AccessToken::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
     }
 
     /**

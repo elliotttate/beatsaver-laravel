@@ -14,6 +14,11 @@ class PreviewPlayer {
     this.audio = new Audio()
     this.audio.volume = volume || 0.5
 
+    /**
+     * @type {Map<string, Blob>}
+     */
+    this.blobStore = new Map()
+
     this.onEnd = () => {}
     this.audio.addEventListener('ended', ev => {
       this.onEnd(ev)
@@ -81,10 +86,19 @@ class PreviewPlayer {
   stop () { this.audio.pause() }
 
   /**
-   * @param {string} url Song Zip URL
+   * @param {string} key Song Key
    * @returns {Promise.<SongInfo>}
    */
-  async play (url) {
+  async play (key) {
+    const cache = this.blobStore.get(key)
+    if (cache) {
+      const { song, info } = cache
+      return this._play(song, info)
+    }
+
+    const [id] = key.split('-')
+    const url = `/storage/songs/${id}/${key}.zip`
+
     const blob = await PreviewPlayer._fetchBlob(url)
     const zipReader = await PreviewPlayer._createReader(blob)
 
@@ -94,6 +108,11 @@ class PreviewPlayer {
     const songBlob = await PreviewPlayer._getSongBlob(zipReader, audioPath)
     const song = URL.createObjectURL(songBlob)
 
+    this.blobStore.set(key, { song, info })
+    return this._play(song, info)
+  }
+
+  _play (song, info) {
     this.audio.pause()
     this.audio.src = song
     this.audio.play()

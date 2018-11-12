@@ -13,6 +13,11 @@ class PreviewPlayer {
   constructor (volume) {
     this.audio = new Audio()
     this.audio.volume = volume || 0.5
+
+    this.onEnd = () => {}
+    this.audio.addEventListener('ended', ev => {
+      this.onEnd(ev)
+    })
   }
 
   /**

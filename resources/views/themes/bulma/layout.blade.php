@@ -24,7 +24,14 @@
     <script type="text/babel" src="{{ asset('/js/preview.js') }}"></script>
     <script type="text/babel">
         zip.workerScriptsPath = '/js/zip/'
+
         const preview = new PreviewPlayer(0.15)
+        preview.onEnd = () => {
+            for (const btn of document.getElementsByClassName('for-playing')) {
+                btn.dataset.playing = false
+                btn.innerHTML = 'Preview'
+            }
+        }
 
         const previewSong = async (button, url) => {
             const playing = button.dataset.playing === 'true'

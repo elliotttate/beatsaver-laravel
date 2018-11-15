@@ -1,0 +1,21 @@
+.table-entries-search {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+}
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.flash-message {
+    margin-top: 2rem;
+}

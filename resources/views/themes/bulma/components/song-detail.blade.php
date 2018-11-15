@@ -11,7 +11,7 @@
             <a class="button is-fullwidth has-text-weight-bold" href="https://bsaber.com/songs/{{ $id }}" style="margin-top: 8px;">View on BeastSaber</a>
             <button
                 class="button is-fullwidth has-text-weight-bold for-playing"
-                onclick="previewSong(this, '{{ $downloadUrl }}')"
+                onclick="previewSong(this, '{{ $key }}')"
                 role="button"
                 style="margin-top: 8px;"
             >

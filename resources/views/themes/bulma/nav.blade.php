@@ -3,7 +3,7 @@
     <a class="navbar-item" href="{{ route('browse.top.downloads') }}">Top Downloads</a>
     <a class="navbar-item" href="{{ route('browse.top.played') }}">Top Played</a>
     <a class="navbar-item" href="{{ route('search') }}">Search</a>
-    <div class="navbar-item">|</div>
+    <div class="navbar-item" style="user-select: none;">|</div>
     <a href="https://scoresaber.com/" class="navbar-item">ScoreSaber</a>
     <a href="https://bsaber.com/" class="navbar-item">BeastSaber</a>
     <div class="navbar-item has-dropdown is-hoverable">

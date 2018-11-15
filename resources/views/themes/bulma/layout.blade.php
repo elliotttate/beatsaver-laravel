@@ -12,18 +12,29 @@
 @show
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/@lolpants/bulma@0.7.1/css/bulma.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@lolpants/bulma@0.7.2/css/bulma.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
     <!-- Navbar Burger Styles -->
     <style>a.navbar-burger { color: white; } a.navbar-burger:hover { color: rgb(220, 220, 220); }</style>
 
+    <!-- Babel and Polyfills -->
+    <script src="https://unpkg.com/@babel/polyfill/dist/polyfill.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <!-- Preview JS -->
     <script src="{{ asset('/js/zip/zip.js') }}"></script>
-    <script src="{{ asset('/js/preview.js') }}"></script>
-    <script>
+    <script type="text/babel" src="{{ asset('/js/preview.js') }}"></script>
+    <script type="text/babel">
         zip.workerScriptsPath = '/js/zip/'
+
         const preview = new PreviewPlayer(0.15)
+        preview.onEnd = () => {
+            for (const btn of document.getElementsByClassName('for-playing')) {
+                btn.dataset.playing = false
+                btn.innerHTML = 'Preview'
+            }
+        }
 
         const previewSong = async (button, url) => {
             const playing = button.dataset.playing === 'true'
@@ -47,6 +58,9 @@
 
             button.dataset.playing = !playing
         }
+
+        window.preview = preview
+        window.previewSong = previewSong
     </script>
 
     <title>Beat Saver @yield('title')</title>
@@ -111,7 +125,7 @@
 </div> <!-- /container -->
 <footer style="margin-bottom: 25px;">
     <div class="content has-text-centered">
-        <b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> || <a href="{{ config('beatsaver.githubUrl') }}">GitHub</a></b>
+        <b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> || <a href="{{ config('beatsaver.githubUrl') }}">GitHub</a> || <a href="https://datbase.org/beatsaver/BeatSaver-Data-Set">BeatSaver Public Data Set</a></b>
     </div>
     @if( App::environment() == 'production' && config('beatsaver.tracking'))
         <script type="text/javascript">
@@ -136,7 +150,7 @@
     @endif
 </footer>
 
-<script>
+<script type="text/babel">
     const burgers = document.getElementsByClassName('navbar-burger')
 
     for (const burger of burgers) {

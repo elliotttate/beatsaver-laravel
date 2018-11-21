@@ -31,6 +31,16 @@ class UserController extends Controller
     }
 
     /**
+     * Returns the DataTable of the resource
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function datatable()
+    {
+        return response()->json(User::dataTable()->toArray());
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

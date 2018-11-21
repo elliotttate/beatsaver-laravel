@@ -78,7 +78,6 @@
                 let labelBuilder = $('<span class="label">');
 
                 for (let state of states) {
-                    console.log(state);
                     switch (state) {
                         case 'Unverified':
                             labelBuilder.attr('class', 'label label-warning');

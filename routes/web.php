@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('users/index/datatable', 'Administration\Usercontroller@datatable')->name('users.datatable');
         Route::resource('/users', 'Administration\UserController')->except(['edit']);
+        Route::get('songs/index/datatable', 'Administration\SongController@datatable')->name('songs.datatable');
         Route::resource('/songs', 'Administration\SongController')->except(['edit', 'create']);
     });
 });

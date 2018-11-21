@@ -25,23 +25,6 @@
                                 <th tabindex="0" rowspan="1" colspan="1">States</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            @foreach($songs as $song)
-                                <tr data-id="{{ $song->id }}" role="row" class="odd clickable-row">
-                                    <td>{{ $song->id }}</td>
-                                    <td>{{ $song->name }}</td>
-                                    <td>{{ $song->uploader->name }}</td>
-                                    <td>{{ $song->details->first()->play_count }}</td>
-                                    <td>{{ $song->details->first()->download_count }}</td>
-                                    <td>{{ $song->details->first()->votes->where('direction', true)->count() }}</td>
-                                    <td>{{ $song->details->first()->votes->where('direction', false)->count() }}</td>
-                                    <td>
-                                        {!! $song->deleted_at ? '<span class="label label-danger">Hidden</span>' : '' !!}
-                                        {!! $song->created_at->diffInDays(Carbon\Carbon::now()) < 30  ? '<span class="label label-info">New</span>' : '' !!}
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
                             <tfoot>
                             <tr>
                                 <th rowspan="1" colspan="1">ID</th>
@@ -65,13 +48,61 @@
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(function () {
-            $('.clickable-row').click(function () {
-                window.location = '{{ route('admin.songs.index') }}' + '/' + $(this).data('id');
-            });
+            // Initialize datatable
+            $(document).ready(function () {
+                let dataTable = $('#index-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: '{!! route('admin.songs.datatable') !!}',
+                    columns: [
+                        {data: 'id', name: 'ID'},
+                        {data: 'name', name: 'Name'},
+                        {data: 'author_name', name: 'Author Name', 'searchable': false, 'orderable': false},
+                        {data: 'play_count', name: 'Play Count', 'searchable': false, 'orderable': false},
+                        {data: 'download_count', name: 'Download Count', 'searchable': false, 'orderable': false},
+                        {data: 'upvotes', name: 'Upvotes', 'searchable': false, 'orderable': false},
+                        {data: 'downvotes', name: 'Downvotes', 'searchable': false, 'orderable': false},
+                        {
+                            data: 'states',
+                            name: 'States',
+                            'searchable': false,
+                            'orderable': false,
+                            "render": function (data) {
+                                return prettifyStates(data);
+                            },
+                        }
+                    ],
+                    "order": [[0, "desc"]]
+                });
 
-            $('#index-table').DataTable({
-                'order': [[0, 'desc']]
-            });
+                // Make rows clickable
+                dataTable.on('click', 'tbody tr', function () {
+                    window.location.href = '{!! route('admin.songs.index') !!}' + '/' + $(this).find('td:first').text();
+                });
+
+                // Turn states into html labels
+                function prettifyStates(data) {
+                    let states = data.split('.').splice(1);
+                    let prettyStates = '';
+                    let labelBuilder = $('<span class="label">');
+
+                    for (let state of states) {
+                        switch (state) {
+                            case 'New':
+                                labelBuilder.attr('class', 'label label-warning');
+                                break;
+                            case 'Hidden':
+                                labelBuilder.attr('class', 'label label-danger');
+                                break;
+                        }
+                        labelBuilder.text(state);
+
+                        prettyStates += labelBuilder.prop('outerHTML') + '&nbsp';
+                    }
+
+                    return prettyStates
+                }
+            })
         })
     </script>
 @endpush

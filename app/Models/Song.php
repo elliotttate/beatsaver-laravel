@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 
 class Song extends Model
 {
@@ -36,6 +38,41 @@ class Song extends Model
     public function votes()
     {
         return $this->hasManyThrough(Vote::class, SongDetail::class, null, 'detail_id');
+    }
+
+    /**
+     * Builds the datatable for Song.
+     *
+     * @return \Yajra\DataTables\EloquentDatatable
+     */
+    public static function dataTable()
+    {
+        $songs = Song::withTrashed()->with('details');
+
+        return DataTables::eloquent($songs)
+            ->addColumn('author_name', function (Song $song) {
+                return $song->uploader->name;
+            })
+            ->addColumn('play_count', function (Song $song) {
+                return $song->details()->first()->play_count;
+            })
+            ->addColumn('download_count', function (Song $song) {
+                return $song->details()->first()->download_count;
+            })
+            ->addColumn('upvotes', function (Song $song) {
+                return $song->details()->first()->votes()->where('direction', true)->count();
+            })
+            ->addColumn('downvotes', function (Song $song) {
+                return $song->details()->first()->votes()->where('direction', false)->count();
+            })
+            ->addColumn('states', function (Song $song) {
+                $states = '';
+
+                !$song->deleted_at ?: $states .= '.Hidden';
+                !$song->created_at->diffInDays(Carbon::now()) < 30 ?: $states .= '.New';
+
+                return $states;
+            });
     }
 
     protected static function boot()

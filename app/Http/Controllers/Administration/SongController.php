@@ -38,6 +38,16 @@ class SongController extends Controller
     }
 
     /**
+     * Returns the DataTable of the resource
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function datatable()
+    {
+        return response()->json(Song::dataTable()->toArray());
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Song  $song

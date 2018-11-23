@@ -47,23 +47,23 @@ class Song extends Model
      */
     public static function dataTable()
     {
-        $songs = Song::withTrashed()->with('details');
+        $songs = Song::withTrashed()->with('details.votes');
 
         return DataTables::eloquent($songs)
             ->addColumn('author_name', function (Song $song) {
                 return $song->uploader->name;
             })
             ->addColumn('play_count', function (Song $song) {
-                return $song->details()->first()->play_count;
+                return $song->details->first()->play_count;
             })
             ->addColumn('download_count', function (Song $song) {
-                return $song->details()->first()->download_count;
+                return $song->details->first()->download_count;
             })
             ->addColumn('upvotes', function (Song $song) {
-                return $song->details()->first()->votes()->where('direction', true)->count();
+                return $song->details->first()->votes->where('direction', true)->count();
             })
             ->addColumn('downvotes', function (Song $song) {
-                return $song->details()->first()->votes()->where('direction', false)->count();
+                return $song->details->first()->votes->where('direction', false)->count();
             })
             ->addColumn('states', function (Song $song) {
                 $states = '';

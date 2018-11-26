@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
         Route::get('/dashboard', 'Administration\HomeController@show')->name('dashboard');
 
-        Route::get('users/index/datatable', 'Administration\Usercontroller@datatable')->name('users.datatable');
+        Route::get('users/index/datatable', 'Administration\UserController@datatable')->name('users.datatable');
         Route::resource('/users', 'Administration\UserController')->except(['edit']);
         Route::get('songs/index/datatable', 'Administration\SongController@datatable')->name('songs.datatable');
         Route::resource('/songs', 'Administration\SongController')->except(['edit', 'create']);

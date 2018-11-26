@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Mail\PasswordReset;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Mail;
+use Yajra\DataTables\Facades\DataTables;
 
 class User extends Authenticatable
 {
@@ -111,6 +113,31 @@ class User extends Authenticatable
     {
         //@todo switch with laravel notification
         Mail::to($this->getEmailForPasswordReset())->send(new PasswordReset($this, $token));
+    }
+
+    /**
+     * Builds the datatable for User.
+     *
+     * @return \Yajra\DataTables\EloquentDatatable
+     */
+    public static function dataTable()
+    {
+        $users = User::withTrashed()->with('songs');
+
+        return DataTables::eloquent($users)
+            ->addColumn('songs', function (User $user) {
+                return $user->songs()->count();
+            })
+            ->addColumn('states', function (User $user) {
+                $states = '';
+
+                !$user->deleted_at ?: $states .= '.Banned';
+                !$user->created_at->diffInDays(Carbon::now()) < 30 ?: $states .= '.New';
+                !$user->admin ?: $states .= '.Administrator';
+                !$user->verification_code ?: $states .= '.Unverified';
+
+                return $states;
+            });
     }
 
     protected static function boot()

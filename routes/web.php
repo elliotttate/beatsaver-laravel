@@ -14,7 +14,7 @@ Route::get('/feeds/byuser/{id}', 'FeedController@byUser')->name('feeds.user');
 Route::get('/download/{key}', 'BeatSaverController@download')->name('download');
 
 Route::post('/search', 'BeatSaverController@searchSubmit')->name('search.submit');
-Route::get('/search/{type?}', 'BeatSaverController@searchResult')->name('search');
+Route::get('/search/{type?}/{start?}', 'BeatSaverController@searchResult')->name('search');
 
 Route::get('/legal/dmca', 'LegalController@dmca')->name('legal.dmca');
 Route::get('/legal/privacy', 'LegalController@privacy')->name('legal.privacy');
@@ -65,5 +65,4 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/auth/forgotpw/confirm/{token}', 'UserController@confirmPasswordReset')->name('password.reset.complete.form');
     Route::post('/auth/forgotpw/confirm', 'UserController@confirmPasswordResetSubmit')->name('password.reset.complete.submit');
 });
-
 Route::any('/auth/logout', 'UserController@logout')->name('logout');

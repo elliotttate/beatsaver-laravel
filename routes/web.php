@@ -8,6 +8,9 @@ Route::get('/browse/newest/{start?}', 'BeatSaverController@newest')->name('brows
 Route::get('/browse/detail/{key}', 'BeatSaverController@detail')->name('browse.detail');
 Route::get('/browse/byuser/{id}/{start?}', 'BeatSaverController@byUser')->name('browse.user');
 
+Route::get('/feeds/newest', 'FeedController@newest')->name('feeds.newest');
+Route::get('/feeds/byuser/{id}', 'FeedController@byUser')->name('feeds.user');
+
 Route::get('/download/{key}', 'BeatSaverController@download')->name('download');
 
 Route::post('/search', 'BeatSaverController@searchSubmit')->name('search.submit');
@@ -35,11 +38,23 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/browse/detail/{id}/edit', 'BeatSaverController@songEditSubmit')->name('browse.detail.edit.submit');
     Route::get('/browse/detail/{id}/delete', 'BeatSaverController@songDelete')->name('browse.detail.delete');
     Route::post('/browse/detail/{id}/delete', 'BeatSaverController@songDeleteSubmit')->name('browse.detail.delete.submit');
+
+    Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+        Route::get('/dashboard', 'Administration\HomeController@show')->name('dashboard');
+
+        Route::get('users/index/datatable', 'Administration\UserController@datatable')->name('users.datatable');
+        Route::resource('/users', 'Administration\UserController')->except(['edit']);
+        Route::get('songs/index/datatable', 'Administration\SongController@datatable')->name('songs.datatable');
+        Route::resource('/songs', 'Administration\SongController')->except(['edit', 'create']);
+    });
 });
 
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/auth/login', 'UserController@login')->name('login.form');
     Route::post('/auth/login', 'UserController@loginSubmit')->name('login.submit');
+
+    Route::get('admin/login', 'UserController@loginAdmin')->name('admin.login.form');
+    Route::post('admin/login', 'UserController@loginAdminSubmit')->name('admin.login.submit');
 
     Route::get('/auth/register', 'UserController@register')->name('register.form');
     Route::post('/auth/register', 'UserController@registerSubmit')->name('register.submit');

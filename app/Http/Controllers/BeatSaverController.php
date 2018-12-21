@@ -198,6 +198,7 @@ class BeatSaverController extends Controller
     public function searchSubmit(SearchRequest $request)
     {
         $params = [];
+        $params['start'] = 0;
         $params['key'] = $request->input('key');
         $params['type'] = 'all';
 

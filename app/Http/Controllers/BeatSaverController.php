@@ -197,7 +197,8 @@ class BeatSaverController extends Controller
      */
     public function searchSubmit(SearchRequest $request)
     {
-        $params = $request->only(['key']);
+        $params = [];
+        $params['key'] = $request->input('key');
         $params['type'] = 'all';
 
         return redirect()->route('search', $params);
@@ -211,21 +212,22 @@ class BeatSaverController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function searchResult($type = 'all', $key = null, $start = 0, SongListComposer $composer)
+    public function searchResult($type = 'all', $start = 0, SongListComposer $composer)
     {
         $songs = [];
+        $key = request()->input('key');
 
         if ($key !== null && \strlen($key) >= 3) {
             $parameter = [strtolower($type) => $key];
 
-            $songs = $composer->search($parameter, 0, 40);
+            $songs = $composer->search($parameter, $start, 40);
         }
 
         return view('master.page-search')->with(
             [
                 'title'  => 'Song Search',
                 'songs'  => $songs,
-                'key'    => $key,
+                'key'    => request()->input('key'),
                 'start'  => $start,
                 'steps'  => 40,
                 'params' => ['type' => $type, 'key' => $key]

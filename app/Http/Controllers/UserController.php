@@ -96,18 +96,54 @@ class UserController extends Controller
      */
     public function loginSubmit(LoginRequest $request)
     {
+        if ($this->attemptLogin($request)) {
+            return redirect()->intended('profile');
+        }
 
-        $credentials = [
-            'name'     => $request->input('username'),
-            'password' => $request->input('password')
-        ];
+        return redirect()->back()->withErrors('Invalid login or password');
+    }
 
-        $rememberMe = $request->input('remember');
-        if (!auth()->attempt($credentials, $rememberMe)) {
-            return redirect()->back()->withErrors('Invalid login or password');
-        };
+    public function loginAdmin()
+    {
+        return view('admin.auth.login');
+    }
 
-        return redirect()->intended('profile');
+    /**
+     * The login request for the admin panel
+     *
+     * @param LoginRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function loginAdminSubmit(LoginRequest $request)
+    {
+        if ($this->attemptLogin($request)) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->back()->withErrors('Invalid login or password');
+    }
+
+    /**
+     * Returns true on a successful login attempt.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        $attempt = auth()->attempt(
+            [
+                'name' => $request->input('username'),
+                'password' => $request->input('password')
+            ],
+            $request->input('remember')
+        );
+
+        if ($attempt) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

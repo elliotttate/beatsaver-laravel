@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Mail\PasswordReset;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Mail;
+use Yajra\DataTables\Facades\DataTables;
 
 class User extends Authenticatable
 {
@@ -23,7 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'votekey',
-        'verification_code'
+        'verification_code',
     ];
 
     protected $dates = ['deleted_at'];
@@ -56,6 +58,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    /**
      * Create email verification code.
      *
      * @return string
@@ -63,7 +73,7 @@ class User extends Authenticatable
     public function createVerificationCode(): string
     {
         $this->update(['verification_code' => str_random(40)]);
-        return  $this->verification_code;
+        return $this->verification_code;
     }
 
     /**
@@ -95,21 +105,52 @@ class User extends Authenticatable
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param  string $token
+     *
      * @return void
      */
     public function sendPasswordResetNotification($token)
     {
         //@todo switch with laravel notification
-        Mail::to($this->getEmailForPasswordReset())->send(new PasswordReset($this,$token));
+        Mail::to($this->getEmailForPasswordReset())->send(new PasswordReset($this, $token));
+    }
+
+    /**
+     * Builds the datatable for User.
+     *
+     * @return \Yajra\DataTables\EloquentDatatable
+     */
+    public static function dataTable()
+    {
+        $users = User::withTrashed()->with('songs');
+
+        return DataTables::eloquent($users)
+            ->addColumn('songs', function (User $user) {
+                return $user->songs()->count();
+            })
+            ->addColumn('states', function (User $user) {
+                $states = '';
+
+                !$user->deleted_at ?: $states .= '.Banned';
+                !$user->created_at->diffInDays(Carbon::now()) < 30 ?: $states .= '.New';
+                !$user->admin ?: $states .= '.Administrator';
+                !$user->verification_code ?: $states .= '.Unverified';
+
+                return $states;
+            });
     }
 
     protected static function boot()
     {
         parent::boot();
-        static::deleting(function($user) {
-            foreach ($user->songs()->get() as $song) {
-                $song->delete();
+        static::deleting(function ($user) {
+            if ($user->isForceDeleting()) {
+                $user->songs()->withTrashed()->get()->each->forceDelete();
+                $user->tokens()->get()->each->forceDelete();
+                Vote::where('user_id', $user->id)->get()->each->forceDelete();
+            } else {
+                $user->songs()->withTrashed()->get()->each->delete();
+                $user->tokens()->get()->each->delete();
             }
         });
     }

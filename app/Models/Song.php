@@ -54,16 +54,32 @@ class Song extends Model
                 return $song->uploader->name;
             })
             ->addColumn('play_count', function (Song $song) {
-                return $song->details->first()->play_count;
+                try {
+                    return $song->details->first()->play_count;
+                } catch (\Exception $e) {
+                    return 0;
+                }
             })
             ->addColumn('download_count', function (Song $song) {
-                return $song->details->first()->download_count;
+                try {
+                    return $song->details->first()->download_count;
+                } catch (\Exception $e) {
+                    return 0;
+                }
             })
             ->addColumn('upvotes', function (Song $song) {
-                return $song->details->first()->votes->where('direction', true)->count();
+                try {
+                    return $song->details->first()->votes->where('direction', true)->count();
+                } catch (\Exception $e) {
+                    return 0;
+                }
             })
             ->addColumn('downvotes', function (Song $song) {
-                return $song->details->first()->votes->where('direction', false)->count();
+                try {
+                    return $song->details->first()->votes->where('direction', false)->count();
+                } catch (\Exception $e) {
+                    return 0;
+                }
             })
             ->addColumn('states', function (Song $song) {
                 $states = '';

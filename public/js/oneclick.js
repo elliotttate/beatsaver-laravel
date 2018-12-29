@@ -1,5 +1,9 @@
 const oneClick = async (elem, key) => {
-  if (!localStorage.getItem('oneclick-prompt')) {
+  const lastCheck = localStorage.getItem('oneclick-prompt')
+  const prompt = lastCheck === undefined ||
+    new Date(lastCheck).getTime() + (1000 * 60 * 60 * 24 * 31) < new Date().getTime()
+
+  if (prompt) {
     localStorage.setItem('oneclick-prompt', new Date())
 
     const resp = await swal({

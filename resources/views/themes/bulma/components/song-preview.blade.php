@@ -40,7 +40,8 @@
 
                 <tr>
                     <td colspan="2">
-                        <a class="button" href="{{ $downloadUrl }}" role="button">Download File</a>
+                        <a class="button" href="{{ $downloadUrl }}" role="button">Download Zip</a>
+                        <button class="button" onclick="oneClick(this, '{{ $key }}')" role="button">OneClick Install</button>
                         <a class="button" href="https://bsaber.com/songs/{{ $id }}" role="button">View on BeastSaber</a>
                         <button class="button for-playing" onclick="previewSong(this, '{{ $key }}')" role="button">Preview</button>
                     </td>

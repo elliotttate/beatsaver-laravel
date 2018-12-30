@@ -7,7 +7,15 @@
         <div class="column" style="max-width: 200px;">
             <img src="{{ $coverUrl }}" alt="{{ $name }}" class="image" style="border-radius: 8px;">
 
-            <a class="button is-fullwidth has-text-weight-bold" href="{{ $downloadUrl }}" style="margin-top: 8px;">Download File</a>
+            <a class="button is-fullwidth has-text-weight-bold" href="{{ $downloadUrl }}" style="margin-top: 8px;">Download Zip</a>
+            <button
+                class="button is-fullwidth has-text-weight-bold"
+                onclick="oneClick(this, '{{ $key }}')"
+                role="button"
+                style="margin-top: 8px;"
+            >
+                OneClick Install
+            </button>
             <a class="button is-fullwidth has-text-weight-bold" href="https://bsaber.com/songs/{{ $id }}" style="margin-top: 8px;">View on BeastSaber</a>
             <button
                 class="button is-fullwidth has-text-weight-bold for-playing"

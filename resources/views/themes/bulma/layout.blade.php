@@ -22,6 +22,10 @@
     <script src="https://unpkg.com/@babel/polyfill/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+    <!-- OneClick Installs -->
+    <script src="https://unpkg.com/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
+    <script type="text/babel" src="{{ asset('/js/oneclick.js') }}"></script>
+
     <!-- Preview JS -->
     <script src="{{ asset('/js/zip/zip.js') }}"></script>
     <script type="text/babel" src="{{ asset('/js/preview.js') }}"></script>

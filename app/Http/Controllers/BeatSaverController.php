@@ -176,7 +176,13 @@ class BeatSaverController extends Controller
 
         if ($song['status'] != $composer::SONG_CREATED) {
             Log::debug($song['status']);
-            return redirect()->back()->withErrors($composer->getErrorText($song['status']));
+
+            $err = $composer->getErrorText($song['status']);
+            if (array_key_exists('statusText', $song)) {
+                $err = $err . "\n" . $song['statusText'];
+            }
+
+            return redirect()->back()->withErrors($err);
         }
 
         return redirect()->route('browse.user', ['id' => auth()->id()]);

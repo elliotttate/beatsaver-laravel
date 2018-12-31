@@ -83,7 +83,7 @@ class SongComposer implements ComposerContract
                 $songData = $parser->getSongData();
             } catch (Exceptions\UploadParserException $e) {
                 Log::error($e->getMessage());
-                return ['status' => static::ERROR_INVALID_FORMAT];
+                return ['status' => static::ERROR_INVALID_FORMAT, 'statusText' => $e->getMessage()];
             }
 
             //check if song hash already exists
@@ -423,11 +423,11 @@ class SongComposer implements ComposerContract
     public function getErrorText(int $code): string
     {
         $translation = [
-            static::SONG_CREATED         => 'Song created successfully.',
+            static::SONG_CREATED         => 'Song created successfully!',
             static::ERROR_ALREADY_EXISTS => 'The same song already exists.',
             static::ERROR_INVALID_FORMAT => 'The song format is invalid.',
-            static::ERROR_INVALID_USER   => 'The user is invalid',
-            static::SONG_UPDATED         => 'Song updated successfully',
+            static::ERROR_INVALID_USER   => 'The user is invalid.',
+            static::SONG_UPDATED         => 'Song updated successfully!',
         ];
         return $translation[$code] ?? 'Code ' . $code . ' Unknown';
     }

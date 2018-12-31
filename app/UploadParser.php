@@ -106,6 +106,12 @@ class UploadParser
                 throw new UploadParserException('Cannot find cover image ' . $info['coverImagePath'] . '!');
             }
 
+            $cover = $this->readFromZip($info['coverImagePath']);
+            list($width, $height, $type, $attr) = getimagesizefromstring($cover);
+            if ($width !== $height) {
+                throw new UploadParserException('Cover image is not a square!');
+            }
+
             $hashBase = '';
             foreach ($info['difficultyLevels'] as $difficultyLevel) {
 

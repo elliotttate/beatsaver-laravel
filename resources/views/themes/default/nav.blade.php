@@ -9,8 +9,8 @@
     <li class="dropdown">
         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Modding<span class="caret"></span></a>
         <ul class="dropdown-menu">
-            <li><a href="https://github.com/Umbranoxio/BeatSaberModInstaller/releases">Mod Installer</a></li>
-            <li><a href="https://discord.gg/ZY8T8ky">Mod Discord</a></li>
+            <li><a href="https://github.com/lolPants/modsaber-installer/releases">ModSaber Installer</a></li>
+            <li><a href="https://discord.gg/beatsabermods">Modding Discord</a></li>
             <li role="separator" class="divider"></li>
         </ul>
     </li>

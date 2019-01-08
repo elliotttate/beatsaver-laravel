@@ -9,8 +9,8 @@
     <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">Modding</a>
         <div class="navbar-dropdown">
-            <a class="navbar-item" href="https://github.com/Umbranoxio/BeatSaberModInstaller/releases">Mod Installer</a>
-            <a class="navbar-item" href="https://discord.gg/ZY8T8ky">Mod Discord</a>
+            <a class="navbar-item" href="https://github.com/lolPants/modsaber-installer/releases">ModSaber Installer</a>
+            <a class="navbar-item" href="https://discord.gg/beatsabermods">Modding Discord</a>
         </div>
     </div>
 </div>

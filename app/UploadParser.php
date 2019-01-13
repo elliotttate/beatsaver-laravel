@@ -112,6 +112,31 @@ class UploadParser
                 throw new UploadParserException('Cover image is not a square!');
             }
 
+            function map($v)
+            {
+                return $v['name'];
+            }
+
+            $indices = $this->createZipIndex();
+            $files = array_map(function ($i) { return $i['name']; }, $indices);
+            foreach ($files as $file)
+            {
+                $path_parts = pathinfo($file);
+                $dir = $path_parts['dirname'];
+                $ext = '.' . $path_parts['extension'];
+
+                // Check for autosaves
+                if (strpos($dir, 'autosaves') !== false) {
+                    throw new UploadParserException('Please strip out autosaves folder!');
+                }
+
+                // Check for illegal file extensions
+                $legal = ['.json', '.ogg', '.wav', '.jpg', '.jpeg', '.png'];
+                if (!in_array($ext, $legal)) {
+                    throw new UploadParserException('Found illegal file extension: ' . $ext);
+                }
+            }
+
             $hashBase = '';
             foreach ($info['difficultyLevels'] as $difficultyLevel) {
 

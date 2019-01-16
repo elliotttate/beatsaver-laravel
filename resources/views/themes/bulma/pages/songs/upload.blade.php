@@ -44,7 +44,7 @@
                 <ul>
                     <li>Avoid using UNICODE charters in folder or file names. BeatSaber has no support for them.</li>
                     <li>Remove unnecessary content from the zip file (like autosaves folder from the 3D editor).</li>
-                    <li>Check out these <a href="https://www.youtube.com/playlist?list=PLYeZR6d3zDPgDgWogOwMteL-5SQWAE14b">great videos by Freeek</a> about how to make a good beat track.</li>
+                    <li>Check out these <a href="https://bsaber.com/benny-custom-mapping/" target="_blank" rel="noopener noreferrer">fantastic tutorials by BennyDaBeast</a> on how to make a great beat map.</li>
                 </ul>
 
                 <div class="field">

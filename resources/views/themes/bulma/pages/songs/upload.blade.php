@@ -12,9 +12,16 @@
 
                 <div class="field" style="margin: 10px 0;">
                     <label class="label">File Input</label>
-                    <div class="file">
+                    <div class="file has-name">
                         <label class="file-label">
-                            <input style="display: none;" class="file-input" type="file" id="InputFile" accept=".zip, application/zip" name="fileupload">
+                            <input
+                                style="display: none;"
+                                class="file-input"
+                                type="file"
+                                id="InputFile"
+                                accept="application/zip"
+                                name="fileupload"
+                            >
                             <span class="file-cta">
                                 <span class="file-icon">
                                     <i class="fas fa-upload"></i>
@@ -23,9 +30,22 @@
                                     Choose a file...
                                 </span>
                             </span>
+                            
+                            <span class="file-name" id="file-name">
+                                No file selected.
+                            </span>
                         </label>
                     </div>
                 </div>
+
+                <script>
+                    var inp = document.getElementById('InputFile')
+                    var label = document.getElementById('file-name')
+
+                    inp.addEventListener('change', e => {
+                        label.innerHTML = e.target.files[0].name
+                    })
+                </script>
 
                 <h5 class="has-text-grey">Must meet the following upload rules</h5>
                 <ul>

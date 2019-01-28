@@ -11,6 +11,7 @@
         <div class="navbar-dropdown">
             <a class="navbar-item" href="https://github.com/lolPants/modsaber-installer/releases">ModSaber Installer</a>
             <a class="navbar-item" href="https://discord.gg/beatsabermods">Modding Discord</a>
+            <a class="navbar-item" href="https://wiki.assistant.moe/">Community Wiki</a>
         </div>
     </div>
 </div>

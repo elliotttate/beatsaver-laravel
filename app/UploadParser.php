@@ -138,9 +138,15 @@ class UploadParser
             }
 
             $hashBase = '';
+            $hasSongPreviewData = false;
             foreach ($info['difficultyLevels'] as $difficultyLevel) {
 
                 if ($this->zipHasFile($difficultyLevel['audioPath']) && $this->zipHasFile($difficultyLevel['jsonPath'])) {
+                    if (!$hasSongPreviewData) {
+                        $songData['songPreviewData'] = base64_encode($this->readFromZip($difficultyLevel['audioPath']));
+                        $hasSongPreviewData = true;
+                    }
+
                     $songData['difficultyLevels'][$difficultyLevel['difficulty']] = [
                         'difficulty' => $difficultyLevel['difficulty'],
                         'rank'       => $difficultyLevel['difficultyRank'],

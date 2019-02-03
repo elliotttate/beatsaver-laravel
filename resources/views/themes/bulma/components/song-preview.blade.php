@@ -31,7 +31,7 @@
                 <tr>
                     <td>
                         Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }} || <i class="fas fa-thumbs-up"></i> {{ $upVotes }} / <i
-                            class="fas fa-thumbs-down"></i> {{ $downVotes }}
+                            class="fas fa-thumbs-down"></i> {{ $downVotes }} || Rating: {{ $rating }}%
                     </td>
                     <td>
                         Lighting Events: {{ $events }}

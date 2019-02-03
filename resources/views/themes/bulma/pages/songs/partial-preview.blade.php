@@ -25,5 +25,6 @@
     @slot('linkUrl', $song['version'][$song['key']]['linkUrl'])
     @slot('downloadUrl', $song['version'][$song['key']]['downloadUrl'])
     @slot('coverUrl', $song['version'][$song['key']]['coverUrl'])
+    @slot('rating', $song['version'][$song['key']]['rating'])
 
 @endcomponent

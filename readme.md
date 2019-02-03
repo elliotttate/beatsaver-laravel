@@ -46,7 +46,7 @@ vagrant ssh
 cat code/storage/logs/laravel.log
 ```
 
-If you want to test uploads, you could use this [test upload ZIP](https://supermedium.com/beatsaver-viewer/assets/BeatSaverTestUpload.zip).
+If you want to test uploads, you could download a map from [Production BeatSaver](https://beatsaver.com/browse/newest).
 
 If you get stuck check the offical homestead docs from laravel https://laravel.com/docs/5.6/homestead
 

@@ -1,10 +1,10 @@
-## Beatsaver
+## BeatSaver
 
-- Beatsaver is a custom song platform for Beatsaber (http://beatsaber.com/)
-- In order to use custom song see [BeatSaberModInstaller](https://github.com/Umbranoxio/BeatSaberModInstaller/releases)
+- BeatSaver is a custom song platform for Beat Saber (https://beatgames.com/)
+- In order to use custom songs see [ModSaber Installer](https://github.com/lolPants/modsaber-installer/releases)
 
 ## Wiki
-For more infomation visit [https://github.com/Byorun/beatsaver-laravel/wiki](https://github.com/Byorun/beatsaver-laravel/wiki)
+For more infomation visit [https://github.com/elliotttate/beatsaver-laravel/wiki](https://github.com/elliotttate/beatsaver-laravel/wiki)
 
 ## Setup instructions
 
@@ -45,6 +45,8 @@ You can now register a user. When creating an account, you'll need to verify you
 vagrant ssh
 cat code/storage/logs/laravel.log
 ```
+
+If you want to test uploads, you could download a map from [Production BeatSaver](https://beatsaver.com/browse/newest).
 
 If you get stuck check the offical homestead docs from laravel https://laravel.com/docs/5.6/homestead
 
@@ -123,4 +125,4 @@ You can now register a user and start using the application.
 
 ## License
 
-Beatsaver is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+BeatSaver is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

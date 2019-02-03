@@ -1,19 +1,20 @@
-## Beatsaver
+## BeatSaver
 
-- Beatsaver is a custom song platform for Beatsaber (http://beatsaber.com/)
-- In order to use custom song see [BeatSaberModInstaller](https://github.com/Umbranoxio/BeatSaberModInstaller/releases)
+- BeatSaver is a custom song platform for Beat Saber (https://beatgames.com/)
+- In order to use custom songs see [ModSaber Installer](https://github.com/lolPants/modsaber-installer/releases)
 
 ## Wiki
-For more infomation visit [https://github.com/Byorun/beatsaver-laravel/wiki](https://github.com/Byorun/beatsaver-laravel/wiki)
+For more infomation visit [https://github.com/elliotttate/beatsaver-laravel/wiki](https://github.com/elliotttate/beatsaver-laravel/wiki)
 
 ## Setup instructions
 
 ### Vagrant
 
 Base requirements:
-* Composer (and therefore php)
-* Vagrant
-* Vagrant backend provider like Hyper-V, Parallels, VMWare or VirtualBox
+* PHP (recommended version 7.x)
+* [Composer](https://getcomposer.org/)
+* [Vagrant](https://www.vagrantup.com/)
+* Vagrant backend provider like [VirtualBox](https://www.virtualbox.org/), Hyper-V, Parallels, VMWare.
 
 ```
 cp Homestead.yaml.example Homestead.yaml
@@ -25,7 +26,8 @@ Setup the configuration file:
 ```
 cp .env.example .env
 ```
-Don't forget to configure the email driver. You can set `MAIL_DRIVER=log` during development.
+
+Don't forget to configure the email driver. Set `MAIL_DRIVER=log` in `.env` during development. 
 
 Now run:
 ```
@@ -37,7 +39,14 @@ Visit the development site:
 
 http://192.168.10.10
 
-You can now register a user.
+You can now register a user. When creating an account, you'll need to verify your account. With `MAIL_DRIVER=log`, the verification link will be logged. To access these logs and view the verification link you need to visit, you can SSH into the VM and view the logs:
+
+```
+vagrant ssh
+cat code/storage/logs/laravel.log
+```
+
+If you want to test uploads, you could download a map from [Production BeatSaver](https://beatsaver.com/browse/newest).
 
 If you get stuck check the offical homestead docs from laravel https://laravel.com/docs/5.6/homestead
 
@@ -116,4 +125,4 @@ You can now register a user and start using the application.
 
 ## License
 
-Beatsaver is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+BeatSaver is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

@@ -224,6 +224,44 @@ class SongListComposer implements ListComposerContract
     }
 
     /**
+     * Get songs ordered by creation date descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopRatedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        if ($offset < 100) {
+            $cache = Cache::tags(['top100'])->get('rated');
+            if ($cache) {
+                return $this->prepareSongInfo($cache['keys']->forPage(1 + ($offset / $limit), $limit));
+            }
+        }
+
+        return $this->prepareSongInfo($this->getTopRatedKeys($offset, $limit));
+    }
+
+    /**
+     * Get song keys ordered by creation date descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopRatedKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        $orderBy = '(calc_rating(song_id, id))';
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
+
+        return $songs->get();
+    }
+
+    /**
      * Get songs uploaded by user {$id] ordered by creation date.
      * If a song has multiple versions only get the latest one.
      *
@@ -333,7 +371,6 @@ class SongListComposer implements ListComposerContract
                 $query->orWhere($field, 'LIKE', "%$search%");
             }
         }, null, null, $type);
-
     }
 
     /**
@@ -351,7 +388,6 @@ class SongListComposer implements ListComposerContract
                 $query->orWhere($field, $search);
             }
         }, null, null, $type);
-
     }
 
     /**
@@ -393,7 +429,5 @@ class SongListComposer implements ListComposerContract
             ->whereNull('s.deleted_at')->whereNull('sd.deleted_at')->whereNull('u.deleted_at')
             ->groupBy(['sd.song_id'])->orderByRaw("(select {$orderBy} from song_details where id = max(sd.id) and deleted_at is null) desc")
             ->offset($offset)->limit($limit);
-
     }
-
 }

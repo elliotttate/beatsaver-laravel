@@ -48,7 +48,7 @@
 
                 <tr>
                     <td>
-                        Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }}
+                        Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }} || Rating: {{ $rating }}%
                     </td>
                     <td>
                         Lighting Events: {{ $events }}

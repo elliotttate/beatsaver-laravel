@@ -76,6 +76,18 @@
                                 </form>
                             </div>
                             <br/>
+                        @else
+                            <div>
+                                <button class="button" title="Log in to vote!" disabled>
+                                    <span class="icon"><i class="fas fa-thumbs-up"></i></span>
+                                    <span>Up {{ $upVotes }}</span>
+                                </button>
+                                <button class="button" title="Log in to vote!" disabled>
+                                    <span class="icon"><i class="fas fa-thumbs-down"></i></span>
+                                    <span>Down {{ $downVotes }}</span>
+                                </button>
+                            </div>
+                            <br/>
                         @endauth
                     </td>
                     <td class="text-right">

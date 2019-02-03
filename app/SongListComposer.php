@@ -333,7 +333,6 @@ class SongListComposer implements ListComposerContract
                 $query->orWhere($field, 'LIKE', "%$search%");
             }
         }, null, null, $type);
-
     }
 
     /**
@@ -351,7 +350,6 @@ class SongListComposer implements ListComposerContract
                 $query->orWhere($field, $search);
             }
         }, null, null, $type);
-
     }
 
     /**
@@ -393,7 +391,5 @@ class SongListComposer implements ListComposerContract
             ->whereNull('s.deleted_at')->whereNull('sd.deleted_at')->whereNull('u.deleted_at')
             ->groupBy(['sd.song_id'])->orderByRaw("(select {$orderBy} from song_details where id = max(sd.id) and deleted_at is null) desc")
             ->offset($offset)->limit($limit);
-
     }
-
 }

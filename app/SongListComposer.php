@@ -224,6 +224,44 @@ class SongListComposer implements ListComposerContract
     }
 
     /**
+     * Get songs ordered by creation date descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopRatedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        if ($offset < 100) {
+            $cache = Cache::tags(['top100'])->get('rated');
+            if ($cache) {
+                return $this->prepareSongInfo($cache['keys']->forPage(1 + ($offset / $limit), $limit));
+            }
+        }
+
+        return $this->prepareSongInfo($this->getTopRatedKeys($offset, $limit));
+    }
+
+    /**
+     * Get song keys ordered by creation date descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopRatedKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection
+    {
+        $orderBy = '(calc_rating(song_id, id))';
+        $songs = $this->prepareQuery($orderBy, $offset, $limit);
+
+        return $songs->get();
+    }
+
+    /**
      * Get songs uploaded by user {$id] ordered by creation date.
      * If a song has multiple versions only get the latest one.
      *

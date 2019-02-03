@@ -1,7 +1,13 @@
 <div class="navbar-start">
     <a class="navbar-item" href="{{ route('browse.top.newest') }}">Newest</a>
-    <a class="navbar-item" href="{{ route('browse.top.downloads') }}">Top Downloads</a>
-    <a class="navbar-item" href="{{ route('browse.top.played') }}">Top Played</a>
+    <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">Sort</a>
+        <div class="navbar-dropdown">
+            <a class="navbar-item" href="{{ route('browse.top.downloads') }}">Top Downloads</a>
+            <a class="navbar-item" href="{{ route('browse.top.played') }}">Top Played</a>
+            <a class="navbar-item" href="{{ route('browse.top.rated') }}">Top Rated</a>
+        </div>
+    </div>
     <a class="navbar-item" href="{{ route('search') }}">Search</a>
     <div class="navbar-item" style="user-select: none;">|</div>
     <a href="https://scoresaber.com/" class="navbar-item">ScoreSaber</a>

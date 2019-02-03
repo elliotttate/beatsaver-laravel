@@ -374,6 +374,14 @@ class SongComposer implements ComposerContract
         ];
 
         foreach ($song->details as $detail) {
+            $totalVotes = $detail->upVotes + $detail->downVotes;
+            if ($totalVotes == 0) {
+                $rating = 0;
+            } else {
+                $average = $detail->upVotes / $totalVotes;
+                $rating = $average - ($average - 0.5) * 2 ** -log10($totalVotes + 1);
+            }
+
             $songData['version'][$song->id . '-' . $detail->id] = [
                 'songName'       => $detail->song_name,
                 'songSubName'    => $detail->song_sub_name,
@@ -392,6 +400,7 @@ class SongComposer implements ComposerContract
                 'coverUrl'       => asset("storage/songs/{$song->id}/{$song->id}-{$detail->id}.$detail->cover"),
                 'hashMd5'        => $detail->hash_md5,
                 'hashSha1'       => $detail->hash_sha1,
+                'rating'         => round($rating * 100, 2),
             ];
         }
 

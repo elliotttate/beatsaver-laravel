@@ -76,6 +76,22 @@ class BeatSaverController extends Controller
     }
 
     /**
+     * @param int              $start
+     * @param SongListComposer $composer
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function topRated($start = 0, SongListComposer $composer)
+    {
+        return view('master.page-songs-by-top-rated')->with([
+            'title' => 'Top Rated',
+            'songs' => $composer->getTopRatedSongs((int)$start),
+            'start' => (int)$start,
+            'steps' => $composer::DEFAULT_LIMIT
+        ]);
+    }
+
+    /**
      * @param                  $id
      * @param int              $start
      * @param SongListComposer $composer

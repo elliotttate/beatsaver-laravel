@@ -100,6 +100,28 @@ interface ListComposerContract
     public function getNewestKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection;
 
     /**
+     * Get songs ordered by rating descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopRatedSongs(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection;
+
+    /**
+     * Get song keys ordered by rating date descending.
+     * If a song has multiple versions only get the latest one.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return Collection
+     */
+    public function getTopRatedKeys(int $offset = 0, int $limit = ListComposerContract::DEFAULT_LIMIT): Collection;
+
+    /**
      * Get songs uploaded by user {$id] ordered by creation date.
      * If a song has multiple versions only get the latest one.
      *

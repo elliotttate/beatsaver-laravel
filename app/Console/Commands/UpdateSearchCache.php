@@ -57,5 +57,8 @@ class UpdateSearchCache extends Command
         if (config('beatsaver.cache.top100.played')) {
             Cache::tags(['top100'])->put('played', ['keys' => $composer->getTopPlayedKeys(0, 100), 'updated' => $now], config('beatsaver.cache.duration'));
         }
+        if (config('beatsaver.cache.top100.rated')) {
+            Cache::tags(['top100'])->put('rated', ['keys' => $composer->getTopRatedKeys(0, 100), 'updated' => $now], config('beatsaver.cache.duration'));
+        }
     }
 }

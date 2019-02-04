@@ -138,13 +138,14 @@ class UploadParser
             }
 
             $hashBase = '';
-            $hasSongPreviewData = false;
+            $songData['songPreviews'] = [];
             foreach ($info['difficultyLevels'] as $difficultyLevel) {
 
                 if ($this->zipHasFile($difficultyLevel['audioPath']) && $this->zipHasFile($difficultyLevel['jsonPath'])) {
-                    if (!$hasSongPreviewData) {
-                        $songData['songPreviewData'] = base64_encode($this->readFromZip($difficultyLevel['audioPath']));
-                        $hasSongPreviewData = true;
+                    // Store song preview data in object for SongComposer to save to disk.
+                    $audioPath = $difficultyLevel['audioPath'];
+                    if (!array_key_exists($audioPath, $songData['songPreviews'])) {
+                      $songData['songPreviews'][$audioPath] = base64_encode($this->readFromZip($audioPath));
                     }
 
                     $songData['difficultyLevels'][$difficultyLevel['difficulty']] = [

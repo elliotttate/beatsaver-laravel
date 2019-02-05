@@ -168,7 +168,7 @@ class SongComposer implements ComposerContract
           $audioFilenameBase = pathinfo($audioFilename)['filename'];
           $previewOutPath = storage_path("app/{$storagePathBase}/{$audioFilenameBase}.mp3");
           $previewTempPath = storage_path("app/{$storagePathPreview}");
-          exec("(ffmpeg -i {$previewTempPath} {$previewOutPath}; rm {$previewTempPath}) > /dev/null &");
+          exec("(ffmpeg -i \"{$previewTempPath}\" \"{$previewOutPath}\"; rm \"{$previewTempPath}\") > /dev/null &");
         }
 
         return [

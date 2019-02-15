@@ -1,0 +1,158 @@
+:root {
+  --background: #222;
+  --foreground: #252525;
+  --textColor: #EEE;
+
+  --ppColour: #8992e8;
+  --alternate: #72a8ff;
+  --buttonColour: #555555;
+}
+
+html {
+  background-color: var(--background);
+}
+
+body {
+  color: var(--textColor);
+}
+
+hr {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+body > div > article {
+  background-color: #363636;
+  margin-top: 20px;
+}
+
+body > div > article > div {
+  color: var(--textColor);
+  border-color: var(--ppColour);
+}
+
+body > div > article > div > a {
+  color: var(--alternate);
+}
+
+body > div > div > h2 > a {
+  color: var(--alternate);
+}
+
+body > div > div > h2 > span {
+  color: var(--alternate);
+}
+
+table td, table th {
+  border-color:rgba(219, 219, 219, 0.3);
+}
+
+body > div > div > div > div:nth-child(2) > table {
+  background-color: transparent;
+  color: var(--textColor);
+}
+
+body > div > div > div > div:nth-child(2) > table > tbody > tr:nth-child(1) > th > small {
+  color: var(--textColor);
+}
+
+a.button,
+body > div > div > div > div:nth-child(1) > a,
+body > div > div > div > div:nth-child(1) > button,
+body > div > div > div > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > a,
+body > div > div > div > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > button {
+  background-color: var(--buttonColour);
+  color: rgb(240, 240, 240);
+  border: none;
+  text-shadow: none;
+}
+
+.button.is-info {
+  background-color: var(--ppColour);
+}
+
+.button.is-link {
+  background-color: #3273dc;
+}
+
+.navbar-inverse {
+  border-color: #353535;
+}
+
+.btn-default:focus,
+.btn-default:hover {
+  background-color: rgb(70, 70, 70);
+}
+
+body > div > div > div > div:nth-child(2) > table > tbody > tr:nth-child(1) > th > small > a {
+  color: var(--alternate);
+}
+
+body > footer > div > b > a {
+  color: var(--alternate);
+}
+
+.nav a {
+  color: #c2c2c2;
+}
+
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .open > a {
+  background-image: linear-gradient(to bottom, #424242 0, #404040 100%);
+}
+
+.navbar.has-shadow {
+  box-shadow: 0 2px 0 0 rgba(255, 255, 255, 0.07);
+}
+
+.form-control {
+  background-color: #000;
+  color: var(--textColor);
+}
+
+.label,
+.content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+  color: var(--textColor);
+}
+
+#inputEmail,
+#inputPassword,
+#inputPasswordConfirm,
+#inputSearchKey {
+  background-color: rgba(0, 0, 0, 0.46);
+  border-color: #4a4a4a;
+  color: var(--textColor);
+}
+
+::placeholder {
+  color: var(--textColor);
+  opacity: .8;
+}
+
+.btn-primary {
+  background-image: linear-gradient(to bottom, #333 0, #444 100%);
+}
+
+.btn-primary:focus,
+.btn-primary:hover {
+  background-color: rgb(70, 70, 70);
+}
+
+.input-group-btn .btn-primary {
+  border-color: #FFFFFF;
+}
+
+body > div > div > div > form > h2 {
+  color: var(--textColor);
+}
+
+body > div > div > div > div > a {
+  background-image: var(--buttonColour);
+  border-color: #1d1d1d;
+  color: var(--textColor);
+  text-shadow: none;
+}
+
+body > div > div > div > div:nth-child(2) > table > tbody > tr:nth-child(6) > td:nth-child(1) > div > form > button {
+  background-color: var(--background);
+  color: var(--textColor);
+}

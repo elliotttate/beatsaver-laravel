@@ -18,6 +18,9 @@
     <!-- Navbar Burger Styles -->
     <style>a.navbar-burger { color: white; } a.navbar-burger:hover { color: rgb(220, 220, 220); }</style>
 
+    <!-- Dark Theme -->
+    <link rel="stylesheet" href="{{ asset('/themes/dark.css') }}">
+
     <!-- Babel and Polyfills -->
     <script src="https://unpkg.com/@babel/polyfill/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>

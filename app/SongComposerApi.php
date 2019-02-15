@@ -43,6 +43,7 @@ class SongComposerApi extends SongComposer
             'upVotesTotal'   => 0,
             'downVotes'      => $song['version'][$song['key']]['downVotes'],
             'downVotesTotal' => 0,
+            'rating'         => $song['version'][$song['key']]['rating'],
             'version'        => $song['key'],
             'createdAt'      => $song['version'][$song['key']]['createdAt'],
             'linkUrl'        => $song['version'][$song['key']]['linkUrl'],

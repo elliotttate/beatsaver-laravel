@@ -34,8 +34,12 @@ body > div > article > div > a {
   color: var(--alternate);
 }
 
-body > div > div > h2 > a {
+a {
   color: var(--alternate);
+}
+
+a:hover {
+  color: var(--ppColour);
 }
 
 body > div > div > h2 > span {
@@ -66,8 +70,21 @@ body > div > div > div > div:nth-child(2) > table > tbody > tr:nth-child(5) > td
   text-shadow: none;
 }
 
+a.button:hover,
+body > div > div > div > div:nth-child(1) > a:hover,
+body > div > div > div > div:nth-child(1) > button:hover,
+body > div > div > div > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > a:hover,
+body > div > div > div > div:nth-child(2) > table > tbody > tr:nth-child(5) > td > button:hover {
+  background-color: rgba(85, 85, 85, 0.8);
+  color: rgb(240, 240, 240);
+}
+
 .button.is-info {
   background-color: var(--ppColour);
+}
+
+.button.is-info:hover {
+  background-color: var(--alternate);
 }
 
 .button.is-link {
@@ -124,8 +141,8 @@ body > footer > div > b > a {
 }
 
 ::placeholder {
-  color: var(--textColor);
-  opacity: .8;
+  color: var(--textColor) !important;
+  opacity: .8 !important;
 }
 
 .btn-primary {

@@ -1,0 +1,17 @@
+{
+  "name": "beatsaver-mp3-convert",
+  "version": "1.0.0",
+  "description": "Convert audio files to MP3 for previewing.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "extract-zip": "^1.6.7",
+    "fluent-ffmpeg": "^2.1.2",
+    "glob": "^7.1.3",
+    "p-queue": "^3.0.0"
+  }
+}

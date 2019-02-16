@@ -16,5 +16,3 @@ yarn-error.log
 /_ide_helper.php
 /.phpstorm.meta.php
 /databasemodel.mwb.bak
-node_modules/
-tmp/

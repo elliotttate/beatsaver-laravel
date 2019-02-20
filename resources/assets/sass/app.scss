@@ -1,14 +1,34 @@
 @charset "utf-8";
 
-// Default Colours
-@import "~@lolpants/bulma/sass/utilities/_all.sass";
+// Initial Bulma Constants
+@import "~@lolpants/bulma/sass/utilities/_all";
 
 // Override Bulma variables
-$bg: #222222;
-$tex: #eeeeee;
+$bg: #232325;
+$tex: #eff1f5;
+$btn: #4f5053;
+$red: #cd384c;
 
-$alt: #72a8ff;
-$altDark: #8992e8;
+// Alternate Colours
+$alt: $red;
+$altDark: darken($alt, 10);
+
+// Override Computed
+$primary: $red;
+$primary-invert: findColorInvert($primary);
+
+// Setup $colors to use as bulma classes
+$colors: (
+  "white": ($white, $black),
+  "black": ($black, $white),
+  "light": ($light, $light-invert),
+  "dark": ($dark, $dark-invert),
+  "primary": ($primary, $primary-invert),
+  "info": ($info, $info-invert),
+  "success": ($success, $success-invert),
+  "warning": ($warning, $warning-invert),
+  "danger": ($danger, $danger-invert),
+);
 
 // Body
 $body-background-color: $bg;
@@ -29,8 +49,4 @@ $table-head-cell-color: darken($tex, 10);
 $table-foot-cell-color: darken($tex, 10);
 
 // Import the rest of Bulma
-@import "~@lolpants/bulma/sass/base/_all.sass";
-@import "~@lolpants/bulma/sass/components/_all.sass";
-@import "~@lolpants/bulma/sass/elements/_all.sass";
-@import "~@lolpants/bulma/sass/grid/_all.sass";
-@import "~@lolpants/bulma/sass/layout/_all.sass";
+@import "~@lolpants/bulma";

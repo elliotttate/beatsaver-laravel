@@ -12,14 +12,11 @@
 @show
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/@lolpants/bulma@0.7.2/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
     <!-- Navbar Burger Styles -->
     <style>a.navbar-burger { color: white; } a.navbar-burger:hover { color: rgb(220, 220, 220); }</style>
-
-    <!-- Dark Theme -->
-    <link rel="stylesheet" href="{{ asset('/themes/dark.css') }}">
 
     <!-- Babel and Polyfills -->
     <script src="https://unpkg.com/@babel/polyfill/dist/polyfill.min.js"></script>

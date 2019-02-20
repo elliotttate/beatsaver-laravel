@@ -1,0 +1,36 @@
+@charset "utf-8";
+
+// Default Colours
+@import "~@lolpants/bulma/sass/utilities/_all.sass";
+
+// Override Bulma variables
+$bg: #222222;
+$tex: #eeeeee;
+
+$alt: #72a8ff;
+$altDark: #8992e8;
+
+// Body
+$body-background-color: $bg;
+$body-color: $tex;
+
+// Navbar
+$navbar-box-shadow-color: rgba(255, 255, 255, 0.07);
+
+// Links
+$link: $alt;
+$link-hover: $altDark;
+
+// Tables
+$table-color: $tex;
+$table-background-color: transparent;
+$table-cell-heading-color: darken($tex, 10);
+$table-head-cell-color: darken($tex, 10);
+$table-foot-cell-color: darken($tex, 10);
+
+// Import the rest of Bulma
+@import "~@lolpants/bulma/sass/base/_all.sass";
+@import "~@lolpants/bulma/sass/components/_all.sass";
+@import "~@lolpants/bulma/sass/elements/_all.sass";
+@import "~@lolpants/bulma/sass/grid/_all.sass";
+@import "~@lolpants/bulma/sass/layout/_all.sass";

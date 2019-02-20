@@ -43,6 +43,21 @@ $navbar-box-shadow-color: rgba($tex, 0.07);
 $link: $alt;
 $link-hover: $altDark;
 
+// Buttons
+$button-color: $tex;
+$button-hover-color: $tex;
+$button-active-color: darken($tex, 20);
+$button-focus-color: darken($tex, 20);
+$button-background-color: $btn;
+$button-border-width: 0;
+$button-disabled-background-color: $btn;
+.button:hover {
+  background-color: darken($btn, 8);
+}
+.button[disabled]:active {
+  color: $tex;
+}
+
 // Tables
 $table-color: $tex;
 $table-cell-border: 1px solid lighten($bg, 30);

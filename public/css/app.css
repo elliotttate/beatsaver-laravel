@@ -338,6 +338,14 @@ fieldset[disabled] .pagination-ellipsis {
   cursor: not-allowed;
 }
 
+.button:hover {
+  background-color: #3b3c3e;
+}
+
+.button[disabled]:active {
+  color: #eff1f5;
+}
+
 /*! bulma.io v0.7.4 | MIT License | github.com/jgthms/bulma */
 
 @keyframes spinAround {
@@ -2086,18 +2094,18 @@ a.box:active {
 }
 
 .button {
-  background-color: white;
+  background-color: #4f5053;
   border-color: #dbdbdb;
-  border-width: 1px;
-  color: #363636;
+  border-width: 0;
+  color: #eff1f5;
   cursor: pointer;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  padding-bottom: calc(0.375em - 1px);
+  padding-bottom: calc(0.375em - 0);
   padding-left: 0.75em;
   padding-right: 0.75em;
-  padding-top: calc(0.375em - 1px);
+  padding-top: calc(0.375em - 0);
   text-align: center;
   white-space: nowrap;
 }
@@ -2115,30 +2123,30 @@ a.box:active {
 }
 
 .button .icon:first-child:not(:last-child) {
-  margin-left: calc(-0.375em - 1px);
+  margin-left: calc(-0.375em - 0);
   margin-right: 0.1875em;
 }
 
 .button .icon:last-child:not(:first-child) {
   margin-left: 0.1875em;
-  margin-right: calc(-0.375em - 1px);
+  margin-right: calc(-0.375em - 0);
 }
 
 .button .icon:first-child:last-child {
-  margin-left: calc(-0.375em - 1px);
-  margin-right: calc(-0.375em - 1px);
+  margin-left: calc(-0.375em - 0);
+  margin-right: calc(-0.375em - 0);
 }
 
 .button:hover,
 .button.is-hovered {
   border-color: #b5b5b5;
-  color: #a82a3b;
+  color: #eff1f5;
 }
 
 .button:focus,
 .button.is-focused {
   border-color: #3273dc;
-  color: #363636;
+  color: #b0bace;
 }
 
 .button:focus:not(:active),
@@ -2150,7 +2158,7 @@ a.box:active {
 .button:active,
 .button.is-active {
   border-color: #4a4a4a;
-  color: #363636;
+  color: #b0bace;
 }
 
 .button.is-text {
@@ -3182,7 +3190,7 @@ fieldset[disabled] .button.is-danger.is-inverted.is-outlined {
 
 .button[disabled],
 fieldset[disabled] .button {
-  background-color: white;
+  background-color: #4f5053;
   border-color: #dbdbdb;
   -webkit-box-shadow: none;
           box-shadow: none;

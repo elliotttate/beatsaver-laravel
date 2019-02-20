@@ -828,7 +828,7 @@ code {
 }
 
 hr {
-  background-color: whitesmoke;
+  background-color: rgba(255, 255, 255, 0.2);
   border: none;
   display: block;
   height: 2px;
@@ -3387,7 +3387,7 @@ fieldset[disabled] .button {
 .content h4,
 .content h5,
 .content h6 {
-  color: #363636;
+  color: #eff1f5;
   font-weight: 600;
   line-height: 1.125;
 }
@@ -5646,7 +5646,7 @@ fieldset[disabled] .select select:hover {
 
 .table td,
 .table th {
-  border: 1px solid #dbdbdb;
+  border: 1px solid #6d6d74;
   border-width: 0 0 1px;
   padding: 0.5em 0.75em;
   vertical-align: top;
@@ -7772,8 +7772,8 @@ a.list-item {
 }
 
 .navbar.has-shadow {
-  -webkit-box-shadow: 0 2px 0 0 rgba(255, 255, 255, 0.07);
-          box-shadow: 0 2px 0 0 rgba(255, 255, 255, 0.07);
+  -webkit-box-shadow: 0 2px 0 0 rgba(239, 241, 245, 0.07);
+          box-shadow: 0 2px 0 0 rgba(239, 241, 245, 0.07);
 }
 
 .navbar.is-fixed-bottom,
@@ -7789,8 +7789,8 @@ a.list-item {
 }
 
 .navbar.is-fixed-bottom.has-shadow {
-  -webkit-box-shadow: 0 -2px 0 0 rgba(255, 255, 255, 0.07);
-          box-shadow: 0 -2px 0 0 rgba(255, 255, 255, 0.07);
+  -webkit-box-shadow: 0 -2px 0 0 rgba(239, 241, 245, 0.07);
+          box-shadow: 0 -2px 0 0 rgba(239, 241, 245, 0.07);
 }
 
 .navbar.is-fixed-top {

@@ -33,9 +33,11 @@ $colors: (
 // Body
 $body-background-color: $bg;
 $body-color: $tex;
+$content-heading-color: $tex;
+$hr-background-color: rgba(255, 255, 255, 0.2);
 
 // Navbar
-$navbar-box-shadow-color: rgba(255, 255, 255, 0.07);
+$navbar-box-shadow-color: rgba($tex, 0.07);
 
 // Links
 $link: $alt;
@@ -43,6 +45,7 @@ $link-hover: $altDark;
 
 // Tables
 $table-color: $tex;
+$table-cell-border: 1px solid lighten($bg, 30);
 $table-background-color: transparent;
 $table-cell-heading-color: darken($tex, 10);
 $table-head-cell-color: darken($tex, 10);

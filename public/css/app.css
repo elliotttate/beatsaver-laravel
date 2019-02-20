@@ -863,7 +863,7 @@ span {
 }
 
 strong {
-  color: #363636;
+  color: #b0bace;
   font-weight: 700;
 }
 
@@ -896,7 +896,7 @@ table th {
 }
 
 table th {
-  color: #363636;
+  color: #b0bace;
 }
 
 .is-clearfix::after {
@@ -2173,13 +2173,13 @@ a.box:active {
 .button.is-text:focus,
 .button.is-text.is-focused {
   background-color: whitesmoke;
-  color: #363636;
+  color: #b0bace;
 }
 
 .button.is-text:active,
 .button.is-text.is-active {
   background-color: #e8e8e8;
-  color: #363636;
+  color: #b0bace;
 }
 
 .button.is-text[disabled],
@@ -3541,20 +3541,20 @@ fieldset[disabled] .button {
 }
 
 .content table th {
-  color: #363636;
+  color: #b0bace;
   text-align: left;
 }
 
 .content table thead td,
 .content table thead th {
   border-width: 0 0 2px;
-  color: #363636;
+  color: #b0bace;
 }
 
 .content table tfoot td,
 .content table tfoot th {
   border-width: 2px 0 0;
-  color: #363636;
+  color: #b0bace;
 }
 
 .content table tbody tr:last-child td,
@@ -4753,7 +4753,7 @@ fieldset[disabled] .select select:hover {
 }
 
 .label {
-  color: #363636;
+  color: #eff1f5;
   display: block;
   font-size: 1rem;
   font-weight: 700;
@@ -6269,7 +6269,7 @@ a.tag:hover {
 }
 
 .breadcrumb li.is-active a {
-  color: #363636;
+  color: #b0bace;
   cursor: default;
   pointer-events: none;
 }
@@ -6369,7 +6369,7 @@ a.tag:hover {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  color: #363636;
+  color: #b0bace;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -6836,7 +6836,7 @@ a.list-item {
 
 .menu-list a:hover {
   background-color: whitesmoke;
-  color: #363636;
+  color: #b0bace;
 }
 
 .menu-list a.is-active {
@@ -7162,7 +7162,7 @@ a.list-item {
 }
 
 .modal-card-title {
-  color: #363636;
+  color: #b0bace;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
@@ -8592,7 +8592,7 @@ a.navbar-item.is-active,
 .panel-heading {
   background-color: whitesmoke;
   border-radius: 4px 4px 0 0;
-  color: #363636;
+  color: #b0bace;
   font-size: 1.25em;
   font-weight: 300;
   line-height: 1.25;
@@ -8635,7 +8635,7 @@ a.navbar-item.is-active,
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  color: #363636;
+  color: #b0bace;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -8736,8 +8736,8 @@ label.panel-block:hover {
 }
 
 .tabs a:hover {
-  border-bottom-color: #363636;
-  color: #363636;
+  border-bottom-color: #b0bace;
+  color: #b0bace;
 }
 
 .tabs li {

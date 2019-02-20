@@ -93,7 +93,7 @@
                     <td class="text-right">
                         @auth
                             @if(auth()->id() == $uploaderId)
-                                <a class="button is-link" href="{{ route('browse.detail.edit',['id' => $id]) }}" role="button">Edit</a>
+                                <a class="button is-primary" href="{{ route('browse.detail.edit',['id' => $id]) }}" role="button">Edit</a>
                                 <a class="button is-danger" href="{{ route('browse.detail.delete',['id' => $id]) }}" role="button">Delete</a>
                             @endif
                         @endauth

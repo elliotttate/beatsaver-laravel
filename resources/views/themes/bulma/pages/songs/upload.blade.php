@@ -73,7 +73,7 @@
                     <h5 class="has-text-grey" style="margin: 10px 0;">Plain Text Only</h5>
                 </div>
 
-                <button class="button is-link is-fullwidth" type="submit">Submit</button>
+                <button class="button is-primary is-fullwidth" type="submit">Submit</button>
             </form>
 
         </div>

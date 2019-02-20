@@ -7,7 +7,7 @@
         <div class="column" style="max-width: 200px;">
             <img src="{{ $coverUrl }}" alt="{{ $name }}" class="image" style="border-radius: 8px;margin-bottom: 8px;">
 
-            <a class="button is-link has-text-weight-bold is-fullwidth" href="{{ $linkUrl }}" role="button">Details</a>
+            <a class="button is-primary has-text-weight-bold is-fullwidth" href="{{ $linkUrl }}" role="button">Details</a>
         </div>
 
         <div class="column">

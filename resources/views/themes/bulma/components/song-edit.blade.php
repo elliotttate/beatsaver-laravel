@@ -63,7 +63,7 @@
                     </td>
                     <td class="text-right">
                         <a class="button" href="{{route('browse.detail',['key' => $id]) }}">Back</a>
-                        <button class="button is-link" type="submit">Update</button>
+                        <button class="button is-primary" type="submit">Update</button>
                     </td>
                 </tr>
             </table>

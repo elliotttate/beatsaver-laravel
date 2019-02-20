@@ -58,6 +58,12 @@ $button-disabled-background-color: $btn;
   color: $tex;
 }
 
+// Text Boxes
+$input-color: $tex;
+$input-background-color: darken($bg, 5);
+$input-border-color: lighten($bg, 4);
+$input-hover-border-color: lighten($bg, 8);
+
 // Tables
 $table-color: $tex;
 $table-cell-border: 1px solid lighten($bg, 30);

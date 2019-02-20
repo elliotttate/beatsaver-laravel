@@ -3576,9 +3576,9 @@ fieldset[disabled] .button {
 
 .input,
 .textarea {
-  background-color: white;
-  border-color: #dbdbdb;
-  color: #363636;
+  background-color: #171718;
+  border-color: #2d2d2f;
+  color: #eff1f5;
   -webkit-box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
           box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
   max-width: 100%;
@@ -3587,29 +3587,29 @@ fieldset[disabled] .button {
 
 .input::-moz-placeholder,
 .textarea::-moz-placeholder {
-  color: rgba(54, 54, 54, 0.3);
+  color: rgba(239, 241, 245, 0.3);
 }
 
 .input::-webkit-input-placeholder,
 .textarea::-webkit-input-placeholder {
-  color: rgba(54, 54, 54, 0.3);
+  color: rgba(239, 241, 245, 0.3);
 }
 
 .input:-moz-placeholder,
 .textarea:-moz-placeholder {
-  color: rgba(54, 54, 54, 0.3);
+  color: rgba(239, 241, 245, 0.3);
 }
 
 .input:-ms-input-placeholder,
 .textarea:-ms-input-placeholder {
-  color: rgba(54, 54, 54, 0.3);
+  color: rgba(239, 241, 245, 0.3);
 }
 
 .input:hover,
 .input.is-hovered,
 .textarea:hover,
 .textarea.is-hovered {
-  border-color: #b5b5b5;
+  border-color: #37373a;
 }
 
 .input:focus,
@@ -3946,9 +3946,9 @@ fieldset[disabled]
 }
 
 .select select {
-  background-color: white;
-  border-color: #dbdbdb;
-  color: #363636;
+  background-color: #171718;
+  border-color: #2d2d2f;
+  color: #eff1f5;
   cursor: pointer;
   display: block;
   font-size: 1em;
@@ -3957,24 +3957,24 @@ fieldset[disabled]
 }
 
 .select select::-moz-placeholder {
-  color: rgba(54, 54, 54, 0.3);
+  color: rgba(239, 241, 245, 0.3);
 }
 
 .select select::-webkit-input-placeholder {
-  color: rgba(54, 54, 54, 0.3);
+  color: rgba(239, 241, 245, 0.3);
 }
 
 .select select:-moz-placeholder {
-  color: rgba(54, 54, 54, 0.3);
+  color: rgba(239, 241, 245, 0.3);
 }
 
 .select select:-ms-input-placeholder {
-  color: rgba(54, 54, 54, 0.3);
+  color: rgba(239, 241, 245, 0.3);
 }
 
 .select select:hover,
 .select select.is-hovered {
-  border-color: #b5b5b5;
+  border-color: #37373a;
 }
 
 .select select:focus,

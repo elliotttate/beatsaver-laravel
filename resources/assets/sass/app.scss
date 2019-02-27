@@ -42,6 +42,17 @@ $text-strong: darken($tex, 20);
 
 // Navbar
 $navbar-box-shadow-color: rgba(lighten($dark, 15), 0.2);
+$navbar-divider-background-color: darken($btn, 4);
+
+// Navbar Dropdown
+$navbar-dropdown-border-top: 2px solid $navbar-divider-background-color;
+$navbar-dropdown-radius: 5px;
+$navbar-dropdown-background-color: $btn;
+$navbar-dropdown-item-hover-background-color: $bg;
+$navbar-dropdown-item-hover-color: $tex;
+.navbar-item {
+  color: $tex !important;
+}
 
 // Links
 $link: $alt;

@@ -41,7 +41,10 @@
 
                 <tr>
                     <td>
-                        Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }}
+                        <ul class="table-spacing">
+                            <li>Downloads: {{ $downloadCount }}</li>
+                            <li>Finished: {{ $playedCount }}</li>
+                        </ul>
                     </td>
                     <td>
                         Lighting Events: {{ $events }}

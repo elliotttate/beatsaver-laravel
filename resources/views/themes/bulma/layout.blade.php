@@ -129,7 +129,11 @@
 </div> <!-- /container -->
 <footer style="margin-bottom: 25px;">
     <div class="content has-text-centered">
-        <b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> || <a href="{{ config('beatsaver.githubUrl') }}">GitHub</a></b>
+        <ul class="table-spacing" style="font-weight: bold; margin: 0;">
+            <li><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a></li>
+            <li><a href="{{ route('legal.privacy') }}">Privacy</a></li>
+            <li><a href="{{ config('beatsaver.githubUrl') }}">GitHub</a></li>
+        </ul>
     </div>
     @if( App::environment() == 'production' && config('beatsaver.tracking'))
         <script type="text/javascript">

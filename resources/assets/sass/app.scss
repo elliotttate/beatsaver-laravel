@@ -16,6 +16,8 @@ $altDark: darken($alt, 10);
 // Override Computed
 $primary: $red;
 $primary-invert: findColorInvert($primary);
+$dark: lighten($bg, 8);
+$dark-invert: findColorInvert($dark);
 
 // Setup $colors to use as bulma classes
 $colors: (
@@ -39,7 +41,7 @@ $label-color: $tex;
 $text-strong: darken($tex, 20);
 
 // Navbar
-$navbar-box-shadow-color: rgba($tex, 0.07);
+$navbar-box-shadow-color: rgba(lighten($dark, 15), 0.2);
 
 // Links
 $link: $alt;

@@ -48,7 +48,11 @@
 
                 <tr>
                     <td>
-                        Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }} || Rating: {{ $rating }}%
+                        <ul class="table-spacing">
+                            <li>Downloads: {{ $downloadCount }}</li>
+                            <li>Finished: {{ $playedCount }}</li>
+                            <li>Rating: {{ $rating }}%</li>
+                        </ul>
                     </td>
                     <td>
                         Lighting Events: {{ $events }}

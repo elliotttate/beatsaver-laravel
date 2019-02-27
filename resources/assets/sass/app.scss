@@ -7,14 +7,14 @@
 $bg: #232325;
 $tex: #eff1f5;
 $btn: #36373a;
-$red: #cd384c;
+$main: #6782ff;
 
 // Alternate Colours
-$alt: $red;
+$alt: $main;
 $altDark: darken($alt, 10);
 
 // Override Computed
-$primary: $red;
+$primary: $main;
 $primary-invert: findColorInvert($primary);
 $dark: lighten($bg, 8);
 $dark-invert: findColorInvert($dark);

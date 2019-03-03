@@ -12,14 +12,11 @@
 @show
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/@lolpants/bulma@0.7.2/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
     <!-- Navbar Burger Styles -->
     <style>a.navbar-burger { color: white; } a.navbar-burger:hover { color: rgb(220, 220, 220); }</style>
-
-    <!-- Dark Theme -->
-    <link rel="stylesheet" href="{{ asset('/themes/dark.css') }}">
 
     <!-- Babel and Polyfills -->
     <script src="https://unpkg.com/@babel/polyfill/dist/polyfill.min.js"></script>
@@ -132,7 +129,11 @@
 </div> <!-- /container -->
 <footer style="margin-bottom: 25px;">
     <div class="content has-text-centered">
-        <b><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a> || <a href="{{ route('legal.privacy') }}">Privacy</a> || <a href="{{ config('beatsaver.githubUrl') }}">GitHub</a></b>
+        <ul class="table-spacing" style="font-weight: bold; margin: 0;">
+            <li><a href="{{ route('legal.dmca') }}">DMCA Copyright Form</a></li>
+            <li><a href="{{ route('legal.privacy') }}">Privacy</a></li>
+            <li><a href="{{ config('beatsaver.githubUrl') }}">GitHub</a></li>
+        </ul>
     </div>
     @if( App::environment() == 'production' && config('beatsaver.tracking'))
         <script type="text/javascript">

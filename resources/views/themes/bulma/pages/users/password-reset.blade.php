@@ -18,7 +18,7 @@
                     </div>
 
                     <div class="control">
-                        <button class="button is-link" type="submit">Send Email</button>
+                        <button class="button is-primary" type="submit">Send Email</button>
                     </div>
                 </div>
             </form>

@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-                <button class="button is-link is-fullwidth" type="submit">Reset</button>
+                <button class="button is-primary is-fullwidth" type="submit">Reset</button>
             </form>
         </div>
     </div>

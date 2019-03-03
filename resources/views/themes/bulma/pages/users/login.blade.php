@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 
-                <button class="button is-link is-fullwidth" type="submit">Sign in</button>
+                <button class="button is-primary is-fullwidth" type="submit">Sign in</button>
             </form>
 
             <br />

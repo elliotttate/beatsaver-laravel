@@ -7,7 +7,7 @@
         <div class="column" style="max-width: 200px;">
             <img src="{{ $coverUrl }}" alt="{{ $name }}" class="image" style="border-radius: 8px;margin-bottom: 8px;">
 
-            <a class="button is-link has-text-weight-bold is-fullwidth" href="{{ $linkUrl }}" role="button">Details</a>
+            <a class="button is-primary has-text-weight-bold is-fullwidth" href="{{ $linkUrl }}" role="button">Details</a>
         </div>
 
         <div class="column">
@@ -30,8 +30,14 @@
 
                 <tr>
                     <td>
-                        Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }} || <i class="fas fa-thumbs-up"></i> {{ $upVotes }} / <i
-                            class="fas fa-thumbs-down"></i> {{ $downVotes }} || Rating: {{ $rating }}%
+                        <ul class="table-spacing">
+                            <li>Downloads: {{ $downloadCount }}</li>
+                            <li>Finished: {{ $playedCount }}</li>
+                            <li>
+                                <i class="fas fa-thumbs-up"></i> {{ $upVotes }} / <i class="fas fa-thumbs-down"></i> {{ $downVotes }}
+                            </li>
+                            <li>Rating: {{ $rating }}%</li>
+                        </ul>
                     </td>
                     <td>
                         Lighting Events: {{ $events }}

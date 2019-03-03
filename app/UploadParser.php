@@ -131,7 +131,7 @@ class UploadParser
                 }
 
                 // Check for illegal file extensions
-                $legal = ['.json', '.ogg', '.wav', '.jpg', '.jpeg', '.png'];
+                $legal = ['.json', '.ogg', '.wav', '.jpg', '.jpeg', '.png', '.srt'];
                 if (!in_array($ext, $legal)) {
                     throw new UploadParserException('Found illegal file extension: ' . $ext);
                 }

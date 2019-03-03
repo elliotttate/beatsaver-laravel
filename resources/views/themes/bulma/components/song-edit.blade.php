@@ -41,7 +41,10 @@
 
                 <tr>
                     <td>
-                        Downloads: {{ $downloadCount }} || Finished: {{ $playedCount }}
+                        <ul class="table-spacing">
+                            <li>Downloads: {{ $downloadCount }}</li>
+                            <li>Finished: {{ $playedCount }}</li>
+                        </ul>
                     </td>
                     <td>
                         Lighting Events: {{ $events }}
@@ -63,7 +66,7 @@
                     </td>
                     <td class="text-right">
                         <a class="button" href="{{route('browse.detail',['key' => $id]) }}">Back</a>
-                        <button class="button is-link" type="submit">Update</button>
+                        <button class="button is-primary" type="submit">Update</button>
                     </td>
                 </tr>
             </table>

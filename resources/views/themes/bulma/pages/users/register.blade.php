@@ -8,7 +8,7 @@
                 <h2>Create New Account</h2>
                 {{ csrf_field() }}
 
-                <article class="message is-info">
+                <article class="message is-primary">
                     <div class="message-body">
                         Before you register please read our <a href="{{ route('legal.privacy') }}">privacy</a> page!
                     </div>
@@ -53,7 +53,7 @@
                     </div>
                 </div>
 
-                <button class="button is-link is-fullwidth" type="submit">Sign Up</button>
+                <button class="button is-primary is-fullwidth" type="submit">Sign Up</button>
             </form>
         </div>
     </div>

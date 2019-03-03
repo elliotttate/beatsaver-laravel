@@ -47,7 +47,7 @@
                     })
                 </script>
 
-                <h5 class="has-text-grey">Must meet the following upload rules</h5>
+                <h5>Must meet the following upload rules</h5>
                 <ul>
                     <li>Must be a ZIP file with the songs subfolder in the root (EG: SongName/info.json)</li>
                     <li>Must be under 15MB</li>
@@ -60,7 +60,7 @@
                     </li>
                 </ul>
 
-                <h5 class="has-text-grey">Useful tips for avoiding problems</h5>
+                <h5>Useful tips for avoiding problems</h5>
                 <ul>
                     <li>Avoid using UNICODE charters in folder or file names. BeatSaber has no support for them.</li>
                     <li>Remove unnecessary content from the zip file (like autosaves folder from the 3D editor).</li>
@@ -70,10 +70,10 @@
                 <div class="field">
                     <label class="label">Beatmap Description</label>
                     <textarea name="description" id="TextFile" class="textarea" rows="3"></textarea>
-                    <h5 class="has-text-grey" style="margin: 10px 0;">Plain Text Only</h5>
+                    <h5 style="margin: 10px 0;">Plain Text Only</h5>
                 </div>
 
-                <button class="button is-link is-fullwidth" type="submit">Submit</button>
+                <button class="button is-primary is-fullwidth" type="submit">Submit</button>
             </form>
 
         </div>

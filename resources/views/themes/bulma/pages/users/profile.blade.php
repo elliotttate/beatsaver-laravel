@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <button class="button is-link is-fullwidth" type="submit">Update Email</button>
+                    <button class="button is-primary is-fullwidth" type="submit">Update Email</button>
                 </form>
             </div>
 
@@ -99,7 +99,7 @@
                         </div>
                     </div>
 
-                    <button class="button is-link is-fullwidth" type="submit">Update Password</button>
+                    <button class="button is-primary is-fullwidth" type="submit">Update Password</button>
                 </form>
             </div>
         </div>

@@ -27,7 +27,7 @@
             @if($tokens->count() < $max)
                 <form class="form-signin" method="post" action="{{ route('profile.token.submit') }}">
                     {{ csrf_field() }}
-                    <button name="new" value="0" class="button is-link" type="submit">New Read-Only Token</button>
+                    <button name="new" value="0" class="button is-primary" type="submit">New Read-Only Token</button>
                     <button name="new" value="1" class="button is-warning" type="submit">New Read/Write Token</button>
                 </form>
             @endif

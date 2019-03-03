@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
 use App\Models\AccessToken;
 use App\SongComposerApi;
 use App\SongListComposerApi;
@@ -122,6 +123,62 @@ class ApiController extends Controller
             $song = $composer->get($key, true);
 
             return Response::json(Arr::only($song, ['upVotes', 'upVotesTotal', 'downVotes', 'downVotesTotal']));
+        }
+
+        return Response::json(['message' => 'invalid song key'], 400);
+    }
+
+    /**
+     * @param string          $key
+     * @param int             $type
+     * @param SongComposerApi $composer
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function voteById(Request $request, string $key, int $type, SongComposerApi $composer)
+    {
+        $apiKey = env('STEAM_WEB_API_KEY', null);
+        if ($apiKey == null) {
+            return Response::json(['message' => 'steam voting not set up'], 501);
+        }
+
+        $id = $request->id;
+        $ticket = $request->ticket;
+
+        if (!$id || !$ticket) {
+            return Response::json(['message' => 'bad request'], 400);
+        }
+
+        try {
+            $client = new Client(['base_uri' => 'https://api.steampowered.com']);
+            $res = $client->get("/ISteamUserAuth/AuthenticateUserTicket/v1?key={$apiKey}&appid=620980&ticket={$ticket}");
+    
+            if ($res->getStatusCode() != 200) {
+                return Response::json(['message' => 'steam api error'], 500);
+            }
+    
+            $body = json_decode($res->getBody())->response;
+            if (array_key_exists('error', $body)) {
+                return Response::json(['message' => 'invalid auth ticket'], 401);
+            } else if (!array_key_exists('params', $body)) {
+                return Response::json(['message' => 'steam api error'], 500);
+            }
+
+            $params = $body->params;
+            if ($params->result != 'OK') {
+                return Response::json(['message' => 'steam api error'], 500);
+            } else if ($id != $params->steamid) {
+                return Response::json(['message' => 'steam id mismatch'], 403);
+            }
+
+            $song = $composer->get($key, true);
+            if ($composer->voteRaw($key, $id, $type)) {
+                $song = $composer->get($key, true);
+    
+                return Response::json(Arr::only($song, ['upVotes', 'upVotesTotal', 'downVotes', 'downVotesTotal']));
+            }
+        } catch (Exception $e) {
+            return Response::json(['message' => 'steam api error'], 500);
         }
 
         return Response::json(['message' => 'invalid song key'], 400);

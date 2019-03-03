@@ -34,30 +34,30 @@ class SongDetail extends Model
     }
 
     /**
-     * @param User $user
+     * @param string $id
      *
      * @return Model
      */
-    public function voteUp(User $user)
+    public function voteUp(string $id)
     {
         return $this->votes()->updateOrCreate([
             'song_id'   => $this->song_id,
             'detail_id' => $this->id,
-            'user_id'   => $user->id,
+            'user_id'   => $id,
         ], ['direction' => 1]);
     }
 
     /**
-     * @param User $user
+     * @param string $id
      *
      * @return Model
      */
-    public function voteDown(User $user)
+    public function voteDown(string $id)
     {
         return $this->votes()->updateOrCreate([
             'song_id'   => $this->song_id,
             'detail_id' => $this->id,
-            'user_id'   => $user->id,
+            'user_id'   => $id,
         ], ['direction' => 0]);
     }
 

@@ -264,6 +264,18 @@ class SongComposer implements ComposerContract
      */
     public function vote(string $key, User $user, int $direction): bool
     {
+        return $this->voteRaw($key, $user->id, $direction);
+    }
+
+    /**
+     * @param string $key
+     * @param string $id
+     * @param int    $direction
+     *
+     * @return bool
+     */
+    public function voteRaw(string $key, string $id, int $direction): bool
+    {
         $split = $this->parseKey($key);
 
         if (is_null($split['detailId'])) {
@@ -273,7 +285,7 @@ class SongComposer implements ComposerContract
         // prevent cache vote count abuse
         $vote = Vote::where('song_id', $split['songId'])
             ->where('detail_id', $split['detailId'])
-            ->where('user_id', $user->id)
+            ->where('user_id', $id)
             ->first();
 
         if ($vote && $vote->direction == $direction) {
@@ -285,9 +297,9 @@ class SongComposer implements ComposerContract
         }
 
         if ($direction == static::VOTE_UP) {
-            $vote = $songDetail->voteUp($user);
+            $vote = $songDetail->voteUp($id);
         } elseif ($direction == static::VOTE_DOWN) {
-            $vote = $songDetail->voteDown($user);
+            $vote = $songDetail->voteDown($id);
         } else {
             return false;
         }

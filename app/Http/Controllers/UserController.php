@@ -63,7 +63,7 @@ class UserController extends Controller
         if (!$user->isVerified() && $user->verification_code == trim($token)) {
             $user->verification_code = null;
             $user->save();
-            return redirect()->route('profile')->with('status-success', 'Email successful validated!');
+            return redirect()->route('profile')->with('status-success', 'Email verification successful!');
         }
         return redirect()->route('profile')->with('status-error', 'Invalid verification code!');
     }
@@ -78,7 +78,7 @@ class UserController extends Controller
         event(new UserRegistered(auth()->user()));
 
         session(['last-verificatopn-sent' => Carbon::now()->addMinutes(2)]);
-        return redirect()->route('profile')->with('status-success', 'Validation email sent');
+        return redirect()->route('profile')->with('status-success', 'Verification email sent');
     }
 
     /**

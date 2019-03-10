@@ -17,7 +17,7 @@
         <p>In order to register at BeatSaver we need three things:</p>
         <ul>
             <li>Username: will be <strong>publicly visible</strong> if you choose to upload a song</li>
-            <li>Email: will be used for first time account validation, password resets and "new song notification" in case you subscribe to another users uploads.
+            <li>Email: will be used for first time account verification, password resets and "new song notification" in case you subscribe to another users uploads.
                 All emails will be sent from <strong>{{ config('mail.from.address') }}</strong></li>
             <li>Password: we store the password in an <strong>encrypted</strong> and salted hash (see <a href="https://en.wikipedia.org/wiki/Bcrypt" target="_blank">BCrypt</a>)</li>
         </ul>

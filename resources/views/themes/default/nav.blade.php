@@ -9,7 +9,7 @@
     <li class="dropdown">
         <a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Modding<span class="caret"></span></a>
         <ul class="dropdown-menu">
-            <li><a href="https://github.com/lolPants/modsaber-installer/releases">ModSaber Installer</a></li>
+            <li><a href="https://bsmg.wiki/beginners-guide">Install Mods</a></li>
             <li><a href="https://discord.gg/beatsabermods">Modding Discord</a></li>
             <li role="separator" class="divider"></li>
         </ul>

@@ -1,7 +1,7 @@
 ## BeatSaver
 
 - BeatSaver is a custom song platform for Beat Saber (https://beatgames.com/)
-- In order to use custom songs see [ModSaber Installer](https://github.com/lolPants/modsaber-installer/releases)
+- In order to use custom songs see [Beginner's Guide](https://bsmg.wiki/beginners-guide)
 
 ## Wiki
 For more infomation visit [https://github.com/elliotttate/beatsaver-laravel/wiki](https://github.com/elliotttate/beatsaver-laravel/wiki)

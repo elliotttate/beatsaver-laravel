@@ -9,14 +9,14 @@ const oneClick = async (elem, key) => {
     const resp = await swal({
       icon: 'warning',
       buttons: {
-        install: { text: 'Get ModSaber Installer', closeModal: false, className: 'swal-button--cancel' },
+        install: { text: 'Get Mod Assistant', closeModal: false, className: 'swal-button--cancel' },
         done: { text: 'OK' },
       },
-      text: 'OneClick Install requires ModSaber Installer to function.\nPlease install it before proceeding.',
+      text: 'BeatSaver OneClick Install requires Mod Assistant to function.\nPlease download it and enable OneClick Install for BeatSaver on the Options page before proceeding.',
     })
 
-    if (resp === 'install') window.open('https://github.com/lolPants/modsaber-installer/releases')
+    if (resp === 'install') window.open('https://github.com/Assistant/ModAssistant/releases/latest')
   }
 
-  window.location = `modsaber://song/${key}`
+  window.location = `beatsaver://${key}`
 }

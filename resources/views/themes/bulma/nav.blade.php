@@ -15,7 +15,7 @@
     <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">Modding</a>
         <div class="navbar-dropdown">
-            <a class="navbar-item" href="https://github.com/lolPants/modsaber-installer/releases">ModSaber Installer</a>
+            <a class="navbar-item" href="https://bsmg.wiki/beginners-guide">Install Mods</a>
             <a class="navbar-item" href="https://discord.gg/beatsabermods">Modding Discord</a>
             <a class="navbar-item" href="https://wiki.assistant.moe/">Community Wiki</a>
         </div>

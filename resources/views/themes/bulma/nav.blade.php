@@ -5,7 +5,7 @@
         <div class="navbar-dropdown">
             <a class="navbar-item" href="{{ route('browse.top.downloads') }}">Top Downloads</a>
             <a class="navbar-item" href="{{ route('browse.top.played') }}">Top Played</a>
-            <!-- <a class="navbar-item" href="{{ route('browse.top.rated') }}">Top Rated</a> -->
+            <!-- <a class="navbar-item" href=" route('browse.top.rated') ">Top Rated</a> -->
         </div>
     </div>
     <a class="navbar-item" href="{{ route('search') }}">Search</a>

@@ -318,14 +318,22 @@ class BeatSaverController extends Controller
 
     public function songDeleteSubmit($id, DeleteSongRequest $request, SongComposer $composer)
     {
+        $song = Song::find($id);
+
+        if (!$song) {
+            return redirect()->back()->withErrors('Invalid Song.');
+        }
+
+        if ($song && auth()->id() != $song->user_id) {
+            throw new UnauthorizedException('Access Denied!');
+        }
 
         if ($request->input('confirm', 0)) {
             if ($composer->delete($id)) {
                 return redirect()->route('browse.user', ['id' => auth()->id()])->with('status-success', 'Delete successful.');
             }
         }
+
         return redirect()->route('browse.detail', ['key' => $id]);
-
-
     }
 }

@@ -152,8 +152,24 @@ class SongComposer implements ComposerContract
             Storage::disk()->makeDirectory('public/songs/' . $song->id);
         }
 
+        // Store song image.
         File::move($file, storage_path('app/public/songs') . "/{$song->id}/{$song->id}-{$songDetails->id}.zip");
         Storage::disk()->put("public/songs/{$song->id}/{$song->id}-{$songDetails->id}.{$songData['coverType']}", base64_decode($songData['coverData']));
+
+        // Create MP3 previews (e.g., for iOS).
+        foreach ($songData['songPreviews'] as $audioPath => $songPreviewData) {
+          // Save original song data temporarily to convert with ffmpeg.
+          $audioFilename = basename($audioPath);
+          $storagePathBase  = "public/songs/{$song->id}";
+          $storagePathPreview = "{$storagePathBase}/temp-{$audioFilename}";
+          Storage::disk()->put("$storagePathPreview", base64_decode($songPreviewData));
+
+          // Convert to MP3 with ffmpeg.
+          $audioFilenameBase = pathinfo($audioFilename)['filename'];
+          $previewOutPath = storage_path("app/{$storagePathBase}/{$audioFilenameBase}.mp3");
+          $previewTempPath = storage_path("app/{$storagePathPreview}");
+          exec("(ffmpeg -i \"{$previewTempPath}\" \"{$previewOutPath}\"; rm \"{$previewTempPath}\") > /dev/null &");
+        }
 
         return [
             'status' => static::SONG_CREATED,

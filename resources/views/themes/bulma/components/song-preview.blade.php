@@ -50,6 +50,7 @@
                         <button class="button" onclick="oneClick(this, '{{ $key }}')" role="button">OneClick Install</button>
                         <a class="button" href="https://bsaber.com/songs/{{ $id }}" role="button">View on BeastSaber</a>
                         <button class="button for-playing" onclick="previewSong(this, '{{ $key }}')" role="button">Preview</button>
+                        <a class="button" href="https://supermedium.com/beatsaver-viewer/?id={{ $version }}" target="_blank" role="button">Preview (3D)</a>
                     </td>
                 </tr>
             </table>

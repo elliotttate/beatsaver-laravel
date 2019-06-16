@@ -25,6 +25,7 @@
             >
                 Preview
             </button>
+            <a class="button" href="https://supermedium.com/beatsaver-viewer/?id={{ $version }}" target="_blank" role="button">Preview (3D)</a>
             <a class="button is-fullwidth has-text-weight-bold" href="{{ route('browse.top.newest') }}" style="margin-top: 8px;">Back</a>
         </div>
 
@@ -62,7 +63,7 @@
                 <tr>
                     <td colspan="2">{!! nl2br(e($description)) !!}</td>
                 </tr>
-                
+
                 <tr>
                     <td>
                         @auth
